@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей](https://up.htmlacademy.ru/nodejs/3/user/1470531).
-* Наставник: `Неизвестно`.
+* Наставник: [Алексей Марунин](https://htmlacademy.ru/profile/id1402867).
 
 ---
 
