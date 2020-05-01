@@ -7,7 +7,8 @@ const {
   TEXTS,
   CATEGORIES,
   postsAmount,
-  Messages
+  Messages,
+  ExitCode
 } = require(`../../constants`);
 const {getRandomInt, shuffle} = require(`../../utils`);
 
@@ -18,21 +19,18 @@ const getCategories = () => [...new Set(
 )];
 
 const getDate = () => {
-  const currentDate = new Date();
-  const currentMonth = new Date().getMonth();
+  const currentDate = new Date().valueOf();
+  const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 2).valueOf();
+  const randomDate = new Date(getRandomInt(currentDate, threeMonthsAgo));
 
-  const date = new Date(
-      currentDate.getFullYear(),
-      getRandomInt(currentMonth, currentMonth - 3),
-      currentDate.getDay(),
-      currentDate.getHours(),
-      currentDate.getMinutes(),
-      currentDate.getSeconds()
-  );
+  const year = randomDate.getFullYear();
+  const month = randomDate.getMonth();
+  const day = randomDate.getDate();
+  const hours = randomDate.getHours();
+  const minutes = randomDate.getMinutes();
+  const seconds = randomDate.getSeconds();
 
-  return `${date.toLocaleDateString()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-
-  // "2019-12-01 14:45:00";
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
 const getOffers = (count) => (
@@ -55,21 +53,25 @@ const generateOffers = (count) => {
   const countOffers = Number.parseInt(count, 10);
 
   if (countOffers > postsAmount.max) {
-    return console.info(Messages.postsQuotaExceed);
+    console.info(Messages.postsQuotaExceed);
+
+    return process.exit(ExitCode.error);
   }
 
   if (countOffers) {
     content = JSON.stringify(getOffers(Number.parseInt(count, 10)));
   }
 
-  console.log(`content`, content);
-
-  return fs.writeFile(FILE_NAME, content, (err) => {
+  return fs.writeFile(`../../${FILE_NAME}`, content, (err) => {
     if (err) {
-      return console.error(`Can't write data to file...`);
+      console.error(`Can't write data to file...`);
+
+      return process.exit(ExitCode.error);
     }
 
-    return console.info(`Operation success. File created.`);
+    console.info(`Operation success. File created.`);
+
+    return process.exit(ExitCode.success);
   });
 };
 
