@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
 const chalk = require(`chalk`);
 const {
   FILE_NAME,
@@ -44,7 +44,7 @@ const getOffers = (count) => (
   }))
 );
 
-const generateOffers = (count) => {
+const generateOffers = async (count) => {
   let content;
 
   if (!count || typeof count !== `number`) {
@@ -63,17 +63,16 @@ const generateOffers = (count) => {
     content = JSON.stringify(getOffers(Number.parseInt(count, 10)));
   }
 
-  return fs.writeFile(`../../${FILE_NAME}`, content, (err) => {
-    if (err) {
-      console.error(chalk.red(`Can't write data to file...`, err));
-
-      return process.exit(ExitCode.error);
-    }
-
+  try {
+    await fs.writeFile(`../../${FILE_NAME}`, content);
     console.info(chalk.green(`Operation success. File created.`));
 
     return process.exit(ExitCode.success);
-  });
+  } catch (err) {
+    console.error(chalk.red(`Can't write data to file...`, err));
+
+    return process.exit(ExitCode.error);
+  }
 };
 
 module.exports = {
