@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require(`fs`);
+const chalk = require(`chalk`);
 const {
   FILE_NAME,
   TITLES,
@@ -53,7 +54,7 @@ const generateOffers = (count) => {
   const countOffers = Number.parseInt(count, 10);
 
   if (countOffers > postsAmount.max) {
-    console.info(Messages.postsQuotaExceed);
+    console.info(chalk.red(Messages.postsQuotaExceed));
 
     return process.exit(ExitCode.error);
   }
@@ -64,12 +65,12 @@ const generateOffers = (count) => {
 
   return fs.writeFile(`../../${FILE_NAME}`, content, (err) => {
     if (err) {
-      console.error(`Can't write data to file...`);
+      console.error(chalk.red(`Can't write data to file...`, err));
 
       return process.exit(ExitCode.error);
     }
 
-    console.info(`Operation success. File created.`);
+    console.info(chalk.green(`Operation success. File created.`));
 
     return process.exit(ExitCode.success);
   });
