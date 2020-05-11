@@ -1,6 +1,7 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
+const chalk = require(`chalk`);
 const {
   FILE_NAME,
   TITLES,
@@ -43,41 +44,36 @@ const getOffers = (count) => (
   }))
 );
 
-const generateOffers = (count) => {
-  let content;
-
-  if (!count || typeof count !== `number`) {
-    content = JSON.stringify(getOffers(postsAmount.min));
-  }
-
-  const countOffers = Number.parseInt(count, 10);
-
-  if (countOffers > postsAmount.max) {
-    console.info(Messages.postsQuotaExceed);
-
-    return process.exit(ExitCode.error);
-  }
-
-  if (countOffers) {
-    content = JSON.stringify(getOffers(Number.parseInt(count, 10)));
-  }
-
-  return fs.writeFile(`../../${FILE_NAME}`, content, (err) => {
-    if (err) {
-      console.error(`Can't write data to file...`);
-
-      return process.exit(ExitCode.error);
-    }
-
-    console.info(`Operation success. File created.`);
-
-    return process.exit(ExitCode.success);
-  });
-};
-
 module.exports = {
   name: `--generate`,
-  run(args) {
-    generateOffers(args);
+  async run(count) {
+    let content;
+
+    if (!count || typeof count !== `number`) {
+      content = JSON.stringify(getOffers(postsAmount.min));
+    }
+
+    const countOffers = Number.parseInt(count, 10);
+
+    if (countOffers > postsAmount.max) {
+      console.info(chalk.red(Messages.postsQuotaExceed));
+
+      return ExitCode.error;
+    }
+
+    if (countOffers) {
+      content = JSON.stringify(getOffers(Number.parseInt(count, 10)));
+    }
+
+    try {
+      await fs.writeFile(FILE_NAME, content);
+      console.info(chalk.green(`Operation success. File created.`));
+
+      return ExitCode.success;
+    } catch (err) {
+      console.error(chalk.red(`Can't write data to file...`, err));
+
+      return ExitCode.error;
+    }
   }
 };

@@ -3,16 +3,20 @@
 const {Cli} = require(`./cli`);
 const {
   USER_ARGV_INDEX,
-  DEFAULT_COMMAND,
-  ExitCode
+  DEFAULT_COMMAND
 } = require(`../constants`);
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
 const [command, amount] = userArguments;
 
 if (userArguments.length === 0 || !Cli[command]) {
-  Cli[DEFAULT_COMMAND].run();
-  process.exit(ExitCode.success);
+  const code = Cli[DEFAULT_COMMAND].run();
+  process.exit(code);
 }
 
-Cli[command].run(amount);
+const main = async () => {
+  const code = await Cli[command].run(amount);
+  process.exit(code);
+};
+
+main();
