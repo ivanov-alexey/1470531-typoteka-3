@@ -1,21 +1,20 @@
 'use strict';
 
 const fs = require(`fs`).promises;
-const chalk = require(`chalk`);
 const {
   FILE_NAME,
-  TITLES,
-  TEXTS,
-  CATEGORIES,
+  FILE_SENTENCES_PATH,
+  FILE_TITLES_PATH,
+  FILE_CATEGORIES_PATH,
   postsAmount,
   Messages,
   ExitCode
 } = require(`../../constants`);
-const {getRandomInt, shuffle} = require(`../../utils`);
+const {getRandomInt, shuffle, logger} = require(`../../utils`);
 
-const getCategories = () => [...new Set(
-    Array(getRandomInt(0, CATEGORIES.length - 1)).fill({}).map(
-        () => CATEGORIES[getRandomInt(0, CATEGORIES.length - 1)]
+const getCategories = (data) => [...new Set(
+    Array(getRandomInt(0, data.length - 1)).fill({}).map(
+        () => data[getRandomInt(0, data.length - 1)]
     )
 )];
 
@@ -34,44 +33,56 @@ const getDate = () => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
-const getOffers = (count) => (
-  Array(count).fill({}).map(() => ({
-    title: TITLES[getRandomInt(0, TITLES.length - 1)],
-    createdDate: getDate(),
-    announce: shuffle(TEXTS).slice(0, 5).join(` `),
-    fullText: shuffle(TEXTS).slice(0, getRandomInt(1, TEXTS.length - 1)).join(` `),
-    category: getCategories()
-  }))
-);
+const readContent = async (path) => {
+  try {
+    const content = await fs.readFile(path, `utf-8`);
+
+    return content.trim().split(`\n`);
+  } catch (err) {
+    logger.error(err);
+
+    return [];
+  }
+};
+
+const getOffers = (count, titles, sentences, categories) => {
+  const amount = !count || Number.isNaN(+count)
+    ? postsAmount.min
+    : Number.parseInt(count, 10);
+
+  if (amount > postsAmount.max) {
+    throw new Error(Messages.postsQuotaExceed);
+  }
+
+  return JSON.stringify(
+      Array(amount)
+        .fill({})
+        .map(() => ({
+          title: titles[getRandomInt(0, titles.length - 1)],
+          createdDate: getDate(),
+          announce: shuffle(sentences).slice(0, 5).join(` `),
+          fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
+          category: getCategories(categories)
+        }))
+  );
+};
 
 module.exports = {
   name: `--generate`,
   async run(count) {
-    let content;
+    const titles = await readContent(FILE_TITLES_PATH);
+    const categories = await readContent(FILE_CATEGORIES_PATH);
+    const sentences = await readContent(FILE_SENTENCES_PATH);
 
-    if (!count || typeof count !== `number`) {
-      content = JSON.stringify(getOffers(postsAmount.min));
-    }
-
-    const countOffers = Number.parseInt(count, 10);
-
-    if (countOffers > postsAmount.max) {
-      console.info(chalk.red(Messages.postsQuotaExceed));
-
-      return ExitCode.error;
-    }
-
-    if (countOffers) {
-      content = JSON.stringify(getOffers(Number.parseInt(count, 10)));
-    }
+    const content = getOffers(count, titles, sentences, categories);
 
     try {
       await fs.writeFile(FILE_NAME, content);
-      console.info(chalk.green(`Operation success. File created.`));
+      logger.success(Messages.fileCreationSuccess);
 
       return ExitCode.success;
     } catch (err) {
-      console.error(chalk.red(`Can't write data to file...`, err));
+      logger.error(err);
 
       return ExitCode.error;
     }
