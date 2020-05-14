@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require(`fs`).promises;
-const chalk = require(`chalk`);
 const {
   FILE_NAME,
   TITLES,
@@ -11,7 +10,7 @@ const {
   Messages,
   ExitCode
 } = require(`../../constants`);
-const {getRandomInt, shuffle} = require(`../../utils`);
+const {getRandomInt, shuffle, logger} = require(`../../utils`);
 
 const getCategories = () => [...new Set(
     Array(getRandomInt(0, CATEGORIES.length - 1)).fill({}).map(
@@ -56,7 +55,7 @@ module.exports = {
     const countOffers = Number.parseInt(count, 10);
 
     if (countOffers > postsAmount.max) {
-      console.info(chalk.red(Messages.postsQuotaExceed));
+      logger.error(Messages.postsQuotaExceed);
 
       return ExitCode.error;
     }
@@ -67,11 +66,11 @@ module.exports = {
 
     try {
       await fs.writeFile(FILE_NAME, content);
-      console.info(chalk.green(`Operation success. File created.`));
+      logger.success(Messages.fileCreationSuccess);
 
       return ExitCode.success;
     } catch (err) {
-      console.error(chalk.red(`Can't write data to file...`, err));
+      logger.error(err);
 
       return ExitCode.error;
     }

@@ -68,7 +68,8 @@ const ExitCode = {
 };
 
 const Messages = {
-  postsQuotaExceed: `Не больше 1000 публикаций`
+  postsQuotaExceed: `Не больше 1000 публикаций`,
+  fileCreationSuccess: `Operation success. File created.`,
 };
 
 module.exports = {
