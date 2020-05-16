@@ -7,7 +7,7 @@ const {
   FILE_TITLES_PATH,
   FILE_CATEGORIES_PATH,
   postsAmount,
-  Messages,
+  Message,
   ExitCode
 } = require(`../../constants`);
 const {getRandomInt, shuffle, logger} = require(`../../utils`);
@@ -51,7 +51,7 @@ const getOffers = (count, titles, sentences, categories) => {
     : Number.parseInt(count, 10);
 
   if (amount > postsAmount.max) {
-    throw new Error(Messages.postsQuotaExceed);
+    throw new Error(Message.postsQuotaExceed);
   }
 
   return JSON.stringify(
@@ -78,7 +78,7 @@ module.exports = {
 
     try {
       await fs.writeFile(FILE_NAME, content);
-      logger.success(Messages.fileCreationSuccess);
+      logger.success(Message.fileCreationSuccess);
 
       return ExitCode.success;
     } catch (err) {
