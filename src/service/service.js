@@ -7,7 +7,7 @@ const {
 } = require(`../constants`);
 
 const userArguments = process.argv.slice(USER_ARGV_INDEX);
-const [command, amount] = userArguments;
+const [command, value] = userArguments;
 
 if (userArguments.length === 0 || !Cli[command]) {
   const code = Cli[DEFAULT_COMMAND].run();
@@ -15,8 +15,13 @@ if (userArguments.length === 0 || !Cli[command]) {
 }
 
 const main = async () => {
-  const code = await Cli[command].run(amount);
-  process.exit(code);
+  if (command !== `--server`) {
+    const code = await Cli[command].run(value);
+
+    process.exit(code);
+  }
+
+  Cli[command].run(value);
 };
 
 main();

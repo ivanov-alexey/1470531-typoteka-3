@@ -13,6 +13,7 @@ const message = `
     --version:            выводит номер версии
     --help:               печатает этот текст
     --generate <count>    формирует файл mocks.json
+    --server <port>       запускает сервер на выбранном порту
 `;
 
 module.exports = {

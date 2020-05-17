@@ -21,21 +21,35 @@ const ExitCode = {
   error: 1
 };
 
-const Messages = {
-  postsQuotaExceed: `Не больше 1000 публикаций`,
+const Message = {
   fileCreationSuccess: `Operation success. File created.`,
+  notFound: `Sorry, page not found`,
+  postsQuotaExceed: `Не больше 1000 публикаций`,
+  listenOnPort: (port) => `Listening for connections on http://localhost:${port}`
+};
+
+const DEFAULT_PORT = 3000;
+
+const HttpCode = {
+  OK: 200,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+  FORBIDDEN: 403,
+  UNAUTHORIZED: 401,
 };
 
 module.exports = {
+  DEFAULT_COMMAND,
   DEFAULT_COUNT,
+  DEFAULT_PORT,
+  ExitCode,
   FILE_NAME,
   FILE_SENTENCES_PATH,
   FILE_TITLES_PATH,
   FILE_CATEGORIES_PATH,
+  HttpCode,
+  Message,
   postsAmount,
-  USER_ARGV_INDEX,
-  DEFAULT_COMMAND,
-  ExitCode,
-  Messages
+  USER_ARGV_INDEX
 };
 
