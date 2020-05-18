@@ -2,7 +2,7 @@
 
 const http = require(`http`);
 const fs = require(`fs`).promises;
-const {FILE_NAME, DEFAULT_PORT, HttpCode, Message} = require(`../../constants`);
+const {FILE_NAME, DEFAULT_API_PORT, HttpCode, Message} = require(`../../constants`);
 const {logger} = require(`../../utils`);
 
 const sendResponse = (res, statusCode, message) => {
@@ -46,7 +46,7 @@ const onClientConnect = async (req, res) => {
 module.exports = {
   name: `--server`,
   run(args) {
-    const port = Number.parseInt(args, 10) || DEFAULT_PORT;
+    const port = Number.parseInt(args, 10) || DEFAULT_API_PORT;
 
     http.createServer(onClientConnect)
       .listen(port)

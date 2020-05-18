@@ -28,7 +28,9 @@ const Message = {
   listenOnPort: (port) => `Listening for connections on http://localhost:${port}`
 };
 
-const DEFAULT_PORT = 3000;
+const DEFAULT_API_PORT = 3000;
+
+const DEFAULT_FRONT_PORT = 8080;
 
 const HttpCode = {
   OK: 200,
@@ -41,7 +43,8 @@ const HttpCode = {
 module.exports = {
   DEFAULT_COMMAND,
   DEFAULT_COUNT,
-  DEFAULT_PORT,
+  DEFAULT_API_PORT,
+  DEFAULT_FRONT_PORT,
   ExitCode,
   FILE_NAME,
   FILE_SENTENCES_PATH,
