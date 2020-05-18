@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require(`express`);
-const {DEFAULT_SERVER_PORT} = require(`../constants`);
+const {DEFAULT_FRONT_PORT} = require(`../constants`);
 const mainRoute = require(`./routes/main-route`);
 const registerRoutes = require(`./routes/register-routes`);
 const loginRoutes = require(`./routes/login-routes`);
@@ -20,4 +20,4 @@ app.use(`/categories`, categoriesRoutes);
 app.use(`/my`, myRoutes);
 app.use(`/articles`, articlesRoutes);
 
-app.listen(DEFAULT_SERVER_PORT);
+app.listen(DEFAULT_FRONT_PORT);
