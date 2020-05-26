@@ -7,6 +7,9 @@ const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 
+const PUBLIC_DIR = `public`;
+const TEMPLATES_DIR = `templates`;
+
 const postsAmount = {
   min: 1,
   max: 1000
@@ -50,6 +53,8 @@ module.exports = {
   FILE_SENTENCES_PATH,
   FILE_TITLES_PATH,
   FILE_CATEGORIES_PATH,
+  PUBLIC_DIR,
+  TEMPLATES_DIR,
   HttpCode,
   Message,
   postsAmount,
