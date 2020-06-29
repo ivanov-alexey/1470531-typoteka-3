@@ -1,12 +1,16 @@
 'use strict';
 
 const fs = require(`fs`).promises;
+const {nanoid} = require(`nanoid`);
 const {
   FILE_NAME,
   FILE_SENTENCES_PATH,
   FILE_TITLES_PATH,
   FILE_CATEGORIES_PATH,
+  FILE_COMMENTS_PATH,
   postsAmount,
+  MAX_ID_LENGTH,
+  MAX_COMMENTS,
   Message,
   ExitCode
 } = require(`../../constants`);
@@ -33,6 +37,15 @@ const getDate = () => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
+const generateComments = (count, comments) => (
+  Array(count).fill({}).map(() => ({
+    id: nanoid(MAX_ID_LENGTH),
+    text: shuffle(comments)
+      .slice(0, getRandomInt(1, comments.length))
+      .join(` `),
+  }))
+);
+
 const readContent = async (path) => {
   try {
     const content = await fs.readFile(path, `utf-8`);
@@ -45,7 +58,7 @@ const readContent = async (path) => {
   }
 };
 
-const getOffers = (count, titles, sentences, categories) => {
+const getOffers = (count, titles, sentences, categories, comments) => {
   const amount = !count || Number.isNaN(+count)
     ? postsAmount.min
     : Number.parseInt(count, 10);
@@ -58,11 +71,13 @@ const getOffers = (count, titles, sentences, categories) => {
       Array(amount)
         .fill({})
         .map(() => ({
+          id: nanoid(MAX_ID_LENGTH),
           title: titles[getRandomInt(0, titles.length - 1)],
           createdDate: getDate(),
           announce: shuffle(sentences).slice(0, 5).join(` `),
           fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
-          category: getCategories(categories)
+          category: getCategories(categories),
+          comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
         }))
   );
 };
@@ -73,8 +88,9 @@ module.exports = {
     const titles = await readContent(FILE_TITLES_PATH);
     const categories = await readContent(FILE_CATEGORIES_PATH);
     const sentences = await readContent(FILE_SENTENCES_PATH);
+    const comments = await readContent(FILE_COMMENTS_PATH);
 
-    const content = getOffers(count, titles, sentences, categories);
+    const content = getOffers(count, titles, sentences, categories, comments);
 
     try {
       await fs.writeFile(FILE_NAME, content);
