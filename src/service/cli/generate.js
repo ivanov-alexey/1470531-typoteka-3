@@ -14,28 +14,13 @@ const {
   Message,
   ExitCode
 } = require(`../../constants`);
-const {getRandomInt, shuffle, logger} = require(`../../utils`);
+const {getRandomInt, getArticleDate, shuffle, logger} = require(`../../utils`);
 
 const getCategories = (data) => [...new Set(
     Array(getRandomInt(0, data.length - 1)).fill({}).map(
         () => data[getRandomInt(0, data.length - 1)]
     )
 )];
-
-const getDate = () => {
-  const currentDate = new Date().valueOf();
-  const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 2).valueOf();
-  const randomDate = new Date(getRandomInt(currentDate, threeMonthsAgo));
-
-  const year = randomDate.getFullYear();
-  const month = randomDate.getMonth();
-  const day = randomDate.getDate();
-  const hours = randomDate.getHours();
-  const minutes = randomDate.getMinutes();
-  const seconds = randomDate.getSeconds();
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-};
 
 const generateComments = (count, comments) => (
   Array(count).fill({}).map(() => ({
@@ -58,7 +43,7 @@ const readContent = async (path) => {
   }
 };
 
-const getOffers = (count, titles, sentences, categories, comments) => {
+const getArticles = (count, titles, sentences, categories, comments) => {
   const amount = !count || Number.isNaN(+count)
     ? postsAmount.min
     : Number.parseInt(count, 10);
@@ -73,7 +58,7 @@ const getOffers = (count, titles, sentences, categories, comments) => {
         .map(() => ({
           id: nanoid(MAX_ID_LENGTH),
           title: titles[getRandomInt(0, titles.length - 1)],
-          createdDate: getDate(),
+          createdDate: getArticleDate(),
           announce: shuffle(sentences).slice(0, 5).join(` `),
           fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
           category: getCategories(categories),
@@ -90,7 +75,7 @@ module.exports = {
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const comments = await readContent(FILE_COMMENTS_PATH);
 
-    const content = getOffers(count, titles, sentences, categories, comments);
+    const content = getArticles(count, titles, sentences, categories, comments);
 
     try {
       await fs.writeFile(FILE_NAME, content);

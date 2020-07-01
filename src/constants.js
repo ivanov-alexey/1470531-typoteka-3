@@ -1,5 +1,7 @@
 'use strict';
 
+const API_PREFIX = `/api`;
+
 const DEFAULT_COUNT = 1;
 const FILE_NAME = `mocks.json`;
 
@@ -49,6 +51,7 @@ const HttpCode = {
 };
 
 module.exports = {
+  API_PREFIX,
   DEFAULT_COMMAND,
   DEFAULT_COUNT,
   DEFAULT_API_PORT,
