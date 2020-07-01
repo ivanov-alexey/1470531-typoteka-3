@@ -1,44 +1,50 @@
 'use strict';
 
 const express = require(`express`);
-const fs = require(`fs`).promises;
-const {FILE_NAME, DEFAULT_API_PORT, HttpCode, Message} = require(`../../constants`);
+const {
+  API_PREFIX,
+  DEFAULT_API_PORT,
+  HttpCode,
+  Message
+} = require(`../../constants`);
+const createApi = require(`../api`);
+const getMockData = require(`../lib/get-mock-data`);
 const {logger} = require(`../../utils`);
 
-const app = express();
+const createApp = async (data) => {
+  const app = express();
+  const apiRoutes = await createApi(data);
 
-app.use(express.json());
+  app.use(express.json());
+  app.use(API_PREFIX, apiRoutes);
 
-app.get(`/posts`, async (req, res) => {
+  app.use((req, res) => res
+    .status(HttpCode.NOT_FOUND)
+    .send(`Not found`));
+
+  return app;
+};
+
+const run = async (args) => {
+  const port = Number.parseInt(args, 10) || DEFAULT_API_PORT;
+  const mockData = await getMockData();
+  const app = await createApp(mockData);
+
   try {
-    const fileContent = await fs.readFile(FILE_NAME);
-    const mocks = JSON.parse(fileContent);
+    app.listen(DEFAULT_API_PORT, (err) => {
+      if (err) {
+        return logger.error(err);
+      }
 
-    res.json(mocks);
+      return logger.success(Message.listenOnPort(port));
+    });
   } catch (err) {
-    res.status(HttpCode.INTERNAL_SERVER_ERROR).send(err);
+    logger.error(err);
   }
-});
-
-app.use((req, res) => res
-  .status(HttpCode.NOT_FOUND)
-  .send(`Not found`));
+};
 
 module.exports = {
   name: `--server`,
-  run(args) {
-    const port = Number.parseInt(args, 10) || DEFAULT_API_PORT;
-
-    try {
-      app.listen(DEFAULT_API_PORT, (err) => {
-        if (err) {
-          return logger.error(err);
-        }
-
-        return logger.success(Message.listenOnPort(port));
-      });
-    } catch (err) {
-      logger.error(err);
-    }
-  }
+  run,
+  createApp
 };

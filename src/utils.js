@@ -18,6 +18,21 @@ const shuffle = (someArray) => {
   return someArray;
 };
 
+const getArticleDate = () => {
+  const currentDate = new Date().valueOf();
+  const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 2).valueOf();
+  const randomDate = new Date(getRandomInt(currentDate, threeMonthsAgo));
+
+  const year = randomDate.getFullYear();
+  const month = randomDate.getMonth();
+  const day = randomDate.getDate();
+  const hours = randomDate.getHours();
+  const minutes = randomDate.getMinutes();
+  const seconds = randomDate.getSeconds();
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
 const logger = {
   info: (message) => console.info(chalk.blue(message)),
   data: (message) => console.info(chalk.gray(message)),
@@ -27,6 +42,7 @@ const logger = {
 
 module.exports = {
   getRandomInt,
+  getArticleDate,
   shuffle,
   logger
 };
