@@ -35,7 +35,8 @@ const Message = {
   fileCreationSuccess: `Operation success. File created.`,
   notFound: `Sorry, page not found`,
   postsQuotaExceed: `Не больше 1000 публикаций`,
-  listenOnPort: (port) => `Listening for connections on http://localhost:${port}`
+  listenOnPort: (port) => `Listening for connections on http://localhost:${port}`,
+  serverStartError: (port, error) => `Server can't start on http://localhost:${port} with error: ${error}`
 };
 
 const DEFAULT_API_PORT = 3000;

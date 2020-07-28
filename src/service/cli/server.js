@@ -9,18 +9,34 @@ const {
 } = require(`../../constants`);
 const createApi = require(`../api`);
 const getMockData = require(`../lib/get-mock-data`);
-const {logger} = require(`../../utils`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 const createApp = async (data) => {
   const app = express();
   const apiRoutes = await createApi(data);
 
+  app.use((req, res, next) => {
+    logger.debug(`Requested url: ${req.url}`);
+
+    res.on(`finish`, () => {
+      logger.info(`Response status code: ${res.statusCode}`);
+    });
+
+    next();
+  });
+
   app.use(express.json());
   app.use(API_PREFIX, apiRoutes);
 
-  app.use((req, res) => res
-    .status(HttpCode.NOT_FOUND)
-    .send(`Not found`));
+  app.use((req, res) => {
+    logger.error(`Not found url: ${req.url}`);
+
+    return res
+      .status(HttpCode.NOT_FOUND)
+      .send(`Not found`);
+  });
 
   return app;
 };
@@ -33,13 +49,13 @@ const run = async (args) => {
   try {
     app.listen(DEFAULT_API_PORT, (err) => {
       if (err) {
-        return logger.error(err);
+        logger.error(Message.serverStartError(port, err));
       }
 
-      return logger.success(Message.listenOnPort(port));
+      logger.info(Message.listenOnPort(port));
     });
   } catch (err) {
-    logger.error(err);
+    logger.error(Message.serverStartError(port, err));
   }
 };
 
