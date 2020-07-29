@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require(`fs`);
+const path = require(`path`);
 const pinoms = require(`pino-multi-stream`);
 
 const prettyStream = pinoms.prettyStream({
@@ -13,7 +14,7 @@ const prettyStream = pinoms.prettyStream({
 });
 const level = process.env.LOG_LEVEL || `info`;
 const streams = [
-  {level, stream: fs.createWriteStream(`./src/service/logs/logs.txt`)},
+  {level, stream: fs.createWriteStream(path.join(path.dirname(process.mainModule.path), `service`, `logs`, `logs.txt`))},
   {level, stream: prettyStream}
 ];
 
