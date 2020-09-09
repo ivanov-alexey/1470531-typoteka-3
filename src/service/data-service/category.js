@@ -9,7 +9,7 @@ class CategoryService {
     const categories = this.articles
       .map((article) => article.category);
 
-    return [...new Set(...categories)];
+    return [...new Set(categories.flat())];
   }
 }
 
