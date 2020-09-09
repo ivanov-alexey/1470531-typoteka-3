@@ -3,16 +3,20 @@
 const fs = require(`fs`).promises;
 const {nanoid} = require(`nanoid`);
 const {
+  avatarSettings,
   FILE_NAME,
   FILE_SENTENCES_PATH,
   FILE_TITLES_PATH,
   FILE_CATEGORIES_PATH,
   FILE_COMMENTS_PATH,
+  FILE_NAMES_PATH,
+  FILE_SURNAMES_PATH,
   postsAmount,
   MAX_ID_LENGTH,
   MAX_COMMENTS,
   MAX_CATEGORIES,
   Message,
+  TimeInMilliseconds,
   ExitCode
 } = require(`../../constants`);
 const {getRandomInt, getArticleDate, shuffle, logger} = require(`../../utils`);
@@ -23,12 +27,15 @@ const getCategories = (data) => [...new Set(
     )
 )];
 
-const generateComments = (count, comments) => (
+const generateComments = (count, comments, names, surnames) => (
   Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     text: shuffle(comments)
       .slice(0, getRandomInt(1, comments.length))
       .join(` `),
+    author: `${names[getRandomInt(0, names.length - 1)]} ${surnames[getRandomInt(0, surnames.length - 1)]}`,
+    avatar: `avatar-${(getRandomInt(avatarSettings.min, avatarSettings.max))}.png`,
+    date: getRandomInt(Date.now() - TimeInMilliseconds.year, Date.now())
   }))
 );
 
@@ -44,7 +51,7 @@ const readContent = async (path) => {
   }
 };
 
-const getArticles = (count, titles, sentences, categories, comments) => {
+const getArticles = (count, titles, sentences, categories, comments, names, surnames) => {
   const amount = !count || Number.isNaN(+count)
     ? postsAmount.min
     : Number.parseInt(count, 10);
@@ -63,7 +70,7 @@ const getArticles = (count, titles, sentences, categories, comments) => {
           announce: shuffle(sentences).slice(0, 5).join(` `),
           fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
           category: getCategories(categories),
-          comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments),
+          comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments, names, surnames),
         }))
   );
 };
@@ -75,8 +82,10 @@ module.exports = {
     const categories = await readContent(FILE_CATEGORIES_PATH);
     const sentences = await readContent(FILE_SENTENCES_PATH);
     const comments = await readContent(FILE_COMMENTS_PATH);
+    const names = await readContent(FILE_NAMES_PATH);
+    const surnames = await readContent(FILE_SURNAMES_PATH);
 
-    const content = getArticles(count, titles, sentences, categories, comments);
+    const content = getArticles(count, titles, sentences, categories, comments, names, surnames);
 
     try {
       await fs.writeFile(FILE_NAME, content);

@@ -9,6 +9,8 @@ const FILE_SENTENCES_PATH = `./data/sentences.txt`;
 const FILE_TITLES_PATH = `./data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./data/categories.txt`;
 const FILE_COMMENTS_PATH = `./data/comments.txt`;
+const FILE_NAMES_PATH = `./data/names.txt`;
+const FILE_SURNAMES_PATH = `./data/surnames.txt`;
 
 const PUBLIC_DIR = `public`;
 const TEMPLATES_DIR = `templates`;
@@ -43,7 +45,13 @@ const Message = {
 
 const TimeInMilliseconds = {
   second: 1000,
-  minute: 1000 * 60
+  minute: 1000 * 60,
+  year: 31556952000
+};
+
+const avatarSettings = {
+  min: 1,
+  max: 5,
 };
 
 const DEFAULT_API_PORT = 3000;
@@ -64,6 +72,7 @@ const HttpCode = {
 module.exports = {
   API_PREFIX,
   API_URL,
+  avatarSettings,
   DEFAULT_COMMAND,
   DEFAULT_COUNT,
   DEFAULT_API_PORT,
@@ -74,6 +83,8 @@ module.exports = {
   FILE_TITLES_PATH,
   FILE_CATEGORIES_PATH,
   FILE_COMMENTS_PATH,
+  FILE_NAMES_PATH,
+  FILE_SURNAMES_PATH,
   PUBLIC_DIR,
   TEMPLATES_DIR,
   TimeInMilliseconds,
