@@ -28,9 +28,8 @@ const getArticleDate = () => {
   const day = randomDate.getDate();
   const hours = randomDate.getHours();
   const minutes = randomDate.getMinutes();
-  const seconds = randomDate.getSeconds();
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}.${month}.${day}, ${hours}:${minutes}`;
 };
 
 const logger = {
