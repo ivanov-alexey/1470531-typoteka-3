@@ -17,7 +17,9 @@ const shuffle = (someArray) => {
   return someArray;
 };
 
-const getArticleDate = () => {
+const getFirstZeroIfNeed = (number) => number < 10 ? `0${number}` : number;
+
+const getArticleDate = (dateTime = false) => {
   const currentDate = new Date().valueOf();
   const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 2).valueOf();
   const randomDate = new Date(getRandomInt(currentDate, threeMonthsAgo));
@@ -28,11 +30,12 @@ const getArticleDate = () => {
   const hours = randomDate.getHours();
   const minutes = randomDate.getMinutes();
 
-  return {
-    date: `${year}.${month}.${day}, ${hours}:${minutes}`,
-    dateTime: `${year}-${month}-${day}T${hours}:${minutes}`
-  };
+  return dateTime
+    ? `${year}-${getFirstZeroIfNeed(month)}-${getFirstZeroIfNeed(day)}T${getFirstZeroIfNeed(hours)}:${getFirstZeroIfNeed(minutes)}`
+    : `${year}.${getFirstZeroIfNeed(month)}.${getFirstZeroIfNeed(day)}, ${getFirstZeroIfNeed(hours)}:${getFirstZeroIfNeed(minutes)}`;
 };
+
+const sortByField = (articles, field) => articles.sort((prev, next) => next[field] - prev[field]);
 
 const logger = {
   info: (message) => console.info(chalk.blue(message)),
@@ -44,6 +47,7 @@ const logger = {
 module.exports = {
   getRandomInt,
   getArticleDate,
+  sortByField,
   shuffle,
   logger
 };

@@ -78,16 +78,16 @@ class ArticleService {
     }
   }
 
-  static async getLastComments() {
+  static async getComments() {
     try {
       const articles = await ArticleService.getAllArticles();
 
       return articles
-        .map((article) => article.comments)
-        .flat()
-        .sort((prev, next) => next.date - prev.date)
-        .slice(0, 4);
-
+        .map((article) =>
+          article.comments
+            .map((comment) => ({...comment, articleTitle: article.title, articleId: article.id}))
+        )
+        .flat();
     } catch (err) {
       console.error(err);
 

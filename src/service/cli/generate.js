@@ -67,6 +67,7 @@ const getArticles = (count, titles, sentences, categories, comments, names, surn
           id: nanoid(MAX_ID_LENGTH),
           title: titles[getRandomInt(0, titles.length - 1)],
           createdDate: getArticleDate(),
+          createdDateTime: getArticleDate(true),
           announce: shuffle(sentences).slice(0, 5).join(` `),
           fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
           category: getCategories(categories),

@@ -14,6 +14,7 @@ class ArticleService {
       id: nanoid(MAX_ID_LENGTH),
       comments: [],
       createdDate: getArticleDate(),
+      createdDateTime: getArticleDate(true),
       ...article,
     };
 
