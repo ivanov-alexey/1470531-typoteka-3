@@ -25,6 +25,18 @@ class ArticleService {
     }
   }
 
+  static async getArticle(id) {
+    try {
+      const articles = await ArticleService.getAllArticles();
+
+      return articles.find((article) => article.id === id);
+    } catch (err) {
+      console.error(err);
+
+      return [];
+    }
+  }
+
   static async getCategories() {
     try {
       const response = await instance.get(`/categories`);
