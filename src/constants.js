@@ -15,6 +15,8 @@ const TEMPLATES_DIR = `templates`;
 
 const MAX_ID_LENGTH = 6;
 
+const MAX_CATEGORIES = 5;
+
 const MAX_COMMENTS = 5;
 
 const postsAmount = {
@@ -39,7 +41,13 @@ const Message = {
   serverStartError: (port, error) => `Server can't start on http://localhost:${port} with error: ${error}`
 };
 
+const TimeInMilliseconds = {
+  second: 1000,
+  minute: 1000 * 60
+};
+
 const DEFAULT_API_PORT = 3000;
+const API_URL = `http://localhost:3000/api`;
 
 const DEFAULT_FRONT_PORT = 8080;
 
@@ -55,6 +63,7 @@ const HttpCode = {
 
 module.exports = {
   API_PREFIX,
+  API_URL,
   DEFAULT_COMMAND,
   DEFAULT_COUNT,
   DEFAULT_API_PORT,
@@ -67,7 +76,9 @@ module.exports = {
   FILE_COMMENTS_PATH,
   PUBLIC_DIR,
   TEMPLATES_DIR,
+  TimeInMilliseconds,
   HttpCode,
+  MAX_CATEGORIES,
   MAX_COMMENTS,
   MAX_ID_LENGTH,
   Message,

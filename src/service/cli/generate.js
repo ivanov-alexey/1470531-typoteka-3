@@ -11,13 +11,14 @@ const {
   postsAmount,
   MAX_ID_LENGTH,
   MAX_COMMENTS,
+  MAX_CATEGORIES,
   Message,
   ExitCode
 } = require(`../../constants`);
 const {getRandomInt, getArticleDate, shuffle, logger} = require(`../../utils`);
 
 const getCategories = (data) => [...new Set(
-    Array(getRandomInt(0, data.length - 1)).fill({}).map(
+    Array(getRandomInt(0, MAX_CATEGORIES)).fill({}).map(
         () => data[getRandomInt(0, data.length - 1)]
     )
 )];
