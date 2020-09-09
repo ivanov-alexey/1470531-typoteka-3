@@ -2,11 +2,10 @@
 
 const chalk = require(`chalk`);
 
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
+const getRandomInt = (min = 0, max = 1) => {
+  const rand = min + Math.random() * (max + 1 - min);
 
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(rand);
 };
 
 const shuffle = (someArray) => {
