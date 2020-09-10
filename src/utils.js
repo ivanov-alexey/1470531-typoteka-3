@@ -1,6 +1,7 @@
 'use strict';
 
 const chalk = require(`chalk`);
+const {TextRestriction} = require(`./constants`);
 
 const getRandomInt = (min = 0, max = 1) => {
   const rand = min + Math.random() * (max + 1 - min);
@@ -44,9 +45,32 @@ const logger = {
   error: (message) => console.error(chalk.red(message)),
 };
 
+const generateErrors = (article) => {
+  const errors = [];
+
+  if (article.announce.length < TextRestriction.shortMin || article.announce.length > TextRestriction.shortMax) {
+    errors.push(`Введите корректный текст анонса`);
+  }
+
+  if (article.title.length < TextRestriction.shortMin || article.title.length > TextRestriction.shortMax) {
+    errors.push(`Введите корректный текст заголовка`);
+  }
+
+  if (article.fullText.length > TextRestriction.longMax) {
+    errors.push(`Введите корректный текст статьи`);
+  }
+
+  if (!article.category.length) {
+    errors.push(`Выберите категорию`);
+  }
+
+  return errors;
+};
+
 module.exports = {
   getRandomInt,
   getArticleDate,
+  generateErrors,
   sortByField,
   shuffle,
   logger

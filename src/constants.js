@@ -69,6 +69,12 @@ const HttpCode = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+const TextRestriction = {
+  shortMin: 30,
+  shortMax: 250,
+  longMax: 1000
+};
+
 module.exports = {
   API_PREFIX,
   API_URL,
@@ -87,6 +93,7 @@ module.exports = {
   FILE_SURNAMES_PATH,
   PUBLIC_DIR,
   TEMPLATES_DIR,
+  TextRestriction,
   TimeInMilliseconds,
   HttpCode,
   MAX_CATEGORIES,

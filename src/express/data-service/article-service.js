@@ -52,7 +52,7 @@ class ArticleService {
   static async getCategoriesWithArticlesCounter() {
     try {
       const articles = await ArticleService.getAllArticles();
-      const categoriesInArticles = articles.map((article) => article.category).flat();
+      const categoriesInArticles = [...new Set(articles.map((article) => article.category).flat())];
 
       return categoriesInArticles.map((category) => ({
         name: category,
@@ -116,6 +116,21 @@ class ArticleService {
       console.error(err);
 
       return [];
+    }
+  }
+
+  async saveNewArticle() {
+    try {
+      return await instance.post(`/articles`, {
+        title: this.article.title,
+        category: typeof this.article.category === `string` ? [this.article.category] : this.article.category || ``,
+        picture: this.article.picture,
+        announce: this.article.announce,
+        fullText: this.article.fullText,
+      });
+
+    } catch (err) {
+      return console.error(err);
     }
   }
 }
