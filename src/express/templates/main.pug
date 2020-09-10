@@ -21,7 +21,7 @@ block content
           ul.hot__list
             each popularArticle in popularArticles
               li.hot__list-item
-                a.hot__list-link(href='#')= popularArticle.announce
+                a.hot__list-link(href='/articles/' + popularArticle.id)= popularArticle.announce
                   sup.hot__link-sup= popularArticle.commentsLength
         else
           p.hot__empty Здесь пока ничего нет...
@@ -53,7 +53,7 @@ block content
                 img.preview__background-image(src='/img/' + article.picture, width='460', height='240', alt='Фотография статьи')
             time.preview__time(datetime=article.createdDateTime)= article.createdDate
             h3.preview__name
-              a.preview__name-link(href='#')= article.title
+              a.preview__name-link(href='/articles/' + article.id)= article.title
             p.preview__text= article.announce
             a.preview__comment(href='#')
               | Комментарии
