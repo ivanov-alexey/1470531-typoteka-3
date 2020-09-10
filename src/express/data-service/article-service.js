@@ -106,6 +106,18 @@ class ArticleService {
       return [];
     }
   }
+
+  static async getSearchResults(query) {
+    try {
+      const response = await instance.get(`${query}`);
+
+      return response.data;
+    } catch (err) {
+      console.error(err);
+
+      return [];
+    }
+  }
 }
 
 module.exports = ArticleService;
