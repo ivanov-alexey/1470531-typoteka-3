@@ -27,9 +27,9 @@ class ArticleService {
 
   static async getArticle(id) {
     try {
-      const articles = await ArticleService.getAllArticles();
+      const response = await instance.get(`/articles/${id}`);
 
-      return articles.find((article) => article.id === id);
+      return response.data;
     } catch (err) {
       console.error(err);
 
