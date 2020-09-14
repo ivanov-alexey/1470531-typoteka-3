@@ -44,11 +44,11 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
     const categories = await ArticleService.getCategories();
     const article = new ArticleService(newArticle);
     const response = await article.saveNewArticle();
+    const wrongAnnounce = newArticle.announce.length < TextRestriction.shortMin || newArticle.announce.length > TextRestriction.shortMax;
+    const wrongTitle = newArticle.title.length < TextRestriction.shortMin || newArticle.title.length > TextRestriction.shortMax;
 
-    if (newArticle.announce.length < TextRestriction.shortMin
-        || newArticle.announce.length > TextRestriction.shortMax
-        || newArticle.title.length < TextRestriction.shortMin
-        || newArticle.title.length > TextRestriction.shortMax
+    if (wrongAnnounce
+        || wrongTitle
         || !newArticle.category.length
         || newArticle.fullText.length > TextRestriction.longMax
         || response && response.statusCode === HttpCode.BAD_REQUEST
