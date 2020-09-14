@@ -33,11 +33,7 @@ CREATE TABLE articles
     picture TEXT,
     title TEXT NOT NULL,
     publication_date TIMESTAMP NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    user_id INTEGER,
-    FOREIGN KEY (user_id) REFERENCES users (id)
-        ON DELETE SET NULL
-        ON UPDATE SET NULL
+    created_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE categories
