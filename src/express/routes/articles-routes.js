@@ -5,7 +5,7 @@ const path = require(`path`);
 const multer = require(`multer`);
 const ArticleService = require(`../data-service/article-service`);
 const {getErrorTemplate} = require(`../../utils`);
-const {HttpCode, TextRestriction} = require(`../../constants`);
+const {TextRestriction} = require(`../../constants`);
 const {generateErrors} = require(`../../utils`);
 
 const storage = multer.diskStorage({
@@ -49,7 +49,6 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
   try {
     const categories = await ArticleService.getCategories();
     const article = new ArticleService(newArticle);
-    const response = await article.saveNewArticle();
     const wrongAnnounce = newArticle.announce.length < TextRestriction.shortMin || newArticle.announce.length > TextRestriction.shortMax;
     const wrongTitle = newArticle.title.length < TextRestriction.shortMin || newArticle.title.length > TextRestriction.shortMax;
 
@@ -57,7 +56,6 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
         || wrongTitle
         || !newArticle.category.length
         || newArticle.fullText.length > TextRestriction.longMax
-        || response && response.statusCode === HttpCode.BAD_REQUEST
     ) {
       return res.render(`my/new-post`, {
         article: newArticle,
@@ -67,6 +65,8 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
         categories
       });
     }
+
+    await article.createNewArticle();
 
     return res.redirect(`/my`);
   } catch (err) {

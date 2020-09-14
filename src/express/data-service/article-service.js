@@ -105,9 +105,9 @@ class ArticleService {
     }
   }
 
-  async saveNewArticle() {
+  async createNewArticle() {
     try {
-      return await instance.post(`/articles`, {
+      return await instance.post(`/articles/add`, {
         title: this.article.title,
         category: typeof this.article.category === `string` ? [this.article.category] : this.article.category || ``,
         picture: this.article.picture,

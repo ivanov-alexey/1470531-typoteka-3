@@ -30,7 +30,7 @@ module.exports = (app, articleService, commentService) => {
       .json(article);
   });
 
-  route.post(`/`, articleValidator, (req, res) => {
+  route.post(`/add`, articleValidator, (req, res) => {
     const article = articleService.create(req.body);
 
     return res.status(HttpCode.CREATED)
