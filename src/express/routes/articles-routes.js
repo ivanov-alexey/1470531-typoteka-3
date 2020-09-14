@@ -4,6 +4,7 @@ const {Router} = require(`express`);
 const path = require(`path`);
 const multer = require(`multer`);
 const ArticleService = require(`../data-service/article-service`);
+const {getErrorTemplate} = require(`../../utils`);
 const {HttpCode, TextRestriction} = require(`../../constants`);
 const {generateErrors} = require(`../../utils`);
 
@@ -21,13 +22,18 @@ const articlesRoutes = new Router();
 articlesRoutes.get(`/category/:id`, (req, res) => res.render(`articles-by-category`));
 
 articlesRoutes.get(`/add`, async (req, res) => {
-  const categories = await ArticleService.getCategories();
+  try {
+    const categories = await ArticleService.getCategories();
 
-  res.render(`my/new-post`, {
-    isEdit: false,
-    isError: false,
-    categories
-  });
+    res.render(`my/new-post`, {
+      isEdit: false,
+      isError: false,
+      categories
+    });
+  } catch (err) {
+    console.error(err);
+    res.render(getErrorTemplate(err));
+  }
 });
 
 articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
@@ -64,29 +70,40 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
 
     return res.redirect(`/my`);
   } catch (err) {
-    return console.error(err);
+    console.error(err);
+    return res.render(getErrorTemplate(err));
   }
 });
 
 articlesRoutes.get(`/edit/:id`, async (req, res) => {
-  const {id} = req.params;
-  const article = await ArticleService.getArticle(id);
+  try {
+    const {id} = req.params;
+    const article = await ArticleService.getArticle(id);
 
-  res.render(`my/new-post`, {
-    article,
-    isEdit: true
-  });
+    res.render(`my/new-post`, {
+      article,
+      isEdit: true
+    });
+  } catch (err) {
+    console.error(err);
+    res.render(getErrorTemplate(err));
+  }
 });
 
 articlesRoutes.get(`/:id`, async (req, res) => {
-  const {id} = req.params;
-  const article = await ArticleService.getArticle(id);
-  const categories = await ArticleService.getCategoriesWithArticlesCounter();
+  try {
+    const {id} = req.params;
+    const article = await ArticleService.getArticle(id);
+    const categories = await ArticleService.getCategoriesWithArticlesCounter();
 
-  res.render(`post`, {
-    article,
-    categories
-  });
+    res.render(`post`, {
+      article,
+      categories
+    });
+  } catch (err) {
+    console.error(err);
+    res.render(getErrorTemplate(err));
+  }
 });
 
 module.exports = articlesRoutes;

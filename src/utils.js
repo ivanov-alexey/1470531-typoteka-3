@@ -1,7 +1,7 @@
 'use strict';
 
 const chalk = require(`chalk`);
-const {TextRestriction} = require(`./constants`);
+const {Message, TextRestriction} = require(`./constants`);
 
 const getRandomInt = (min = 0, max = 1) => {
   const rand = min + Math.random() * (max + 1 - min);
@@ -67,9 +67,12 @@ const generateErrors = (article) => {
   return errors;
 };
 
+const getErrorTemplate = ({message}) => message === Message.serverError ? `errors/500` : `errors/400`;
+
 module.exports = {
   getRandomInt,
   getArticleDate,
+  getErrorTemplate,
   generateErrors,
   sortByField,
   shuffle,

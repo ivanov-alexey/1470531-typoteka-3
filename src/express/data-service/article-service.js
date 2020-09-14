@@ -1,7 +1,7 @@
 'use strict';
 
 const axios = require(`axios`);
-const {API_URL, TimeInMilliseconds} = require(`../../constants`);
+const {API_URL, TimeInMilliseconds, Message} = require(`../../constants`);
 
 const instance = axios.create({
   baseURL: API_URL,
@@ -19,9 +19,7 @@ class ArticleService {
 
       return response.data;
     } catch (error) {
-      console.error(error);
-
-      return [];
+      throw new Error(Message.serverError);
     }
   }
 
@@ -31,9 +29,7 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      console.error(err);
-
-      return [];
+      throw new Error(Message.serverError);
     }
   }
 
@@ -43,9 +39,7 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      console.error(err);
-
-      return [];
+      throw new Error(Message.serverError);
     }
   }
 
@@ -59,9 +53,7 @@ class ArticleService {
         count: categoriesInArticles.filter((item) => item === category).length
       }));
     } catch (err) {
-      console.error(err);
-
-      return [];
+      throw new Error(Message.serverError);
     }
   }
 
@@ -84,9 +76,7 @@ class ArticleService {
           };
         });
     } catch (err) {
-      console.error(err);
-
-      return [];
+      throw new Error(Message.serverError);
     }
   }
 
@@ -101,9 +91,7 @@ class ArticleService {
         )
         .flat();
     } catch (err) {
-      console.error(err);
-
-      return [];
+      throw new Error(Message.serverError);
     }
   }
 
@@ -113,9 +101,7 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      console.error(err);
-
-      return [];
+      throw new Error(Message.serverError);
     }
   }
 
@@ -130,7 +116,7 @@ class ArticleService {
       });
 
     } catch (err) {
-      return console.error(err);
+      throw new Error(Message.serverError);
     }
   }
 }

@@ -40,7 +40,8 @@ const Message = {
   notFound: `Sorry, page not found`,
   postsQuotaExceed: `Не больше 1000 публикаций`,
   listenOnPort: (port) => `Listening for connections on http://localhost:${port}`,
-  serverStartError: (port, error) => `Server can't start on http://localhost:${port} with error: ${error}`
+  serverStartError: (port, error) => `Server can't start on http://localhost:${port} with error: ${error}`,
+  serverError: `Server error`
 };
 
 const TimeInMilliseconds = {
