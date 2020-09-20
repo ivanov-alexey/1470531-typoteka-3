@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS categories_articles CASCADE;
 
 CREATE TABLE users
 (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     avatar TEXT,
     email TEXT NOT NULL,
     firstname TEXT NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE users
 
 CREATE TABLE articles
 (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     announce TEXT NOT NULL,
     full_text TEXT NOT NULL,
     picture TEXT,
@@ -42,14 +42,14 @@ CREATE TABLE articles
 
 CREATE TABLE categories
 (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title TEXT,
     created_at timestamptz
 );
 
 CREATE TABLE comments
 (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     text TEXT,
     publication_date timestamptz,
     created_at timestamptz,
@@ -65,7 +65,7 @@ CREATE TABLE comments
 
 CREATE TABLE categories_articles
 (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     category_id INTEGER NOT NULL,
     article_id INTEGER NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories (id)
