@@ -1,7 +1,8 @@
 'use strict';
 
 const axios = require(`axios`);
-const {API_URL, TimeInMilliseconds, Message} = require(`../../constants`);
+const {getErrorMessage} = require(`../../utils`);
+const {API_URL, TimeInMilliseconds} = require(`../../constants`);
 
 const instance = axios.create({
   baseURL: API_URL,
@@ -18,8 +19,10 @@ class ArticleService {
       const response = await instance.get(`/articles`);
 
       return response.data;
-    } catch (error) {
-      throw new Error(Message.serverError);
+    } catch (err) {
+      console.error(`Request /articles error: `, err.message);
+
+      return getErrorMessage(err);
     }
   }
 
@@ -29,7 +32,9 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      throw new Error(Message.serverError);
+      console.error(`Request /articles/:id error: `, err.message);
+
+      return getErrorMessage(err);
     }
   }
 
@@ -39,7 +44,9 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      throw new Error(Message.serverError);
+      console.error(`Request /categories error: `, err.message);
+
+      return getErrorMessage(err);
     }
   }
 
@@ -53,7 +60,9 @@ class ArticleService {
         count: categoriesInArticles.filter((item) => item === category).length
       }));
     } catch (err) {
-      throw new Error(Message.serverError);
+      console.error(`Request /articles error: `, err.message);
+
+      return getErrorMessage(err);
     }
   }
 
@@ -76,7 +85,9 @@ class ArticleService {
           };
         });
     } catch (err) {
-      throw new Error(Message.serverError);
+      console.error(`Request /articles error: `, err.message);
+
+      return getErrorMessage(err);
     }
   }
 
@@ -91,7 +102,9 @@ class ArticleService {
         )
         .flat();
     } catch (err) {
-      throw new Error(Message.serverError);
+      console.error(`Request /articles error: `, err.message);
+
+      return getErrorMessage(err);
     }
   }
 
@@ -101,7 +114,9 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      throw new Error(Message.serverError);
+      console.error(`Request /search error: `, err.message);
+
+      return getErrorMessage(err);
     }
   }
 
@@ -116,7 +131,9 @@ class ArticleService {
       });
 
     } catch (err) {
-      throw new Error(Message.serverError);
+      console.error(`Request /articles/add error: `, err.message);
+
+      return getErrorMessage(err);
     }
   }
 }

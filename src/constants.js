@@ -41,7 +41,8 @@ const Message = {
   postsQuotaExceed: `Не больше 1000 публикаций`,
   listenOnPort: (port) => `Listening for connections on http://localhost:${port}`,
   serverStartError: (port, error) => `Server can't start on http://localhost:${port} with error: ${error}`,
-  serverError: `Server error`
+  serverError: `Server error`,
+  connectionError: `Connection error`
 };
 
 const TimeInMilliseconds = {
