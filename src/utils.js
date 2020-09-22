@@ -1,12 +1,12 @@
 'use strict';
 
 const chalk = require(`chalk`);
+const {Message, HttpCode, TextRestriction} = require(`./constants`);
 
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
+const getRandomInt = (min = 0, max = 1) => {
+  const rand = min + Math.random() * (max + 1 - min);
 
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(rand);
 };
 
 const shuffle = (someArray) => {
@@ -18,7 +18,9 @@ const shuffle = (someArray) => {
   return someArray;
 };
 
-const getArticleDate = () => {
+const getFirstZeroIfNeed = (number) => number < 10 ? `0${number}` : number;
+
+const getArticleDate = (dateTime = false) => {
   const currentDate = new Date().valueOf();
   const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 2).valueOf();
   const randomDate = new Date(getRandomInt(currentDate, threeMonthsAgo));
@@ -28,10 +30,13 @@ const getArticleDate = () => {
   const day = randomDate.getDate();
   const hours = randomDate.getHours();
   const minutes = randomDate.getMinutes();
-  const seconds = randomDate.getSeconds();
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return dateTime
+    ? `${year}-${getFirstZeroIfNeed(month)}-${getFirstZeroIfNeed(day)}T${getFirstZeroIfNeed(hours)}:${getFirstZeroIfNeed(minutes)}`
+    : `${year}.${getFirstZeroIfNeed(month)}.${getFirstZeroIfNeed(day)}, ${getFirstZeroIfNeed(hours)}:${getFirstZeroIfNeed(minutes)}`;
 };
+
+const sortByField = (articles, field) => articles.sort((prev, next) => next[field] - prev[field]);
 
 const logger = {
   info: (message) => console.info(chalk.blue(message)),
@@ -40,9 +45,45 @@ const logger = {
   error: (message) => console.error(chalk.red(message)),
 };
 
+const generateErrors = (article) => {
+  const errors = [];
+
+  if (article.announce.length < TextRestriction.shortMin || article.announce.length > TextRestriction.shortMax) {
+    errors.push(`Введите корректный текст анонса`);
+  }
+
+  if (article.title.length < TextRestriction.shortMin || article.title.length > TextRestriction.shortMax) {
+    errors.push(`Введите корректный текст заголовка`);
+  }
+
+  if (article.fullText.length > TextRestriction.longMax) {
+    errors.push(`Введите корректный текст статьи`);
+  }
+
+  if (!article.category.length) {
+    errors.push(`Выберите категорию`);
+  }
+
+  return errors;
+};
+
+const getErrorMessage = (error) => {
+  if (error.response && error.response.status !== HttpCode.NOT_FOUND) {
+    throw new Error(Message.serverError);
+  }
+
+  throw new Error(Message.connectionError);
+};
+
+const getErrorTemplate = ({message}) => message === Message.serverError ? `errors/500` : `errors/400`;
+
 module.exports = {
   getRandomInt,
   getArticleDate,
+  getErrorTemplate,
+  getErrorMessage,
+  generateErrors,
+  sortByField,
   shuffle,
   logger
 };
