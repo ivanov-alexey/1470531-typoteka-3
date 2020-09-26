@@ -17,3 +17,4 @@ build/
 /mocks.json
 /coverage/
 /src/service/logs/
+.env
