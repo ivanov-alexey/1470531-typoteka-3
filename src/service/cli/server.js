@@ -10,6 +10,7 @@ const {
 const createApi = require(`../api`);
 const getMockData = require(`../lib/get-mock-data`);
 const {getLogger} = require(`../lib/logger`);
+const {connectToDb} = require(`../db/connect`);
 
 const logger = getLogger();
 
@@ -54,6 +55,8 @@ const run = async (args) => {
 
       logger.info(Message.listenOnPort(port));
     });
+
+    connectToDb();
   } catch (err) {
     logger.error(Message.serverStartError(port, err));
   }
