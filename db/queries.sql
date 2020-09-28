@@ -1,13 +1,13 @@
 /* done Получить список всех категорий (идентификатор, наименование категории); */
-SELECT id    AS "identifier",
-       title AS "category_name"
+SELECT id    AS "id",
+       title AS "title"
 FROM categories;
 
 
 /* Получить список категорий для которых создана минимум одна публикация
    (идентификатор, наименование категории); */
-SELECT c.id    AS "identifier",
-       c.title AS "category_name"
+SELECT c.id    AS "id",
+       c.title AS "title"
 FROM categories_articles AS ca
          INNER JOIN categories AS c on ca.category_id = c.id
 GROUP BY c.id
@@ -16,9 +16,9 @@ HAVING count(c.id) > 0;
 
 /* Получить список категорий с количеством публикаций (идентификатор,
    наименование категории, количество публикаций в категории); */
-SELECT c.id                  AS "identifier",
-       c.title               AS "category_name",
-       count(ca.category_id) AS "amount_of_publications"
+SELECT c.id                  AS "id",
+       c.title               AS "title",
+       count(ca.category_id) AS "articles_count"
 FROM categories AS c
          LEFT JOIN categories_articles AS ca ON ca.category_id = c.id
 GROUP BY c.id;
@@ -27,17 +27,17 @@ GROUP BY c.id;
 /* Получить список публикаций (идентификатор публикации, заголовок публикации,
     анонс публикации, дата публикации, имя и фамилия автора, контактный email,
     количество комментариев, наименование категорий). Сначала свежие публикации; */
-SELECT a.id                                 AS "publication_id",
-       a.title                              AS "publication_title",
-       a.announce                           AS "announcement",
+SELECT a.id                                 AS "id",
+       a.title                              AS "title",
+       a.announce                           AS "announce",
        a.full_text                          AS "full_text",
        a.publication_date                   AS "publication_date",
-       a.picture                            AS "img_path",
+       a.picture                            AS "picture",
        concat(u.firstname, ' ', u.lastname) AS "author",
        u.email                              AS "email",
-       count(com.article_id)                AS "amount_of_comments",
+       count(com.article_id)                AS "comments_count",
        (
-           SELECT string_agg(c.title, ', ') AS "categories_name"
+           SELECT string_agg(c.title, ', ') AS "categories_title"
            FROM categories_articles AS ca
                     LEFT JOIN categories AS c ON ca.category_id = c.id
                AND ca.article_id = a.id
@@ -54,16 +54,16 @@ GROUP BY a.id, u.firstname, u.lastname, u, email;
     заголовок публикации, анонс, полный текст публикации, дата публикации,
     путь к изображению, имя и фамилия автора, контактный email,
     количество комментариев, наименование категорий); */
-SELECT a.id                                 AS "publication_id",
-       a.title                              AS "publication title",
-       a.announce                           AS "announcement",
+SELECT a.id                                 AS "id",
+       a.title                              AS "title",
+       a.announce                           AS "announce",
        a.full_text                          AS "full_text",
        a.publication_date                   AS "publication_date",
        concat(u.firstname, ' ', u.lastname) AS "author",
        u.email                              AS "email",
-       count(com.article_id)                AS "amount_of_comments",
+       count(com.article_id)                AS "comments_count",
        (
-           SELECT string_agg(c.title, ', ') AS "categories_name"
+           SELECT string_agg(c.title, ', ') AS "categories_title"
            FROM categories_articles AS ca
                     LEFT JOIN categories AS c
                               ON ca.category_id = c.id
@@ -84,10 +84,10 @@ ORDER BY a.publication_date DESC;
 
 /* Получить список из 5 свежих комментариев (идентификатор комментария,
    идентификатор публикации, имя и фамилия автора, текст комментария); */
-SELECT c.id                                 AS "comment_id",
-       c.article_id                         AS "publication_id",
+SELECT c.id                                 AS "id",
+       c.article_id                         AS "article_id",
        concat(u.firstname, ' ', u.lastname) AS "author",
-       c.text                               AS "comment_text"
+       c.text                               AS "text"
 FROM comments AS c
          INNER JOIN users AS u
                     ON c.user_id = u.id
@@ -98,10 +98,10 @@ LIMIT 5;
 /* Получить список комментариев для определённой публикации (идентификатор комментария,
     идентификатор публикации, имя и фамилия автора, текст комментария).
     Сначала новые комментарии; */
-SELECT c.id                                 AS "comment_id",
-       c.article_id                         AS "publication_id",
+SELECT c.id                                 AS "id",
+       c.article_id                         AS "article_id",
        concat(u.firstname, ' ', u.lastname) AS "author",
-       c.text                               AS "comment_text"
+       c.text                               AS "text"
 FROM comments AS c
          INNER JOIN users AS u
                     ON c.user_id = u.id
