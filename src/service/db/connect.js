@@ -12,6 +12,11 @@ const sequelize = new Sequelize(database, user, password, {
   dialect: `postgres`,
 });
 
+const Article = require(`./models/article`)(sequelize);
+const Category = require(`./models/category`)(sequelize);
+const Comment = require(`./models/comment`)(sequelize);
+const User = require(`./models/user`)(sequelize);
+
 const connectToDb = async () => {
   try {
     logger.info(`Connecting to database "${database}" on ${host}:${port}`);
@@ -27,6 +32,23 @@ const connectToDb = async () => {
   }
 };
 
+const initDb = async () => {
+  try {
+    await sequelize.sync({force: true});
+
+    return logger.info(`Database created successfully`);
+  } catch (err) {
+    return console.error(err);
+  }
+};
+
 module.exports = {
-  connectToDb
+  db: {
+    Article,
+    Category,
+    Comment,
+    User
+  },
+  connectToDb,
+  initDb
 };
