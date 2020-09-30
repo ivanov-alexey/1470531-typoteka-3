@@ -31,15 +31,11 @@ module.exports = (sequelize) => {
     "publication_date": {
       type: DataTypes.DATE,
       allowNull: false
-    },
-    "user_id": {
-      type: DataTypes.INTEGER,
-      allowNull: false
     }
   }, {
     sequelize,
     timestamps: true,
-    paranoid: false
+    modelName: `article`
   });
 
   return Article;

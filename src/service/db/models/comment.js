@@ -20,18 +20,10 @@ module.exports = (sequelize) => {
       type: DataTypes.DATE,
       allowNull: false
     },
-    "user_id": {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    "article_id": {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    }
   }, {
     sequelize,
     timestamps: true,
-    paranoid: false
+    modelName: `comment`
   });
 
   return Comment;

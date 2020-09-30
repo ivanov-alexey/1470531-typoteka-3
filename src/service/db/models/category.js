@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
   }, {
     sequelize,
     timestamps: true,
-    paranoid: false
+    modelName: `category`
   });
 
   return Category;
