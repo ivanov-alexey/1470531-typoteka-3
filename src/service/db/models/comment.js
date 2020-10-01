@@ -23,6 +23,7 @@ module.exports = (sequelize) => {
   }, {
     sequelize,
     timestamps: true,
+    underscored: true,
     modelName: `comment`
   });
 
