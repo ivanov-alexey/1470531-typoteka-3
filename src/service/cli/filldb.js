@@ -117,6 +117,18 @@ const run = async () => {
     await Article.bulkCreate(articles);
     await Comment.bulkCreate(comments);
     await Category.bulkCreate(categories);
+
+    const firstCategory = await Category.findByPk(1);
+    const secondCategory = await Category.findByPk(2);
+
+    const firstArticle = await Article.findByPk(1);
+    const secondrticle = await Article.findByPk(2);
+    const thirdArticle = await Article.findByPk(3);
+
+    await firstArticle.addCategory(firstCategory);
+    await secondrticle.addCategory(secondCategory);
+    await thirdArticle.addCategory(firstCategory);
+
     await sequelize.close();
 
     return logger.info(`Database filled successfully`);
