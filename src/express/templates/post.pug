@@ -14,7 +14,7 @@ block content
             ul.post__themes.themes
               each category in categories
                 li.themes__item
-                  a.themes__item-link(href='#')= category.name
+                  a.themes__item-link(href='#')= category.title
                     sup= category.count
                   button.themes__remove-btn(type='button') Удалить категорию
           if article.picture
@@ -27,14 +27,14 @@ block content
         section.post__comments.comments
           h2.comments__title.title.title--middle Комментарии
           ul.comments__list
-            each comment in article.comments
+            each comment in comments
               li.comments__comment
                 .comments__avatar.avatar
                   img(src='/img/' + comment.avatar, alt='аватар пользователя')
                 .comments__text
                   .comments__head
                     p= comment.author + '•'
-                    time.comments__date(datetime= comment.dateTime)= comment.date
+                    time.comments__date(datetime= comment.createdAt)= comment.createdAt
                   p.comments__message= comment.text
           .comments__footer.comments__footer--user
             form(action='#', method='POST')
