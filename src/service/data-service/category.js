@@ -1,15 +1,26 @@
 'use strict';
 
+const {db: {Category}} = require(`../db/connect`);
+
 class CategoryService {
-  constructor(articles) {
-    this.articles = articles;
-  }
+  async findAll() {
+    try {
+      const result = [];
+      const allCategories = await Category.findAll();
 
-  findAll() {
-    const categories = this.articles
-      .map((article) => article.category);
+      for (const category of allCategories) {
+        const {id} = category;
+        const currentCategory = await Category.findByPk(id);
+        const count = await currentCategory.countArticles();
+        const {dataValues} = currentCategory;
 
-    return [...new Set(categories.flat())];
+        result.push({...dataValues, count});
+      }
+
+      return result;
+    } catch (err) {
+      return console.error(err);
+    }
   }
 }
 
