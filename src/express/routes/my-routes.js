@@ -2,15 +2,14 @@
 
 const {Router} = require(`express`);
 const ArticleService = require(`../data-service/article-service`);
+const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
-const {sortByField} = require(`../../utils`);
 
 const myRoutes = new Router();
 
 myRoutes.get(`/`, async (req, res) => {
   try {
-    const allArticles = await ArticleService.getAllArticles();
-    const articles = sortByField(allArticles, `createdDate`);
+    const articles = await ArticleService.getAll();
 
     res.render(`my/my`, {
       articles
@@ -23,8 +22,7 @@ myRoutes.get(`/`, async (req, res) => {
 
 myRoutes.get(`/comments`, async (req, res) => {
   try {
-    const allComments = await ArticleService.getComments();
-    const comments = sortByField(allComments, `createdDate`);
+    const comments = await CommentService.getAll();
 
     res.render(`my/comments`, {
       comments
