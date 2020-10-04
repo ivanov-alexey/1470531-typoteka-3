@@ -28,6 +28,18 @@ class CommentService {
     }
   }
 
+  static async getByArticleId(id) {
+    try {
+      const response = await apiRequest.get(`/articles/${id}/comments`);
+
+      return response.data;
+    } catch (err) {
+      console.error(`Request /comments error: `, err.message);
+
+      return getErrorMessage(err);
+    }
+  }
+
   static async drop(id) {
     try {
       const response = await apiRequest.delete(`/comments/${id}`);
