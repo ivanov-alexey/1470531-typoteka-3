@@ -4,6 +4,8 @@ const {Router} = require(`express`);
 const path = require(`path`);
 const multer = require(`multer`);
 const ArticleService = require(`../data-service/article-service`);
+const CategoryService = require(`../data-service/category-service`);
+const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
 const {TextRestriction} = require(`../../constants`);
 const {generateErrors} = require(`../../utils`);
@@ -17,13 +19,15 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({storage});
+
 const articlesRoutes = new Router();
 
+// TODO: fix
 articlesRoutes.get(`/category/:id`, (req, res) => res.render(`articles-by-category`));
 
 articlesRoutes.get(`/add`, async (req, res) => {
   try {
-    const categories = await ArticleService.getCategories();
+    const categories = await CategoryService.getAll();
 
     res.render(`my/new-post`, {
       isEdit: false,
@@ -47,7 +51,7 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
   };
 
   try {
-    const categories = await ArticleService.getCategories();
+    const categories = await CategoryService.getAll();
     const article = new ArticleService(newArticle);
     const wrongAnnounce = newArticle.announce.length < TextRestriction.shortMin || newArticle.announce.length > TextRestriction.shortMax;
     const wrongTitle = newArticle.title.length < TextRestriction.shortMin || newArticle.title.length > TextRestriction.shortMax;
@@ -78,10 +82,12 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
 articlesRoutes.get(`/edit/:id`, async (req, res) => {
   try {
     const {id} = req.params;
-    const article = await ArticleService.getArticle(id);
+    const article = await ArticleService.getOne(id);
+    const categories = await CategoryService.getAll();
 
     res.render(`my/new-post`, {
       article,
+      categories,
       isEdit: true
     });
   } catch (err) {
@@ -93,12 +99,14 @@ articlesRoutes.get(`/edit/:id`, async (req, res) => {
 articlesRoutes.get(`/:id`, async (req, res) => {
   try {
     const {id} = req.params;
-    const article = await ArticleService.getArticle(id);
-    const categories = await ArticleService.getCategoriesWithArticlesCounter();
+    const article = await ArticleService.getOne(id);
+    const categories = await CategoryService.getAll();
+    const comments = await CommentService.getByArticleId(id);
 
     res.render(`post`, {
       article,
-      categories
+      categories,
+      comments
     });
   } catch (err) {
     console.error(err);
