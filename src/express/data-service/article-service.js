@@ -32,31 +32,17 @@ class ArticleService {
     }
   }
 
-  // TODO: fix
-  // static async getMostDiscussed() {
-  //   try {
-  //     const articles = await ArticleService.getAll();
-  //
-  //     return articles
-  //       .sort((prev, next) => next.comments.length - prev.comments.length)
-  //       .slice(0, 4)
-  //       .map((article) => {
-  //         const croppedAnnounce = article.announce.slice(0, 100).trim();
-  //         const announce = croppedAnnounce
-  //           .slice(0, croppedAnnounce.endsWith(`,`) ? croppedAnnounce.length - 1 : croppedAnnounce.length) + `...`;
-  //
-  //         return {
-  //           id: article.id,
-  //           announce,
-  //           commentsLength: article.comments.length
-  //         };
-  //       });
-  //   } catch (err) {
-  //     console.error(`Request /articles error: `, err.message);
-  //
-  //     return getErrorMessage(err);
-  //   }
-  // }
+  static async findMostDiscussed() {
+    try {
+      const response = await apiRequest.get(`/articles?popular=true`);
+
+      return response.data;
+    } catch (err) {
+      console.error(`Request /articles?popular=true error: `, err.message);
+
+      return getErrorMessage(err);
+    }
+  }
 
   async create() {
     try {

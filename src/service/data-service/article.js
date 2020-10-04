@@ -22,12 +22,55 @@ class ArticleService {
 
   async findAll() {
     try {
-      return await Article.findAll({
+      const result = [];
+      const allArticles = await Article.findAll({
         order: [
           [`created_at`, `DESC`]
         ],
         raw: true
       });
+
+      for (const article of allArticles) {
+        const {id} = article;
+        const currentArticle = await Article.findByPk(id);
+        const rawComments = await currentArticle.getComments();
+        const rawCategories = await currentArticle.getCategories();
+        const comments = rawComments.map(({dataValues}) => ({...dataValues}));
+        const category = rawCategories.map(({dataValues}) => ({...dataValues}));
+
+        result.push({...currentArticle.dataValues, comments, category});
+      }
+
+      return result;
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
+  }
+
+  async findMostDiscussed() {
+    try {
+      const result = [];
+      const allArticles = await Article.findAll({
+        raw: true
+      });
+
+      for (const article of allArticles) {
+        const {id} = article;
+        const currentArticle = await Article.findByPk(id);
+        const count = await currentArticle.countComments();
+        const {dataValues} = currentArticle;
+
+        result.push({
+          id: dataValues.id,
+          announce: dataValues.announce.slice(0, 100).concat(`...`),
+          count
+        });
+      }
+
+      console.log(`result`, result);
+
+      return result.sort((prev, next) => next.count - prev.count).slice(0, 4);
     } catch (err) {
       logger.error(err);
       throw err;

@@ -15,7 +15,8 @@ module.exports = (app, articleService, commentService) => {
 
   route.get(`/`, async (req, res) => {
     try {
-      const articles = await articleService.findAll();
+      const {popular} = req.query;
+      const articles = popular ? await articleService.findMostDiscussed() : await articleService.findAll();
 
       return res
         .status(HttpCode.OK)
