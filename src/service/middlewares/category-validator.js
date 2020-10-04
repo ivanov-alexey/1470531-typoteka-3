@@ -10,17 +10,20 @@ module.exports = (req, res, next) => {
   const keysExists = categoryKeys.every((key) => keys.includes(key));
 
   if (!keysExists) {
-    res.status(HttpCode.BAD_REQUEST)
+    res
+      .status(HttpCode.BAD_REQUEST)
       .send(`Title not exist`);
   }
 
   if (category.title && category.title.length < TextRestriction.categoryMin) {
-    res.status(HttpCode.BAD_REQUEST)
+    res
+      .status(HttpCode.BAD_REQUEST)
       .send(`Title too short`);
   }
 
   if (category.title && category.title.length > TextRestriction.categoryMax) {
-    res.status(HttpCode.BAD_REQUEST)
+    res
+      .status(HttpCode.BAD_REQUEST)
       .send(`Title too long`);
   }
 

@@ -10,12 +10,14 @@ module.exports = (req, res, next) => {
   const keysExists = commentKeys.every((key) => keys.includes(key));
 
   if (!keysExists) {
-    res.status(HttpCode.BAD_REQUEST)
+    res
+      .status(HttpCode.BAD_REQUEST)
       .send(`Text not exist`);
   }
 
   if (comment.text && comment.text.length < TextRestriction.commentMin) {
-    res.status(HttpCode.BAD_REQUEST)
+    res
+      .status(HttpCode.BAD_REQUEST)
       .send(`Comment too short`);
   }
 
