@@ -68,8 +68,6 @@ class ArticleService {
         });
       }
 
-      console.log(`result`, result);
-
       return result.sort((prev, next) => next.count - prev.count).slice(0, 4);
     } catch (err) {
       logger.error(err);

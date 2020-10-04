@@ -11,16 +11,11 @@ const mainRoute = new Router();
 mainRoute.get(`/`, async (req, res) => {
   try {
     const allArticles = await ArticleService.getAll();
-
-    console.log(`allArticles`, allArticles);
-
     const categories = await CategoryService.getAll();
     const popularArticles = await ArticleService.findMostDiscussed();
     const allComments = await CommentService.getAll();
     const lastComments = allComments.slice(0, 4);
     const articles = allArticles.slice(0, 8);
-
-    console.log(`popularArticles`, popularArticles);
 
     res.render(`main`, {
       articles,
