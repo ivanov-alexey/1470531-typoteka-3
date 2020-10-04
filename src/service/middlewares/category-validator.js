@@ -1,6 +1,6 @@
 'use strict';
 
-const {HttpCode} = require(`../../constants`);
+const {HttpCode, TextRestriction} = require(`../../constants`);
 
 const categoryKeys = [`title`];
 
@@ -14,12 +14,12 @@ module.exports = (req, res, next) => {
       .send(`Title not exist`);
   }
 
-  if (category.title && category.title.length < 5) {
+  if (category.title && category.title.length < TextRestriction.categoryMin) {
     res.status(HttpCode.BAD_REQUEST)
       .send(`Title too short`);
   }
 
-  if (category.title && category.title.length > 30) {
+  if (category.title && category.title.length > TextRestriction.categoryMax) {
     res.status(HttpCode.BAD_REQUEST)
       .send(`Title too long`);
   }

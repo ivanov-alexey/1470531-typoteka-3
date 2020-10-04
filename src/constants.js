@@ -72,6 +72,9 @@ const HttpCode = {
 };
 
 const TextRestriction = {
+  commentMin: 20,
+  categoryMin: 5,
+  categoryMax: 30,
   shortMin: 30,
   shortMax: 250,
   longMax: 1000
