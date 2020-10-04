@@ -46,9 +46,34 @@ class CommentService {
 
   async findAll() {
     try {
-      return await Comment.findAll({
-        raw: true
+      const result = [];
+      const allComments = await Comment.findAll({
+        order: [
+          [`created_at`, `DESC`]
+        ]
       });
+
+      for (const comment of allComments) {
+        const {id} = comment;
+        const rawComment = await Comment.findByPk(id);
+        const rawUser = await rawComment.getUser();
+        const rawArticle = await rawComment.getArticle();
+        const currentComment = rawComment.dataValues;
+        const user = rawUser.dataValues;
+        const article = rawArticle.dataValues;
+
+        result.push({
+          id: currentComment.id,
+          articleId: article.id,
+          author: `${user.firstname} ${user.lastname}`,
+          avatar: user.avatar,
+          createdAt: currentComment.createdAt,
+          text: currentComment.text
+        });
+
+      }
+
+      return result;
     } catch (err) {
       logger.error(err);
       throw err;
