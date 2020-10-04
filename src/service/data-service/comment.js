@@ -1,6 +1,9 @@
 'use strict';
 
 const {db: {Comment}} = require(`../db/connect`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 class CommentService {
   async create(userId, text) {
@@ -10,27 +13,8 @@ class CommentService {
         'user_id': userId
       });
     } catch (err) {
-      return console.error(err);
-    }
-  }
-
-  async drop(commentId) {
-    try {
-      const comment = await Comment.findByPk(commentId, {raw: true});
-
-      if (!comment) {
-        return null;
-      }
-
-      await Comment.destroy({
-        where: {
-          id: commentId
-        }
-      });
-
-      return comment;
-    } catch (err) {
-      return console.error(err);
+      logger.error(err);
+      throw err;
     }
   }
 
@@ -51,11 +35,44 @@ class CommentService {
         id: comment.id,
         author: `${comment[`user.firstname`]} ${comment[`user.lastname`]}`,
         avatar: comment[`user.avatar`],
-        createdAt: comment[`created_at`],
+        createdAt: comment.createdAt,
         text: comment.text
       }));
     } catch (err) {
-      return console.error(err);
+      logger.error(err);
+      throw err;
+    }
+  }
+
+  async findAll() {
+    try {
+      return await Comment.findAll({
+        raw: true
+      });
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
+  }
+
+  async drop(id) {
+    try {
+      const comment = await Comment.findByPk(id, {raw: true});
+
+      if (!comment) {
+        return null;
+      }
+
+      await Comment.destroy({
+        where: {
+          id
+        }
+      });
+
+      return comment;
+    } catch (err) {
+      logger.error(err);
+      throw err;
     }
   }
 }
