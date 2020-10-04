@@ -5,94 +5,169 @@ const {HttpCode} = require(`../../constants`);
 const articleValidator = require(`../middlewares/article-validator`);
 const articleExist = require(`../middlewares/article-exists`);
 const commentValidator = require(`../middlewares/comment-validator`);
+const {getLogger} = require(`../lib/logger`);
 
+const logger = getLogger();
 const route = new Router();
 
 module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, route);
 
-  route.get(`/`, (req, res) => {
-    const articles = articleService.findAll();
+  route.get(`/`, async (req, res) => {
+    try {
+      const articles = await articleService.findAll();
 
-    res.status(HttpCode.OK).json(articles);
-  });
+      return res
+        .status(HttpCode.OK)
+        .json(articles);
+    } catch (err) {
+      logger.error(err);
 
-  route.get(`/:articleId`, (req, res) => {
-    const {articleId} = req.params;
-    const article = articleService.findOne(articleId);
-
-    if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
+      return res
+        .status(HttpCode.BAD_REQUEST)
+        .send(`Bad request on GET /articles`);
     }
-
-    return res.status(HttpCode.OK)
-      .json(article);
   });
 
-  route.post(`/add`, articleValidator, (req, res) => {
-    const article = articleService.create(req.body);
+  route.get(`/:id`, async (req, res) => {
+    try {
+      const {id} = req.params;
+      const article = await articleService.findOne(id);
 
-    return res.status(HttpCode.CREATED)
-      .json(article);
-  });
+      if (!article) {
+        return res
+          .status(HttpCode.NOT_FOUND)
+          .send(`Not found with ${id}`);
+      }
 
-  route.put(`/:articleId`, articleValidator, ((req, res) => {
-    const {articleId} = req.params;
-    const existArticle = articleService.findOne(articleId);
+      return res
+        .status(HttpCode.OK)
+        .json(article);
+    } catch (err) {
+      logger.error(err);
 
-    if (!existArticle) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found with ${articleId}`);
+      return res
+        .status(HttpCode.BAD_REQUEST)
+        .send(`Bad request on GET /articles/:id`);
     }
+  });
 
-    const updatedArticle = articleService.update(articleId, req.body);
+  route.post(`/add`, articleValidator, async (req, res) => {
+    try {
+      const article = await articleService.create(req.body);
 
-    return res.status(HttpCode.OK)
-      .json(updatedArticle);
-  }));
+      return res
+        .status(HttpCode.CREATED)
+        .json(article);
+    } catch (err) {
+      logger.error(err);
 
-  route.delete(`/:articleId`, (req, res) => {
-    const {articleId} = req.params;
-    const article = articleService.drop(articleId);
-
-    if (!article) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found`);
+      return res
+        .status(HttpCode.BAD_REQUEST)
+        .send(`Bad request on POST /articles/add`);
     }
-
-    return res.status(HttpCode.OK)
-      .json(article);
   });
 
-  route.get(`/:articleId/comments`, articleExist(articleService), (req, res) => {
-    const {article} = res.locals;
-    const comments = commentService.findAll(article);
+  route.put(`/:id`, articleValidator, async (req, res) => {
+    try {
+      const {id} = req.params;
+      const article = await articleService.findOne(id);
 
-    res.status(HttpCode.OK)
-      .json(comments);
+      if (!article) {
+        return res
+          .status(HttpCode.NOT_FOUND)
+          .send(`Not found with ${id}`);
+      }
 
-  });
+      const updatedArticle = await articleService.update(id, req.body);
 
-  route.delete(`/:articleId/comments/:commentId`, articleExist(articleService), (req, res) => {
-    const {article} = res.locals;
-    const {commentId} = req.params;
-    const deletedComment = commentService.drop(article, commentId);
+      return res
+        .status(HttpCode.OK)
+        .json(updatedArticle);
+    } catch (err) {
+      logger.error(err);
 
-    if (!deletedComment) {
-      return res.status(HttpCode.NOT_FOUND)
-        .send(`Not found`);
+      return res
+        .status(HttpCode.BAD_REQUEST)
+        .send(`Bad request on GET /articles/:id`);
     }
-
-    return res.status(HttpCode.OK)
-      .json(deletedComment);
   });
 
-  route.post(`/:articleId/comments`, [articleExist(articleService), commentValidator], (req, res) => {
-    const {article} = res.locals;
-    const comment = commentService.create(article, req.body);
+  route.delete(`/:id`, async (req, res) => {
+    try {
+      const {id} = req.params;
+      const article = await articleService.drop(id);
 
-    return res.status(HttpCode.CREATED)
-      .json(comment);
+      if (!article) {
+        return res
+          .status(HttpCode.NOT_FOUND)
+          .send(`Not found`);
+      }
+
+      return res
+        .status(HttpCode.OK)
+        .json(article);
+    } catch (err) {
+      logger.error(err);
+
+      return res
+        .status(HttpCode.BAD_REQUEST)
+        .send(`Bad request on DELETE /articles/:id`);
+    }
+  });
+
+  route.get(`/:id/comments`, articleExist(articleService), async (req, res) => {
+    try {
+      const {id} = req.params;
+      const comments = await commentService.findByArticleId(id);
+
+      return res.status(HttpCode.OK).json(comments);
+    } catch (err) {
+      logger.error(err);
+
+      return res
+        .status(HttpCode.BAD_REQUEST)
+        .send(`Bad request on GET /articles/:id/comments`);
+    }
+  });
+
+  route.delete(`/:id/comments/:commentId`, articleExist(articleService), async (req, res) => {
+    try {
+      const {commentId} = req.params;
+      const deletedComment = await commentService.drop(commentId);
+
+      if (!deletedComment) {
+        return res
+          .status(HttpCode.NOT_FOUND)
+          .send(`Not found`);
+      }
+
+      return res
+        .status(HttpCode.OK)
+        .json(deletedComment);
+    } catch (err) {
+      logger.error(err);
+
+      return res
+        .status(HttpCode.BAD_REQUEST)
+        .send(`Bad request on GET /articles/:id/comments/:commentId`);
+    }
+  });
+
+  route.post(`/:id/comments/add`, [articleExist(articleService), commentValidator], async (req, res) => {
+    try {
+      // TODO: добавить userId, articleId?
+      const {article: {id}} = res.locals;
+      const comment = await commentService.create(id, req.body);
+
+      return res.status(HttpCode.CREATED)
+        .json(comment);
+    } catch (err) {
+      logger.error(err);
+
+      return res
+        .status(HttpCode.BAD_REQUEST)
+        .send(`Bad request on POST /articles/:id/comments/:commentId`);
+    }
   });
 };

@@ -1,52 +1,85 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {getArticleDate} = require(`../../utils`);
-const {MAX_ID_LENGTH} = require(`../../constants`);
+const {db: {Article}} = require(`../db/connect`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 class ArticleService {
-  constructor(articles) {
-    this.articles = articles;
-  }
-
-  create(article) {
-    const newArticle = {
-      id: nanoid(MAX_ID_LENGTH),
-      comments: [],
-      createdDate: getArticleDate(),
-      createdDateTime: getArticleDate(true),
-      ...article,
-    };
-
-    this.articles.push(newArticle);
-
-    return newArticle;
-  }
-
-  drop(id) {
-    const article = this.articles.find((item) => item.id === id);
-
-    if (!article) {
-      return null;
+  async create({announce, fullText, picture, title}) {
+    try {
+      return await Article.create({
+        announce,
+        fullText,
+        picture,
+        title
+      });
+    } catch (err) {
+      logger.error(err);
+      throw err;
     }
-
-    this.articles = this.articles.filter((item) => item.id !== id);
-
-    return article;
   }
 
-  findAll() {
-    return this.articles;
+  async findAll() {
+    try {
+      return await Article.findAll({
+        order: [
+          [`created_at`, `DESC`]
+        ],
+        raw: true
+      });
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
   }
 
-  findOne(id) {
-    return this.articles.find((item) => item.id === id);
+  async findOne(id) {
+    try {
+      return await Article.findByPk(id, {raw: true});
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
   }
 
-  update(id, article) {
-    const oldArticle = this.articles.find((item) => item.id === id);
+  async update(id, {announce, fullText, picture, title}) {
+    try {
+      await Article.update({
+        announce,
+        fullText,
+        title,
+        picture
+      }, {
+        where: {id}
+      });
 
-    return {...oldArticle, ...article};
+      return await Article.findByPk(id);
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
+  }
+
+  async drop(id) {
+    try {
+      const article = await Article.findByPk(id, {raw: true});
+
+      if (!article) {
+        return null;
+      }
+
+      await Article.destroy({
+        where: {
+          id
+        }
+      });
+
+      return article;
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
   }
 }
 
