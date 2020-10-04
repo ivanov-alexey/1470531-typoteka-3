@@ -8,7 +8,7 @@ class CategoryService {
     try {
       const response = await apiRequest.get(`/categories`);
 
-      return response.data;
+      return response.data.filter((category) => category.count);
     } catch (err) {
       console.error(`Request /categories error: `, err.message);
 
