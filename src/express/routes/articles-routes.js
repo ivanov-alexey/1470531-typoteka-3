@@ -42,12 +42,12 @@ articlesRoutes.get(`/add`, async (req, res) => {
 
 articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
   const newArticle = {
-    announce: req.body.announce || ``,
-    category: req.body.category || ``,
-    currentDate: req.body.currentDate || new Date(),
-    fullText: req.body.fullText || ``,
-    title: req.body.title || ``,
-    picture: req.file && req.file.filename || ``
+    "announce": req.body.announce || ``,
+    "category": req.body.category || ``,
+    "publication_date": req.body.currentDate || new Date(),
+    "full_text": req.body.fullText || ``,
+    "title": req.body.title || ``,
+    "picture": req.file && req.file.filename || ``
   };
 
   try {
@@ -59,7 +59,7 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
     if (wrongAnnounce
         || wrongTitle
         || !newArticle.category.length
-        || newArticle.fullText.length > TextRestriction.longMax
+        || newArticle.full_text.length > TextRestriction.longMax
     ) {
       return res.render(`my/new-post`, {
         article: newArticle,
@@ -70,7 +70,7 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
       });
     }
 
-    await article.createNewArticle();
+    await article.create();
 
     return res.redirect(`/my`);
   } catch (err) {
