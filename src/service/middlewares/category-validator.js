@@ -10,22 +10,22 @@ module.exports = (req, res, next) => {
   const keysExists = categoryKeys.every((key) => keys.includes(key));
 
   if (!keysExists) {
-    res
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Title not exist`);
   }
 
   if (category.title && category.title.length < TextRestriction.categoryMin) {
-    res
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Title too short`);
   }
 
   if (category.title && category.title.length > TextRestriction.categoryMax) {
-    res
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Title too long`);
   }
 
-  next();
+  return next();
 };

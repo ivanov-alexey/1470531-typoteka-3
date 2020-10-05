@@ -2,54 +2,62 @@
 
 const {HttpCode, TextRestriction} = require(`../../constants`);
 
-const articleKeys = [`category`, `announce`, `fullText`, `title`];
+const articleKeys = [`category`, `announce`, `full_text`, `title`, `picture`, `publication_date`];
 
 module.exports = (req, res, next) => {
   const article = req.body;
   const keys = Object.keys(article);
   const keysExists = articleKeys.every((key) => keys.includes(key));
 
+  // TODO: не работает send
+
   if (!keysExists) {
-    res
+    return res
       .status(HttpCode.BAD_REQUEST)
-      .send(`Bad request`);
+      .send(`Field not exist`);
   }
 
   if (article.title && article.title.length < TextRestriction.shortMin) {
-    res
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Title too short`);
   }
 
-  if (article.title && article.title.length < TextRestriction.shortMax) {
-    res
+  if (article.title && article.title.length > TextRestriction.shortMax) {
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Title too long`);
   }
 
   if (article.announce && article.announce.length < TextRestriction.shortMin) {
-    res
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Announce too short`);
   }
 
-  if (article.announce && article.announce.length < TextRestriction.shortMax) {
-    res
+  if (article.announce && article.announce.length > TextRestriction.shortMax) {
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Announce too long`);
   }
 
   if (article.category && !article.category.length) {
-    res
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Category is empty`);
   }
 
   if (article.fullText && article.fullText.length > TextRestriction.longMax) {
-    res
+    return res
       .status(HttpCode.BAD_REQUEST)
       .send(`Publication is too long`);
   }
 
-  next();
+  if (!article.publication_date) {
+    return res
+      .status(HttpCode.BAD_REQUEST)
+      .send(`publication_date is required`);
+  }
+
+  return next();
 };

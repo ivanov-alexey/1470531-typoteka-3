@@ -7,7 +7,8 @@ module.exports = (service) => (req, res, next) => {
   const article = service.findOne(id);
 
   if (!article) {
-    return res.status(HttpCode.NOT_FOUND)
+    return res
+      .status(HttpCode.NOT_FOUND)
       .send(`Article with id = ${id} not found`);
   }
 
