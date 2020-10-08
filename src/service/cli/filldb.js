@@ -139,7 +139,7 @@ const run = async (count) => {
     for (const article of allArticles) {
       const randomCategory = allCategories[getRandomInt(0, allCategories.length)];
 
-      article.addCategory(randomCategory);
+      await article.addCategory(randomCategory);
     }
 
     await sequelize.close();
