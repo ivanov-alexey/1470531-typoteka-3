@@ -52,14 +52,11 @@ const normalizeCount = (count) => {
 
 const getCategories = (amount, data) => [...new Set(
     Array(amount)
-    .fill({})
-    .map(
-        (item, index) => ({
-          "id": index + 1,
-          "title": data[getRandomInt(0, data.length - 1)]
-        })
-    )
-)].sort((prev, next) => prev.id - next.id);
+      .fill({})
+      .map(() => ({
+        "title": data[getRandomInt(0, data.length - 1)]
+      }))
+)];
 
 const getUsers = (amount, firstNames, lastNames) =>
   Array(amount)
@@ -68,7 +65,6 @@ const getUsers = (amount, firstNames, lastNames) =>
       const id = index + 1;
 
       return ({
-        "id": id,
         "avatar": `avatar-${id}.png`,
         "email": `user${id}@mail.localhost`,
         "firstname": firstNames[getRandomInt(0, firstNames.length - 1)],
@@ -93,19 +89,15 @@ const getComments = (amount, text, numberOfArticles, numberOfUsers) => (
 const getArticles = (amount, sentences, titles, numberOfUsers) =>
   Array(amount)
     .fill({})
-    .map((item, index) => {
-      const id = index + 1;
-
-      return ({
-        "id": id,
-        "announce": shuffle(sentences).slice(0, 5).join(` `),
-        "full_text": shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
-        "picture": null,
-        "title": titles[getRandomInt(0, titles.length - 1)],
-        "publication_date": getDate(),
-        "user_id": getRandomInt(1, numberOfUsers)
-      });
-    });
+    .map(() => ({
+      "announce": shuffle(sentences).slice(0, 5).join(` `),
+      "full_text": shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
+      "picture": null,
+      "title": titles[getRandomInt(0, titles.length - 1)],
+      "publication_date": getDate(),
+      "user_id": getRandomInt(1, numberOfUsers)
+    })
+    );
 
 const run = async (count) => {
   try {
