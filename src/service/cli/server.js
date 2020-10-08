@@ -17,6 +17,7 @@ const createApp = async () => {
   const app = express();
   const apiRoutes = await createApi();
 
+  app.set(`json spaces`, 2);
   app.use((req, res, next) => {
     logger.debug(`Requested url: ${req.url}`);
 
