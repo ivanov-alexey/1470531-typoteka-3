@@ -4,6 +4,9 @@ const {Router} = require(`express`);
 const ArticleService = require(`../data-service/article-service`);
 const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 const myRoutes = new Router();
 
@@ -15,7 +18,7 @@ myRoutes.get(`/`, async (req, res) => {
       articles
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });
@@ -28,7 +31,7 @@ myRoutes.get(`/comments`, async (req, res) => {
       comments
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });

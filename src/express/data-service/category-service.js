@@ -2,6 +2,9 @@
 
 const {getErrorMessage} = require(`../../utils`);
 const apiRequest = require(`./api-request`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 class CategoryService {
   static async getAll() {
@@ -10,7 +13,7 @@ class CategoryService {
 
       return response.data.filter((category) => category.count);
     } catch (err) {
-      console.error(`Request /categories error: `, err.message);
+      logger.error(`Request /categories error: `, err.message);
 
       return getErrorMessage(err);
     }

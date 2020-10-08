@@ -3,6 +3,9 @@
 const {Router} = require(`express`);
 const CategoryService = require(`../data-service/category-service`);
 const {getErrorTemplate} = require(`../../utils`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 const categoriesRoutes = new Router();
 
@@ -14,7 +17,7 @@ categoriesRoutes.get(`/`, async (req, res) => {
       categories
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });

@@ -2,6 +2,9 @@
 
 const {getErrorMessage} = require(`../../utils`);
 const apiRequest = require(`./api-request`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 class ArticleService {
   constructor(article) {
@@ -14,7 +17,7 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      console.error(`Request /articles error: `, err.message);
+      logger.error(`Request /articles error: `, err.message);
 
       return getErrorMessage(err);
     }
@@ -26,7 +29,7 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      console.error(`Request /articles/:id error: `, err.message);
+      logger.error(`Request /articles/:id error: `, err.message);
 
       return getErrorMessage(err);
     }
@@ -38,7 +41,7 @@ class ArticleService {
 
       return response.data;
     } catch (err) {
-      console.error(`Request /articles?popular=true error: `, err.message);
+      logger.error(`Request /articles?popular=true error: `, err.message);
 
       return getErrorMessage(err);
     }
@@ -56,7 +59,7 @@ class ArticleService {
       });
 
     } catch (err) {
-      console.error(`Request /articles/add error: `, err.message);
+      logger.error(`Request /articles/add error: `, err.message);
 
       return getErrorMessage(err);
     }

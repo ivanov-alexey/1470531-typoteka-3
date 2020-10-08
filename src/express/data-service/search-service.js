@@ -2,6 +2,9 @@
 
 const {getErrorMessage} = require(`../../utils`);
 const apiRequest = require(`./api-request`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 class SearchService {
   static async getResults(query) {
@@ -10,7 +13,7 @@ class SearchService {
 
       return response.data;
     } catch (err) {
-      console.error(`Request /search error: `, err.message);
+      logger.error(`Request /search error: `, err.message);
 
       return getErrorMessage(err);
     }

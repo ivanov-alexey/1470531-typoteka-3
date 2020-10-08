@@ -5,6 +5,9 @@ const ArticleService = require(`../data-service/article-service`);
 const CategoryService = require(`../data-service/category-service`);
 const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 const mainRoute = new Router();
 
@@ -24,7 +27,7 @@ mainRoute.get(`/`, async (req, res) => {
       lastComments
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });

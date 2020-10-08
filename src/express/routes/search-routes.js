@@ -3,6 +3,9 @@
 const {Router} = require(`express`);
 const SearchService = require(`../data-service/search-service`);
 const {getErrorTemplate} = require(`../../utils`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 const searchRoutes = new Router();
 
@@ -16,7 +19,7 @@ searchRoutes.get(`/`, async (req, res) => {
       query
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });

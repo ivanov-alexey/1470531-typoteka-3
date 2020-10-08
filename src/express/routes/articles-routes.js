@@ -9,6 +9,9 @@ const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
 const {TextRestriction} = require(`../../constants`);
 const {generateErrors} = require(`../../utils`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -35,7 +38,7 @@ articlesRoutes.get(`/add`, async (req, res) => {
       categories
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });
@@ -74,7 +77,7 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
 
     return res.redirect(`/my`);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.render(getErrorTemplate(err));
   }
 });
@@ -91,7 +94,7 @@ articlesRoutes.get(`/edit/:id`, async (req, res) => {
       isEdit: true
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });
@@ -109,7 +112,7 @@ articlesRoutes.get(`/:id`, async (req, res) => {
       comments
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });

@@ -2,6 +2,9 @@
 
 const {getErrorMessage} = require(`../../utils`);
 const apiRequest = require(`./api-request`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 class CommentService {
   static async create() {
@@ -10,7 +13,7 @@ class CommentService {
 
       return response.data;
     } catch (err) {
-      console.error(`Request /comments/add error: `, err.message);
+      logger.error(`Request /comments/add error: `, err.message);
 
       return getErrorMessage(err);
     }
@@ -22,7 +25,7 @@ class CommentService {
 
       return response.data;
     } catch (err) {
-      console.error(`Request /comments error: `, err.message);
+      logger.error(`Request /comments error: `, err.message);
 
       return getErrorMessage(err);
     }
@@ -34,7 +37,7 @@ class CommentService {
 
       return response.data;
     } catch (err) {
-      console.error(`Request /comments error: `, err.message);
+      logger.error(`Request /comments error: `, err.message);
 
       return getErrorMessage(err);
     }
@@ -46,7 +49,7 @@ class CommentService {
 
       return response.data;
     } catch (err) {
-      console.error(`Request /comments/:id error: `, err.message);
+      logger.error(`Request /comments/:id error: `, err.message);
 
       return getErrorMessage(err);
     }
