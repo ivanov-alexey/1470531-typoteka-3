@@ -1,7 +1,8 @@
 'use strict';
 
 const chalk = require(`chalk`);
-const {Message, HttpCode, TextRestriction} = require(`./constants`);
+const DateTime = require(`luxon`).DateTime;
+const {Message, HttpCode, TextRestriction, TimeConfig} = require(`./constants`);
 
 const getRandomInt = (min = 0, max = 1) => {
   const rand = min + Math.random() * (max + 1 - min);
@@ -18,23 +19,14 @@ const shuffle = (someArray) => {
   return someArray;
 };
 
-const getFirstZeroIfNeed = (number) => number < 10 ? `0${number}` : number;
-
-const getArticleDate = (dateTime = false) => {
-  const currentDate = new Date().valueOf();
-  const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 2).valueOf();
-  const randomDate = new Date(getRandomInt(currentDate, threeMonthsAgo));
-
-  const year = randomDate.getFullYear();
-  const month = randomDate.getMonth();
-  const day = randomDate.getDate();
-  const hours = randomDate.getHours();
-  const minutes = randomDate.getMinutes();
-
-  return dateTime
-    ? `${year}-${getFirstZeroIfNeed(month)}-${getFirstZeroIfNeed(day)}T${getFirstZeroIfNeed(hours)}:${getFirstZeroIfNeed(minutes)}`
-    : `${year}.${getFirstZeroIfNeed(month)}.${getFirstZeroIfNeed(day)}, ${getFirstZeroIfNeed(hours)}:${getFirstZeroIfNeed(minutes)}`;
-};
+const getDate = () => DateTime.fromObject({
+  year: getRandomInt(TimeConfig.minYear, TimeConfig.maxYear),
+  month: getRandomInt(TimeConfig.minMonth, TimeConfig.maxMonth),
+  day: getRandomInt(TimeConfig.minDay, TimeConfig.maxDay),
+  hour: getRandomInt(TimeConfig.minHour, TimeConfig.maxHour),
+  minute: getRandomInt(TimeConfig.minMinute, TimeConfig.maxMinute),
+  second: getRandomInt(TimeConfig.minSecond, TimeConfig.maxSecond)
+}).toISO();
 
 const sortByField = (articles, field) => articles.sort((prev, next) => next[field] - prev[field]);
 
@@ -79,7 +71,7 @@ const getErrorTemplate = ({message}) => message === Message.serverError ? `error
 
 module.exports = {
   getRandomInt,
-  getArticleDate,
+  getDate,
   getErrorTemplate,
   getErrorMessage,
   generateErrors,

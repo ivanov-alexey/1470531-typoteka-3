@@ -17,13 +17,30 @@ const TEMPLATES_DIR = `templates`;
 
 const MAX_ID_LENGTH = 6;
 
-const MAX_CATEGORIES = 5;
-
+const MIN_CATEGORIES = 3;
+const MAX_CATEGORIES = 6;
+const MIN_USERS = 2;
+const MAX_USERS = 10;
 const MAX_COMMENTS = 5;
 
 const postsAmount = {
   min: 1,
   max: 1000
+};
+
+const TimeConfig = {
+  minYear: 2018,
+  maxYear: 2020,
+  minMonth: 1,
+  maxMonth: 12,
+  minDay: 1,
+  maxDay: 30,
+  minHour: 0,
+  maxHour: 23,
+  minMinute: 0,
+  maxMinute: 59,
+  minSecond: 0,
+  maxSecond: 59
 };
 
 const USER_ARGV_INDEX = 2;
@@ -100,8 +117,12 @@ module.exports = {
   TEMPLATES_DIR,
   TextRestriction,
   TimeInMilliseconds,
+  TimeConfig,
   HttpCode,
+  MIN_CATEGORIES,
   MAX_CATEGORIES,
+  MIN_USERS,
+  MAX_USERS,
   MAX_COMMENTS,
   MAX_ID_LENGTH,
   Message,

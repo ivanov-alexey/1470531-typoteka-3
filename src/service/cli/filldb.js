@@ -1,139 +1,160 @@
 'use strict';
 
+const fs = require(`fs`).promises;
+const {
+  FILE_SENTENCES_PATH,
+  FILE_TITLES_PATH,
+  FILE_CATEGORIES_PATH,
+  FILE_COMMENTS_PATH,
+  FILE_NAMES_PATH,
+  FILE_SURNAMES_PATH,
+  postsAmount,
+  MIN_CATEGORIES,
+  MAX_CATEGORIES,
+  MIN_USERS,
+  MAX_USERS,
+  Message,
+  ExitCode
+} = require(`../../constants`);
+const {getRandomInt, getDate, shuffle} = require(`../../utils`);
 const {
   initDb,
-  db: {Article, Category, Comment, User, sequelize}
+  sequelize,
+  db: {Article, Category, Comment, User}
 } = require(`../db/connect`);
 const {getLogger} = require(`../lib/logger`);
 
 const logger = getLogger();
 
-const articles = [
-  {
-    "id": 1,
-    "announce": `Как мы уже знаем, самонаблюдение растворимо отражает рутений. Бессознательное противоречиво представляет собой интермедиат. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Однако Э.Дюркгейм утверждал, что восстановитель адсорбирует периодический катализатор, образуя кристаллы кубической формы. Аккредитив, например, диазотирует экзотермический интермедиат.`,
-    "full_text": `Из под его пера вышло 8 платиновых альбомов. Как отмечает Жан Пиаже, катод отталкивает бесцветный филогенез. Он написал больше 30 хитов. Бытовой подряд, как следует из теоретических исследований, устойчив в магнитном поле. Как отмечает Д.Майерс, у нас есть некоторое чувство конфликта, которое возникает с ситуации несоответствия желаемого и действительного, поэтому ингибитор лимитированно диазотирует когнитивный филогенез. Игры и программирование разные вещи. Не стоит идти в программисты, если вам нравится только игры. Регрессное требование фактически интегрирует оппортунический сверхпроводник. Как известно, молекула иллюстрирует комплекс. Неустойка, как и везде в пределах наблюдаемой вселенной, диссоциирует валютный штраф. Восприятие, несмотря на некоторую вероятность коллапса, гидролизует триплетный страх. Роль ингибирует кризис. При наступлении резонанса колба Клязина понимает психоз, что отмечают такие крупнейшие ученые как Фрейд, Адлер, Юнг, Эриксон, Фромм. Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами. Программировать не настолько сложно, как об этом говорят. Продукт реакции диссоциирует инсайт, о чем и писал А.Маслоу в своей работе \"Мотивация и личность\". Сверхпроводник ненаблюдаемо поручает сексуальный континентально-европейский тип политической культуры. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Агрессия, в первом приближении, окрашивает стресс по мере распространения использования фтористого этилена. Как начать действовать? Для начала просто соберитесь. Анима верифицирует уставный квазар, утверждает руководитель аппарата Правительства.`,
-    "picture": null,
-    "title": `Мономерный рефрен: гипотеза и теории`,
-    "publication_date": `2020-02-01 10:23:54+03`,
-    "user_id": 1
-  },
-  {
-    "id": 2,
-    "announce": `Свойство синтезирует контраст. Интроекция отчуждает электролиз. Регрессное требование фактически интегрирует оппортунический сверхпроводник. Достичь успеха помогут ежедневные повторения. Агрессия, в первом приближении, окрашивает стресс по мере распространения использования фтористого этилена. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много.`,
-    "full_text": `Собрать камни бесконечности легко, если вы прирожденный герой. Личность, несмотря на внешние воздействия, обретает вексель. Мажоритарная избирательная система концентрирует штраф в полном соответствии с законом сохранения энергии. Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло-партии не дадут заскучать. Ёлки — это не просто красивое дерево. Это прочная древесина. Он написал больше 30 хитов. Программировать не настолько сложно, как об этом говорят. При наступлении резонанса колба Клязина понимает психоз, что отмечают такие крупнейшие ученые как Фрейд, Адлер, Юнг, Эриксон, Фромм. Сублимация концептуально интегрирует аутотренинг. Восприятие просветляет системный электролиз. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем. Регрессное требование фактически интегрирует оппортунический сверхпроводник. Вы можете достичь всего. Стоит только немного постараться и запастись книгами. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Квазар, короче говоря, дегидрирован. Бессознательное противоречиво представляет собой интермедиат. Продукт реакции диссоциирует инсайт, о чем и писал А.Маслоу в своей работе \"Мотивация и личность\". Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Изомерия дает фотосинтетический психоанализ.`,
-    "picture": null,
-    "title": `Экспериментальный конформизм: основные моменты`,
-    "publication_date": `2020-02-02 10:23:54+03`,
-    "user_id": 1
-  },
-  {
-    "id": 3,
-    "announce": `Как отмечает Жан Пиаже, катод отталкивает бесцветный филогенез. Восприятие просветляет системный электролиз. Это один из лучших рок-музыкантов. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем. Простые ежедневные упражнения помогут достичь успеха.`,
-    "full_text": `Изомерия дает фотосинтетический психоанализ. При приватизации имущественного комплекса предсознательное известно. Освоить вёрстку несложно. Возьмите книгу новую книгу и закрепите все упражнения на практике. Наши  исследования  позволяют сделать  вывод  о  том, что репрезентативная система взрывоопасно дает газообразный страх. Рок-музыка всегда ассоциировалась с протестами. Так ли это на самом деле? Если в соответствии с законом допускается самозащита права, квазар понимает короткоживущий психоанализ. Кондуктометрия расщепляет неорганический фотоиндуцированный энергетический перенос. Лидерство отражает депрессивный импульс. Квазар, короче говоря, дегидрирован. Политический процесс в современной России квантуем. Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло-партии не дадут заскучать. Личность, несмотря на внешние воздействия, обретает вексель. Анима верифицирует уставный квазар, утверждает руководитель аппарата Правительства. Мажоритарная избирательная система концентрирует штраф в полном соответствии с законом сохранения энергии. Собрать камни бесконечности легко, если вы прирожденный герой. Золотое сечение — соотношение двух величин, гармоническая пропорция. Это один из лучших рок-музыкантов. Как известно, молекула иллюстрирует комплекс. Бытовой подряд, как следует из теоретических исследований, устойчив в магнитном поле. Сверхпроводник ненаблюдаемо поручает сексуальный континентально-европейский тип политической культуры. Простые ежедневные упражнения помогут достичь успеха. Помните, небольшое количество ежедневных упражнений лучше, чем один раз, но много. Неустойка, как и везде в пределах наблюдаемой вселенной, диссоциирует валютный штраф. Свойство гомогенно ударяет гетерогенный атомный радиус. Выпаривание, как неоднократно наблюдалось при постоянном воздействии ультрафиолетового облучения, мгновенно. Однако Э.Дюркгейм утверждал, что восстановитель адсорбирует периодический катализатор, образуя кристаллы кубической формы. Воздействие латентно. Краситель одинаково облучает психоанализ в том случае, когда процессы дициклизации невозможны. Достичь успеха помогут ежедневные повторения. Этот смартфон — настоящая находка. Большой и яркий экран, мощнейший процессор — всё это в небольшом гаджете. Свойство синтезирует контраст. Интроекция отчуждает электролиз. Бороться с прокрастинацией несложно. Просто действуйте. Маленькими шагами. Бессознательное противоречиво представляет собой интермедиат. Процессор заслуживает особого внимания. Он обязательно понравится геймерам со стажем. Как начать действовать? Для начала просто соберитесь. Он написал больше 30 хитов. Как отмечает Д.Майерс, у нас есть некоторое чувство конфликта, которое возникает с ситуации несоответствия желаемого и действительного, поэтому ингибитор лимитированно диазотирует когнитивный филогенез.`,
-    "picture": null,
-    "title": `Как собрать камни бесконечности`,
-    "publication_date": `2020-02-03 10:23:54+03`,
-    "user_id": 2
-  },
-];
-const categories = [
-  {
-    "id": 1,
-    "title": `Кино`
-  },
-  {
-    "id": 2,
-    "title": `Музыка`
-  }
-];
-const comments = [
-  {
-    "id": 1,
-    "text": `Согласен с автором! Давно не пользуюсь стационарными компьютерами. Ноутбуки победили`,
-    "publication_date": `2020-03-19 10:23:54+03`,
-    "article_id": 1,
-    "user_id": 2
-  },
-  {
-    "id": 2,
-    "text": `Хочу такую же футболку :-) Плюсую, но слишком много буквы! Мне не нравится ваш стиль. Ощущение, что вы меня поучаете.`,
-    "publication_date": `2020-04-19 13:43:54+03`,
-    "article_id": 1,
-    "user_id": 1
-  },
-  {
-    "id": 3,
-    "text": `Это где ж такие красоты? Планируете записать видосик на эту тему?`,
-    "publication_date": `2020-05-19 10:23:54+03`,
-    "article_id": 2,
-    "user_id": 2
-  },
-  {
-    "id": 4,
-    "text": `Совсем немного... Плюсую, но слишком много буквы! Это где ж такие красоты?`,
-    "publication_date": `2020-07-19 10:23:54+03`,
-    "article_id": 2,
-    "user_id": 1
-  },
-  {
-    "id": 5,
-    "text": `Хочу такую же футболку :-)`,
-    "publication_date": `2020-08-19 10:23:54+03`,
-    "article_id": 3,
-    "user_id": 2
-  },
-  {
-    "id": 6,
-    "text": `Согласен с автором!`,
-    "publication_date": `2020-10-19 10:23:54+03`,
-    "article_id": 3,
-    "user_id": 1
-  },
-];
-const users = [
-  {
-    "id": 1,
-    "avatar": `avatar-1.png`,
-    "email": `user1@mail.localhost`,
-    "firstname": `Аскар`,
-    "lastname": `Высоцкий`,
-    "password": `123456`
-  },
-  {
-    "id": 2,
-    "avatar": `avatar-2.png`,
-    "email": `user2@mail.localhost`,
-    "firstname": `Борислав`,
-    "lastname": `Толмачев`,
-    "password": `123456`
-  },
-];
-
-const run = async () => {
+const readContent = async (path) => {
   try {
+    const content = await fs.readFile(path, `utf-8`);
+
+    return content.trim().split(`\n`);
+  } catch (err) {
+    logger.error(err);
+
+    return [];
+  }
+};
+
+const normalizeCount = (count) => {
+  const amount = !count || Number.isNaN(+count)
+    ? postsAmount.min
+    : Number.parseInt(count, 10);
+
+  if (amount > postsAmount.max) {
+    throw new Error(Message.postsQuotaExceed);
+  }
+
+  return amount;
+};
+
+const getCategories = (amount, data) => [...new Set(
+    Array(amount)
+    .fill({})
+    .map(
+        (item, index) => ({
+          "id": index + 1,
+          "title": data[getRandomInt(0, data.length - 1)]
+        })
+    )
+)].sort((prev, next) => prev.id - next.id);
+
+const getUsers = (amount, firstNames, lastNames) =>
+  Array(amount)
+    .fill({})
+    .map((item, index) => {
+      const id = index + 1;
+
+      return ({
+        "id": id,
+        "avatar": `avatar-${id}.png`,
+        "email": `user${id}@mail.localhost`,
+        "firstname": firstNames[getRandomInt(0, firstNames.length - 1)],
+        "lastname": lastNames[getRandomInt(0, lastNames.length - 1)],
+        "password": `123456`
+      });
+    });
+
+const getComments = (amount, text, numberOfArticles, numberOfUsers) => (
+  Array(amount)
+    .fill({})
+    .map(() => ({
+      "text": shuffle(text)
+        .slice(0, getRandomInt(1, text.length))
+        .join(` `),
+      "publication_date": getDate(),
+      "article_id": getRandomInt(1, numberOfArticles),
+      "user_id": getRandomInt(1, numberOfUsers)
+    }))
+);
+
+const getArticles = (amount, sentences, titles, numberOfUsers) =>
+  Array(amount)
+    .fill({})
+    .map((item, index) => {
+      const id = index + 1;
+
+      return ({
+        "id": id,
+        "announce": shuffle(sentences).slice(0, 5).join(` `),
+        "full_text": shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
+        "picture": null,
+        "title": titles[getRandomInt(0, titles.length - 1)],
+        "publication_date": getDate(),
+        "user_id": getRandomInt(1, numberOfUsers)
+      });
+    });
+
+const run = async (count) => {
+  console.log(`count`, count);
+  try {
+    const numberOfCategories = getRandomInt(MIN_CATEGORIES, MAX_CATEGORIES);
+    const numberOfUsers = getRandomInt(MIN_USERS, MAX_USERS);
+    const numberOfArticles = normalizeCount(count);
+    const numberOfComments = numberOfArticles * 4;
+
+    console.log(`numberOfArticles`, numberOfArticles);
+    console.log(`numberOfComments`, numberOfComments);
+
+    const titlesData = await readContent(FILE_TITLES_PATH);
+    const categoriesData = await readContent(FILE_CATEGORIES_PATH);
+    const sentencesData = await readContent(FILE_SENTENCES_PATH);
+    const commentsData = await readContent(FILE_COMMENTS_PATH);
+    const firstNamesData = await readContent(FILE_NAMES_PATH);
+    const lastNamesData = await readContent(FILE_SURNAMES_PATH);
+
+    const categories = getCategories(numberOfCategories, categoriesData);
+    const users = getUsers(numberOfUsers, firstNamesData, lastNamesData);
+    const articles = getArticles(numberOfArticles, sentencesData, titlesData, numberOfUsers);
+    const comments = getComments(numberOfComments, commentsData, numberOfArticles, numberOfUsers);
+
     await initDb();
     await User.bulkCreate(users);
     await Article.bulkCreate(articles);
     await Comment.bulkCreate(comments);
     await Category.bulkCreate(categories);
 
-    const firstCategory = await Category.findByPk(1);
-    const secondCategory = await Category.findByPk(2);
+    /* fix start */
+    const allArticles = await Article.findAll();
+    const allCategories = await Category.findAll();
 
-    const firstArticle = await Article.findByPk(1);
-    const secondrticle = await Article.findByPk(2);
-    const thirdArticle = await Article.findByPk(3);
+    for (const article of allArticles) {
+      const randomCategory = allCategories[getRandomInt(0, allCategories.length)];
 
-    await firstArticle.addCategory(firstCategory);
-    await secondrticle.addCategory(secondCategory);
-    await thirdArticle.addCategory(firstCategory);
+      article.addCategory(randomCategory);
+    }
 
     await sequelize.close();
 
-    return logger.info(`Database filled successfully`);
+    logger.info(`Database filled successfully`);
+
+    return ExitCode.success;
   } catch (err) {
-    return logger.error(err);
+    logger.error(err);
+
+    return ExitCode.error;
   }
 };
 
