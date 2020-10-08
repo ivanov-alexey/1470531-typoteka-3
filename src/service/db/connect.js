@@ -91,9 +91,9 @@ module.exports = {
     Article,
     Category,
     Comment,
-    User,
-    sequelize
+    User
   },
+  sequelize,
   connectToDb,
   initDb
 };
