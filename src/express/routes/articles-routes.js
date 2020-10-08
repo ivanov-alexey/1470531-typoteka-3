@@ -9,7 +9,7 @@ const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
 const {TextRestriction} = require(`../../constants`);
 const {generateErrors} = require(`../../utils`);
-const {getLogger} = require(`../lib/logger`);
+const {getLogger} = require(`../../service/lib/logger`);
 
 const logger = getLogger();
 

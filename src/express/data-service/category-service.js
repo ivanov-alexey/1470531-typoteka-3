@@ -2,7 +2,7 @@
 
 const {getErrorMessage} = require(`../../utils`);
 const apiRequest = require(`./api-request`);
-const {getLogger} = require(`../lib/logger`);
+const {getLogger} = require(`../../service/lib/logger`);
 
 const logger = getLogger();
 

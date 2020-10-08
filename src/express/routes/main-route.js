@@ -5,7 +5,7 @@ const ArticleService = require(`../data-service/article-service`);
 const CategoryService = require(`../data-service/category-service`);
 const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
-const {getLogger} = require(`../lib/logger`);
+const {getLogger} = require(`../../service/lib/logger`);
 
 const logger = getLogger();
 

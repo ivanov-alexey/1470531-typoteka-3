@@ -3,7 +3,7 @@
 const {Router} = require(`express`);
 const CategoryService = require(`../data-service/category-service`);
 const {getErrorTemplate} = require(`../../utils`);
-const {getLogger} = require(`../lib/logger`);
+const {getLogger} = require(`../../service/lib/logger`);
 
 const logger = getLogger();
 
