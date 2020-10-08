@@ -55,7 +55,7 @@ const run = async (args) => {
       logger.info(Message.listenOnPort(port));
     });
 
-    connectToDb();
+    await connectToDb();
   } catch (err) {
     logger.error(Message.serverStartError(port, err));
   }

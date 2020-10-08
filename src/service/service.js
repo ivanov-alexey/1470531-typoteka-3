@@ -21,7 +21,7 @@ const main = async () => {
     process.exit(code);
   }
 
-  Cli[command].run(value);
+  await Cli[command].run(value);
 };
 
 main();
