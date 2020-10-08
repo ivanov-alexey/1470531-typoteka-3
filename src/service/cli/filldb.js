@@ -108,15 +108,11 @@ const getArticles = (amount, sentences, titles, numberOfUsers) =>
     });
 
 const run = async (count) => {
-  console.log(`count`, count);
   try {
     const numberOfCategories = getRandomInt(MIN_CATEGORIES, MAX_CATEGORIES);
     const numberOfUsers = getRandomInt(MIN_USERS, MAX_USERS);
     const numberOfArticles = normalizeCount(count);
     const numberOfComments = numberOfArticles * 4;
-
-    console.log(`numberOfArticles`, numberOfArticles);
-    console.log(`numberOfComments`, numberOfComments);
 
     const titlesData = await readContent(FILE_TITLES_PATH);
     const categoriesData = await readContent(FILE_CATEGORIES_PATH);
@@ -131,12 +127,12 @@ const run = async (count) => {
     const comments = getComments(numberOfComments, commentsData, numberOfArticles, numberOfUsers);
 
     await initDb();
+
     await User.bulkCreate(users);
     await Article.bulkCreate(articles);
     await Comment.bulkCreate(comments);
     await Category.bulkCreate(categories);
 
-    /* fix start */
     const allArticles = await Article.findAll();
     const allCategories = await Category.findAll();
 
