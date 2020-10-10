@@ -8,16 +8,16 @@ const {
   Message
 } = require(`../../constants`);
 const createApi = require(`../api`);
-const getMockData = require(`../lib/get-mock-data`);
 const {getLogger} = require(`../lib/logger`);
 const {connectToDb} = require(`../db/connect`);
 
 const logger = getLogger();
 
-const createApp = async (data) => {
+const createApp = async () => {
   const app = express();
-  const apiRoutes = await createApi(data);
+  const apiRoutes = await createApi();
 
+  app.set(`json spaces`, 2);
   app.use((req, res, next) => {
     logger.debug(`Requested url: ${req.url}`);
 
@@ -44,8 +44,7 @@ const createApp = async (data) => {
 
 const run = async (args) => {
   const port = Number.parseInt(args, 10) || DEFAULT_API_PORT;
-  const mockData = await getMockData();
-  const app = await createApp(mockData);
+  const app = await createApp();
 
   try {
     app.listen(DEFAULT_API_PORT, (err) => {
@@ -56,7 +55,7 @@ const run = async (args) => {
       logger.info(Message.listenOnPort(port));
     });
 
-    connectToDb();
+    await connectToDb();
   } catch (err) {
     logger.error(Message.serverStartError(port, err));
   }

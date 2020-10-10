@@ -1,14 +1,17 @@
 'use strict';
 
 const {Router} = require(`express`);
-const ArticleService = require(`../data-service/article-service`);
+const SearchService = require(`../data-service/search-service`);
 const {getErrorTemplate} = require(`../../utils`);
+const {getLogger} = require(`../../service/lib/logger`);
+
+const logger = getLogger();
 
 const searchRoutes = new Router();
 
 searchRoutes.get(`/`, async (req, res) => {
   try {
-    const articles = await ArticleService.getSearchResults(req.originalUrl);
+    const articles = await SearchService.getResults(req.originalUrl);
     const {query = ``} = req.query;
 
     res.render(`search`, {
@@ -16,7 +19,7 @@ searchRoutes.get(`/`, async (req, res) => {
       query
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });

@@ -42,8 +42,8 @@ block content
                   button.button.button--transparent Удалить
                 each category, index in categories
                   .new-publication__checkbox.new-publication__checkbox--auto
-                    input(type='checkbox', name='category', value=category id='checkbox_' + index)
-                    label(for='checkbox_' +  index)= category
+                    input(type='checkbox', name='category', value=category.title id='checkbox_' + index)
+                    label(for='checkbox_' +  index)= category.title
                 a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
               .form__wrapper.form__wrapper--text
                 .form__field.form__field--publication-text

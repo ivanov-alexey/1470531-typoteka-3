@@ -1,15 +1,86 @@
 'use strict';
 
+const {db: {Category}} = require(`../db/connect`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
+
 class CategoryService {
-  constructor(articles) {
-    this.articles = articles;
+  async create({title}) {
+    try {
+      return await Category.create({
+        title,
+      });
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
   }
 
-  findAll() {
-    const categories = this.articles
-      .map((article) => article.category);
+  async findAll() {
+    try {
+      const result = [];
+      const allCategories = await Category.findAll();
 
-    return [...new Set(categories.flat())];
+      for (const category of allCategories) {
+        const {id} = category;
+        const currentCategory = await Category.findByPk(id);
+        const count = await currentCategory.countArticles();
+        const {dataValues} = currentCategory;
+
+        result.push({...dataValues, count});
+      }
+
+      return result;
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
+  }
+
+  async findOne(id) {
+    try {
+      return await Category.findByPk(id, {raw: true});
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
+  }
+
+  async update(id, {title}) {
+    try {
+      await Category.update({
+        title,
+      }, {
+        where: {id}
+      });
+
+      return await Category.findByPk(id);
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
+  }
+
+  async drop(id) {
+    try {
+      const category = await Category.findByPk(id, {raw: true});
+
+      if (!category) {
+        return null;
+      }
+
+      await Category.destroy({
+        where: {
+          id
+        }
+      });
+
+      return category;
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
   }
 }
 

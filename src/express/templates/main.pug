@@ -10,7 +10,7 @@ block content
       ul.themes
         each category in categories
           li.themes__item
-            a.themes__item-link(href='#')= category.name
+            a.themes__item-link(href='#')= category.title
               sup= category.count
     .main-page__section-flex
       section.main-page__hot.hot
@@ -22,7 +22,7 @@ block content
             each popularArticle in popularArticles
               li.hot__list-item
                 a.hot__list-link(href='/articles/' + popularArticle.id)= popularArticle.announce
-                  sup.hot__link-sup= popularArticle.commentsLength
+                  sup.hot__link-sup= popularArticle.count
         else
           p.hot__empty Здесь пока ничего нет...
       section.main-page__last.last
@@ -35,7 +35,7 @@ block content
               li.last__list-item
                 img.last__list-image(src='/img/' + comment.avatar, width='20', height='20', alt='Аватар пользователя')
                 b.last__list-name= comment.author
-                a.last__list-link(href='#')= comment.text
+                a.last__list-link(href='/articles/' + comment.articleId)= comment.text
         else
           p.last__empty Здесь пока ничего нет...
     section.main-page__list.preview
@@ -46,12 +46,12 @@ block content
             ul.preview__breadcrumbs
               each category in article.category
                 li.preview__breadcrumbs-item
-                  a.preview__breadcrumbs-link(href='#')= category
+                  a.preview__breadcrumbs-link(href='#')= category.title
             if article.picture
               if article.picture2x
               .preview__background
                 img.preview__background-image(src='/img/' + article.picture, width='460', height='240', alt='Фотография статьи')
-            time.preview__time(datetime=article.createdDateTime)= article.createdDate
+            time.preview__time(datetime=article.createdAt)= article.createdAt
             h3.preview__name
               a.preview__name-link(href='/articles/' + article.id)= article.title
             p.preview__text= article.announce

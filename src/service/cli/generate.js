@@ -19,7 +19,7 @@ const {
   TimeInMilliseconds,
   ExitCode
 } = require(`../../constants`);
-const {getRandomInt, getArticleDate, shuffle, logger} = require(`../../utils`);
+const {getRandomInt, getDate, shuffle, logger} = require(`../../utils`);
 
 const getCategories = (data) => [...new Set(
     Array(getRandomInt(0, MAX_CATEGORIES)).fill({}).map(
@@ -66,8 +66,8 @@ const getArticles = (count, titles, sentences, categories, comments, names, surn
         .map(() => ({
           id: nanoid(MAX_ID_LENGTH),
           title: titles[getRandomInt(0, titles.length - 1)],
-          createdDate: getArticleDate(),
-          createdDateTime: getArticleDate(true),
+          createdDate: getDate(),
+          createdDateTime: getDate(),
           announce: shuffle(sentences).slice(0, 5).join(` `),
           fullText: shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
           category: getCategories(categories),

@@ -1,6 +1,6 @@
 'use strict';
 
-const {HttpCode} = require(`../../constants`);
+const {HttpCode, TextRestriction} = require(`../../constants`);
 
 const commentKeys = [`text`];
 
@@ -10,9 +10,16 @@ module.exports = (req, res, next) => {
   const keysExists = commentKeys.every((key) => keys.includes(key));
 
   if (!keysExists) {
-    res.status(HttpCode.BAD_REQUEST)
-      .send(`Bad request`);
+    return res
+      .status(HttpCode.BAD_REQUEST)
+      .send(`Text not exist`);
   }
 
-  next();
+  if (comment.text && comment.text.length < TextRestriction.commentMin) {
+    return res
+      .status(HttpCode.BAD_REQUEST)
+      .send(`Comment too short`);
+  }
+
+  return next();
 };

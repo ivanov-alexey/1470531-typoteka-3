@@ -4,9 +4,14 @@ const {Router} = require(`express`);
 const path = require(`path`);
 const multer = require(`multer`);
 const ArticleService = require(`../data-service/article-service`);
+const CategoryService = require(`../data-service/category-service`);
+const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
 const {TextRestriction} = require(`../../constants`);
 const {generateErrors} = require(`../../utils`);
+const {getLogger} = require(`../../service/lib/logger`);
+
+const logger = getLogger();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -17,13 +22,15 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({storage});
+
 const articlesRoutes = new Router();
 
+// TODO: fix
 articlesRoutes.get(`/category/:id`, (req, res) => res.render(`articles-by-category`));
 
 articlesRoutes.get(`/add`, async (req, res) => {
   try {
-    const categories = await ArticleService.getCategories();
+    const categories = await CategoryService.getAll();
 
     res.render(`my/new-post`, {
       isEdit: false,
@@ -31,23 +38,23 @@ articlesRoutes.get(`/add`, async (req, res) => {
       categories
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });
 
 articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
   const newArticle = {
-    announce: req.body.announce || ``,
-    category: req.body.category || ``,
-    currentDate: req.body.currentDate || new Date(),
-    fullText: req.body.fullText || ``,
-    title: req.body.title || ``,
-    picture: req.file && req.file.filename || ``
+    "announce": req.body.announce || ``,
+    "category": req.body.category || ``,
+    "publication_date": req.body.currentDate || new Date(),
+    "full_text": req.body.fullText || ``,
+    "title": req.body.title || ``,
+    "picture": req.file && req.file.filename || ``
   };
 
   try {
-    const categories = await ArticleService.getCategories();
+    const categories = await CategoryService.getAll();
     const article = new ArticleService(newArticle);
     const wrongAnnounce = newArticle.announce.length < TextRestriction.shortMin || newArticle.announce.length > TextRestriction.shortMax;
     const wrongTitle = newArticle.title.length < TextRestriction.shortMin || newArticle.title.length > TextRestriction.shortMax;
@@ -55,7 +62,7 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
     if (wrongAnnounce
         || wrongTitle
         || !newArticle.category.length
-        || newArticle.fullText.length > TextRestriction.longMax
+        || newArticle.full_text.length > TextRestriction.longMax
     ) {
       return res.render(`my/new-post`, {
         article: newArticle,
@@ -66,11 +73,11 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
       });
     }
 
-    await article.createNewArticle();
+    await article.create();
 
     return res.redirect(`/my`);
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.render(getErrorTemplate(err));
   }
 });
@@ -78,14 +85,16 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
 articlesRoutes.get(`/edit/:id`, async (req, res) => {
   try {
     const {id} = req.params;
-    const article = await ArticleService.getArticle(id);
+    const article = await ArticleService.getOne(id);
+    const categories = await CategoryService.getAll();
 
     res.render(`my/new-post`, {
       article,
+      categories,
       isEdit: true
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });
@@ -93,15 +102,17 @@ articlesRoutes.get(`/edit/:id`, async (req, res) => {
 articlesRoutes.get(`/:id`, async (req, res) => {
   try {
     const {id} = req.params;
-    const article = await ArticleService.getArticle(id);
-    const categories = await ArticleService.getCategoriesWithArticlesCounter();
+    const article = await ArticleService.getOne(id);
+    const categories = await CategoryService.getAll();
+    const comments = await CommentService.getByArticleId(id);
 
     res.render(`post`, {
       article,
-      categories
+      categories,
+      comments
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     res.render(getErrorTemplate(err));
   }
 });
