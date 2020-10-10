@@ -16,4 +16,5 @@ plugins:
 rules:
   prettier/prettier: error
   newline-after-var: 1
+  newline-before-return: 1
   object-curly-spacing: error
