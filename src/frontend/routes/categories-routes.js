@@ -14,7 +14,7 @@ categoriesRoutes.get(`/`, async (req, res) => {
     const categories = await CategoryService.getAll();
 
     res.render(`categories`, {
-      categories
+      categories,
     });
   } catch (err) {
     logger.error(err);

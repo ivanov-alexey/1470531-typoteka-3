@@ -16,7 +16,7 @@ searchRoutes.get(`/`, async (req, res) => {
 
     res.render(`search`, {
       articles,
-      query
+      query,
     });
   } catch (err) {
     logger.error(err);

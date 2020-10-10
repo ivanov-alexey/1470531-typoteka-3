@@ -50,14 +50,13 @@ class ArticleService {
   async create() {
     try {
       return await apiRequest.post(`/articles/add`, {
-        "title": this.article.title,
-        "category": typeof this.article.category === `string` ? [this.article.category] : this.article.category || ``,
-        "picture": this.article.picture,
-        "announce": this.article.announce,
-        "full_text": this.article.full_text,
-        "publication_date": this.article.publication_date || new Date()
+        title: this.article.title,
+        category: typeof this.article.category === `string` ? [this.article.category] : this.article.category || ``,
+        picture: this.article.picture,
+        announce: this.article.announce,
+        fullText: this.article.full_text,
+        publicationDate: this.article.publication_date || new Date(),
       });
-
     } catch (err) {
       logger.error(`Request /articles/add error: `, err.message);
 

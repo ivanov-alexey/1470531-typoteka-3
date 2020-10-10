@@ -15,7 +15,7 @@ myRoutes.get(`/`, async (req, res) => {
     const articles = await ArticleService.getAll();
 
     res.render(`my/my`, {
-      articles
+      articles,
     });
   } catch (err) {
     logger.error(err);
@@ -28,7 +28,7 @@ myRoutes.get(`/comments`, async (req, res) => {
     const comments = await CommentService.getAll();
 
     res.render(`my/comments`, {
-      comments
+      comments,
     });
   } catch (err) {
     logger.error(err);

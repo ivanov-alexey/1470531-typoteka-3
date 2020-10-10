@@ -12,7 +12,7 @@
     "filldb": "node ./src/service/service.js --filldb 10",
     "server": "LOG_LEVEL=error nodemon ./src/service/service.js --server 3000",
     "server::debug": "LOG_LEVEL=debug nodemon ./src/service/service.js --server 3000",
-    "start-front-server": "nodemon ./src/express/index.js"
+    "start-front-server": "nodemon src/frontend/index.js"
   },
   "repository": {
     "type": "git",

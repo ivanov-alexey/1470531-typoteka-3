@@ -24,7 +24,7 @@ mainRoute.get(`/`, async (req, res) => {
       articles,
       categories,
       popularArticles,
-      lastComments
+      lastComments,
     });
   } catch (err) {
     logger.error(err);
