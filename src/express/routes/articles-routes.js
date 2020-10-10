@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + `-` + Date.now() + path.extname(file.originalname));
-  }
+  },
 });
 const upload = multer({storage});
 
@@ -35,7 +35,7 @@ articlesRoutes.get(`/add`, async (req, res) => {
     res.render(`my/new-post`, {
       isEdit: false,
       isError: false,
-      categories
+      categories,
     });
   } catch (err) {
     logger.error(err);
@@ -45,40 +45,43 @@ articlesRoutes.get(`/add`, async (req, res) => {
 
 articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
   const newArticle = {
-    "announce": req.body.announce || ``,
-    "category": req.body.category || ``,
-    "publication_date": req.body.currentDate || new Date(),
-    "full_text": req.body.fullText || ``,
-    "title": req.body.title || ``,
-    "picture": req.file && req.file.filename || ``
+    announce: req.body.announce || ``,
+    category: req.body.category || ``,
+    publicationDate: req.body.currentDate || new Date(),
+    fullText: req.body.fullText || ``,
+    title: req.body.title || ``,
+    picture: (req.file && req.file.filename) || ``,
   };
 
   try {
     const categories = await CategoryService.getAll();
     const article = new ArticleService(newArticle);
-    const wrongAnnounce = newArticle.announce.length < TextRestriction.shortMin || newArticle.announce.length > TextRestriction.shortMax;
-    const wrongTitle = newArticle.title.length < TextRestriction.shortMin || newArticle.title.length > TextRestriction.shortMax;
+    const wrongAnnounce =
+      newArticle.announce.length < TextRestriction.shortMin || newArticle.announce.length > TextRestriction.shortMax;
+    const wrongTitle =
+      newArticle.title.length < TextRestriction.shortMin || newArticle.title.length > TextRestriction.shortMax;
 
-    if (wrongAnnounce
-        || wrongTitle
-        || !newArticle.category.length
-        || newArticle.full_text.length > TextRestriction.longMax
+    if (
+      wrongAnnounce ||
+      wrongTitle ||
+      !newArticle.category.length ||
+      newArticle.full_text.length > TextRestriction.longMax
     ) {
-      return res.render(`my/new-post`, {
+      res.render(`my/new-post`, {
         article: newArticle,
         isError: true,
         errors: generateErrors(newArticle),
         isEdit: true,
-        categories
+        categories,
       });
     }
 
     await article.create();
 
-    return res.redirect(`/my`);
+    res.redirect(`/my`);
   } catch (err) {
     logger.error(err);
-    return res.render(getErrorTemplate(err));
+    res.render(getErrorTemplate(err));
   }
 });
 
@@ -91,7 +94,7 @@ articlesRoutes.get(`/edit/:id`, async (req, res) => {
     res.render(`my/new-post`, {
       article,
       categories,
-      isEdit: true
+      isEdit: true,
     });
   } catch (err) {
     logger.error(err);
@@ -109,7 +112,7 @@ articlesRoutes.get(`/:id`, async (req, res) => {
     res.render(`post`, {
       article,
       categories,
-      comments
+      comments,
     });
   } catch (err) {
     logger.error(err);

@@ -15,15 +15,11 @@ module.exports = (app, service) => {
     try {
       const categories = await service.findAll();
 
-      return res
-        .status(HttpCode.OK)
-        .json(categories);
+      res.status(HttpCode.OK).json(categories);
     } catch (err) {
       logger.error(err);
 
-      return res
-        .status(HttpCode.BAD_REQUEST)
-        .send(`Bad request on GET /categories`);
+      res.status(HttpCode.BAD_REQUEST).send(`Bad request on GET /categories`);
     }
   });
 
@@ -31,15 +27,11 @@ module.exports = (app, service) => {
     try {
       const category = await service.create(req.body);
 
-      return res
-        .status(HttpCode.CREATED)
-        .json(category);
+      res.status(HttpCode.CREATED).json(category);
     } catch (err) {
       logger.error(err);
 
-      return res
-        .status(HttpCode.BAD_REQUEST)
-        .send(`Bad request on POST /categories/add`);
+      res.status(HttpCode.BAD_REQUEST).send(`Bad request on POST /categories/add`);
     }
   });
 
@@ -49,20 +41,14 @@ module.exports = (app, service) => {
       const category = await service.drop(id);
 
       if (!category) {
-        return res
-          .status(HttpCode.NOT_FOUND)
-          .send(`Not found`);
+        res.status(HttpCode.NOT_FOUND).send(`Not found`);
       }
 
-      return res
-        .status(HttpCode.OK)
-        .json(category);
+      res.status(HttpCode.OK).json(category);
     } catch (err) {
       logger.error(err);
 
-      return res
-        .status(HttpCode.BAD_REQUEST)
-        .send(`Bad request on DELETE /categories/:id`);
+      res.status(HttpCode.BAD_REQUEST).send(`Bad request on DELETE /categories/:id`);
     }
   });
 
@@ -72,22 +58,16 @@ module.exports = (app, service) => {
       const existCategory = await service.findOne(id);
 
       if (!existCategory) {
-        return res
-          .status(HttpCode.NOT_FOUND)
-          .send(`Not found with ${id}`);
+        res.status(HttpCode.NOT_FOUND).send(`Not found with ${id}`);
       }
 
       const updatedCategory = await service.update(id, req.body);
 
-      return res
-        .status(HttpCode.OK)
-        .json(updatedCategory);
+      res.status(HttpCode.OK).json(updatedCategory);
     } catch (err) {
       logger.error(err);
 
-      return res
-        .status(HttpCode.BAD_REQUEST)
-        .send(`Bad request on PUT /categories/:id`);
+      res.status(HttpCode.BAD_REQUEST).send(`Bad request on PUT /categories/:id`);
     }
   });
 };

@@ -1,12 +1,7 @@
 'use strict';
 
 const express = require(`express`);
-const {
-  API_PREFIX,
-  DEFAULT_API_PORT,
-  HttpCode,
-  Message
-} = require(`../../constants`);
+const {API_PREFIX, DEFAULT_API_PORT, HttpCode, Message} = require(`../../constants`);
 const createApi = require(`../api`);
 const {getLogger} = require(`../lib/logger`);
 const {connectToDb} = require(`../db/connect`);
@@ -34,9 +29,7 @@ const createApp = async () => {
   app.use((req, res) => {
     logger.error(`Not found url: ${req.url}`);
 
-    return res
-      .status(HttpCode.NOT_FOUND)
-      .send(`Not found`);
+    res.status(HttpCode.NOT_FOUND).send(`Not found`);
   });
 
   return app;
@@ -64,5 +57,5 @@ const run = async (args) => {
 module.exports = {
   name: `--server`,
   run,
-  createApp
+  createApp,
 };

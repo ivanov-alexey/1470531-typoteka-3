@@ -15,15 +15,11 @@ module.exports = (app, service) => {
     try {
       const comments = await service.findAll();
 
-      return res
-        .status(HttpCode.OK)
-        .json(comments);
+      res.status(HttpCode.OK).json(comments);
     } catch (err) {
       logger.error(err);
 
-      return res
-        .status(HttpCode.BAD_REQUEST)
-        .send(`Bad request on GET /comments`);
+      res.status(HttpCode.BAD_REQUEST).send(`Bad request on GET /comments`);
     }
   });
 
@@ -31,15 +27,11 @@ module.exports = (app, service) => {
     try {
       const comment = await service.create(req.body);
 
-      return res
-        .status(HttpCode.CREATED)
-        .json(comment);
+      res.status(HttpCode.CREATED).json(comment);
     } catch (err) {
       logger.error(err);
 
-      return res
-        .status(HttpCode.BAD_REQUEST)
-        .send(`Bad request on POST /comments/add`);
+      res.status(HttpCode.BAD_REQUEST).send(`Bad request on POST /comments/add`);
     }
   });
 
@@ -49,20 +41,14 @@ module.exports = (app, service) => {
       const comment = await service.drop(id);
 
       if (!comment) {
-        return res
-          .status(HttpCode.NOT_FOUND)
-          .send(`Not found`);
+        res.status(HttpCode.NOT_FOUND).send(`Not found`);
       }
 
-      return res
-        .status(HttpCode.OK)
-        .json(comment);
+      res.status(HttpCode.OK).json(comment);
     } catch (err) {
       logger.error(err);
 
-      return res
-        .status(HttpCode.BAD_REQUEST)
-        .send(`Bad request on DELETE /comments/:id`);
+      res.status(HttpCode.BAD_REQUEST).send(`Bad request on DELETE /comments/:id`);
     }
   });
 };
