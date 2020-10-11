@@ -1,10 +1,10 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HttpCode} = require(`../../constants`);
-const articleValidator = require(`../middlewares/article-validator`);
-const articleExist = require(`../middlewares/article-exists`);
-const commentValidator = require(`../middlewares/comment-validator`);
+const {HttpCode} = require(`src/constants`);
+const articleValidator = require(`src/backend/middlewares/article-validator`);
+const articleExist = require(`src/backend/middlewares/article-exists`);
+const commentValidator = require(`src/backend/middlewares/comment-validator`);
 const {getLogger} = require(`./src/lib`);
 
 const logger = getLogger();

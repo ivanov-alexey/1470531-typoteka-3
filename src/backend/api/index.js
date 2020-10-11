@@ -1,10 +1,10 @@
 'use strict';
 
 const {Router} = require(`express`);
-const category = require(`../api/category`);
-const article = require(`../api/article`);
-const search = require(`../api/search`);
-const comment = require(`../api/comment`);
+const category = require(`src/backend/api/category/category`);
+const article = require(`src/backend/api/article/article`);
+const search = require(`src/backend/api/search/search`);
+const comment = require(`src/backend/api/comment/comment`);
 const CategoryService = require(`../data-service/category`);
 const ArticleService = require(`../data-service/article`);
 const CommentService = require(`../data-service/comment`);
