@@ -2,7 +2,7 @@
 
 const {
   db: {Comment},
-} = require(`src/backend/configs/connect`);
+} = require(`src/backend/configs/db-connect`);
 const {getLogger} = require(`./src/lib`);
 
 const logger = getLogger();

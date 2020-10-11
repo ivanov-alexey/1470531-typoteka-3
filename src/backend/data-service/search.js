@@ -1,7 +1,7 @@
 'use strict';
 
 const {Op} = require(`sequelize`);
-const {db: {Article}} = require(`src/backend/configs/connect`);
+const {db: {Article}} = require(`src/backend/configs/db-connect`);
 
 class SearchService {
   async findAll(searchText) {

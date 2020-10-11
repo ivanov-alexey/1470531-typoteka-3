@@ -4,7 +4,7 @@ const express = require(`express`);
 const {API_PREFIX, DEFAULT_API_PORT, HttpCode, Message} = require(`src/constants`);
 const createApi = require(`src/backend/api/index`);
 const {getLogger} = require(`./src/lib`);
-const {connectToDb} = require(`src/backend/configs/connect`);
+const {connectToDb} = require(`src/backend/configs/db-connect`);
 
 const logger = getLogger();
 
