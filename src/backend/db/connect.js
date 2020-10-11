@@ -3,7 +3,7 @@
 require(`dotenv`).config();
 const {Sequelize} = require(`sequelize`);
 const {host, user, database, password, port} = require(`../config`);
-const {getLogger} = require(`../lib/logger`);
+const {getLogger} = require(`./src/lib`);
 
 const logger = getLogger();
 

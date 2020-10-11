@@ -3,7 +3,7 @@
 const {
   db: {Comment},
 } = require(`../db/connect`);
-const {getLogger} = require(`../lib/logger`);
+const {getLogger} = require(`./src/lib`);
 
 const logger = getLogger();
 

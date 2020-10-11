@@ -22,7 +22,7 @@ const {
 const {getDate} = require(`../../utils/get-date`);
 const {shuffle} = require(`../../utils/shuffle`);
 const {getRandomInt} = require(`../../utils/get-random-int`);
-const {getLogger} = require(`../lib/logger`);
+const {getLogger} = require(`./src/lib`);
 
 const logger = getLogger();
 

@@ -3,7 +3,7 @@
 const {Router} = require(`express`);
 const {HttpCode} = require(`../../constants`);
 const categoryValidator = require(`../middlewares/category-validator`);
-const {getLogger} = require(`../lib/logger`);
+const {getLogger} = require(`./src/lib`);
 
 const logger = getLogger();
 const route = new Router();
