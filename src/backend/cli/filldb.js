@@ -23,7 +23,7 @@ const {
   initDb,
   sequelize,
   db: {Article, Category, Comment, User}
-} = require(`../db/connect`);
+} = require(`src/backend/configs/connect`);
 const {getLogger} = require(`./src/lib`);
 
 const logger = getLogger();
