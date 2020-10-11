@@ -6,17 +6,17 @@ module.exports = (sequelize) => {
   class Comment extends Model {}
 
   Comment.init({
-    "id": {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    "text": {
+    text: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    "publication_date": {
+    'publication_date': {
       type: DataTypes.DATE,
       allowNull: false
     },

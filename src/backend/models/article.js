@@ -6,29 +6,29 @@ module.exports = (sequelize) => {
   class Article extends Model {}
 
   Article.init({
-    "id": {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    "announce": {
+    announce: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    "full_text": {
+    'full_text': {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    "picture": {
+    picture: {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    "title": {
+    title: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    "publication_date": {
+    'publication_date': {
       type: DataTypes.DATE,
       allowNull: false
     }

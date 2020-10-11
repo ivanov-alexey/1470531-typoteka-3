@@ -6,13 +6,13 @@ module.exports = (sequelize) => {
   class Category extends Model {}
 
   Category.init({
-    "id": {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    "title": {
+    title: {
       type: DataTypes.TEXT,
       allowNull: false
     },

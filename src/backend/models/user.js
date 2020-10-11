@@ -6,29 +6,29 @@ module.exports = (sequelize) => {
   class User extends Model {}
 
   User.init({
-    "id": {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       allowNull: false
     },
-    "avatar": {
+    avatar: {
       type: DataTypes.TEXT,
       allowNull: true
     },
-    "email": {
+    email: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    "firstname": {
+    firstname: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    "lastname": {
+    lastname: {
       type: DataTypes.TEXT,
       allowNull: false
     },
-    "password": {
+    password: {
       type: DataTypes.TEXT,
       allowNull: false
     }
