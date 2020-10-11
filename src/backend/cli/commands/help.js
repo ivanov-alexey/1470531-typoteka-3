@@ -1,6 +1,6 @@
 'use strict';
 
-const {ExitCode} = require(`../../constants`);
+const {ExitCode} = require(`src/constants`);
 const {consoleLogger} = require(`src/utils/console-logger`);
 
 const message = `

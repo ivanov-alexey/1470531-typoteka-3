@@ -18,10 +18,10 @@ const {
   Message,
   TimeInMilliseconds,
   ExitCode
-} = require(`../../constants`);
-const {getDate} = require(`../../utils/get-date`);
-const {shuffle} = require(`../../utils/shuffle`);
-const {getRandomInt} = require(`../../utils/get-random-int`);
+} = require(`src/constants`);
+const {getDate} = require(`src/utils/get-date`);
+const {shuffle} = require(`src/utils/shuffle`);
+const {getRandomInt} = require(`src/utils/get-random-int`);
 const {getLogger} = require(`./src/lib`);
 
 const logger = getLogger();

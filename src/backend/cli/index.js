@@ -1,10 +1,10 @@
 'use strict';
 
-const help = require(`./help`);
-const version = require(`./version`);
-const generate = require(`./generate`);
-const server = require(`./server`);
-const filldb = require(`./filldb`);
+const help = require(`src/backend/cli/commands/help`);
+const version = require(`src/backend/cli/commands/version`);
+const generate = require(`src/backend/cli/commands/generate`);
+const server = require(`src/backend/cli/commands/server`);
+const filldb = require(`src/backend/cli/commands/filldb`);
 
 const Cli = {
   [help.name]: help,

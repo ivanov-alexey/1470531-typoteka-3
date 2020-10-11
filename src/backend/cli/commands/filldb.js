@@ -15,10 +15,10 @@ const {
   MAX_USERS,
   Message,
   ExitCode
-} = require(`../../constants`);
-const {getDate} = require(`../../utils/get-date`);
-const {shuffle} = require(`../../utils/shuffle`);
-const {getRandomInt} = require(`../../utils/get-random-int`);
+} = require(`src/constants`);
+const {getDate} = require(`src/utils/get-date`);
+const {shuffle} = require(`src/utils/shuffle`);
+const {getRandomInt} = require(`src/utils/get-random-int`);
 const {
   initDb,
   sequelize,
@@ -56,7 +56,7 @@ const getCategories = (amount, data) => [...new Set(
     Array(amount)
       .fill({})
       .map(() => ({
-        "title": data[getRandomInt(0, data.length - 1)]
+        title: data[getRandomInt(0, data.length - 1)]
       }))
 )];
 
@@ -67,11 +67,11 @@ const getUsers = (amount, firstNames, lastNames) =>
       const id = index + 1;
 
       return ({
-        "avatar": `avatar-${id}.png`,
-        "email": `user${id}@mail.localhost`,
-        "firstname": firstNames[getRandomInt(0, firstNames.length - 1)],
-        "lastname": lastNames[getRandomInt(0, lastNames.length - 1)],
-        "password": `123456`
+        avatar: `avatar-${id}.png`,
+        email: `user${id}@mail.localhost`,
+        firstname: firstNames[getRandomInt(0, firstNames.length - 1)],
+        lastname: lastNames[getRandomInt(0, lastNames.length - 1)],
+        password: `123456`
       });
     });
 
@@ -79,12 +79,12 @@ const getComments = (amount, text, numberOfArticles, numberOfUsers) => (
   Array(amount)
     .fill({})
     .map(() => ({
-      "text": shuffle(text)
+      text: shuffle(text)
         .slice(0, getRandomInt(1, text.length))
         .join(` `),
-      "publication_date": getDate(),
-      "article_id": getRandomInt(1, numberOfArticles),
-      "user_id": getRandomInt(1, numberOfUsers)
+      'publication_date': getDate(),
+      'article_id': getRandomInt(1, numberOfArticles),
+      'user_id': getRandomInt(1, numberOfUsers)
     }))
 );
 
@@ -92,12 +92,12 @@ const getArticles = (amount, sentences, titles, numberOfUsers) =>
   Array(amount)
     .fill({})
     .map(() => ({
-      "announce": shuffle(sentences).slice(0, 5).join(` `),
-      "full_text": shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
-      "picture": null,
-      "title": titles[getRandomInt(0, titles.length - 1)],
-      "publication_date": getDate(),
-      "user_id": getRandomInt(1, numberOfUsers)
+      announce: shuffle(sentences).slice(0, 5).join(` `),
+      'full_text': shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
+      picture: null,
+      title: titles[getRandomInt(0, titles.length - 1)],
+      'publication_date': getDate(),
+      'user_id': getRandomInt(1, numberOfUsers)
     })
     );
 
