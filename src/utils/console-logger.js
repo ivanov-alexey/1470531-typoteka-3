@@ -2,7 +2,7 @@
 
 const chalk = require(`chalk`);
 
-module.exports.logger = {
+module.exports.consoleLogger = {
   info: (message) => console.info(chalk.blue(message)),
   data: (message) => console.info(chalk.gray(message)),
   success: (message) => console.info(chalk.green(message)),
