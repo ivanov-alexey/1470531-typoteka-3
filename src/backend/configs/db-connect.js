@@ -15,7 +15,7 @@ const sequelize = new Sequelize(database, user, password, {
 const Article = require('../models/article')(sequelize);
 const Category = require('../models/category')(sequelize);
 const Comment = require('../models/comment')(sequelize);
-const User = require('../models/comment')(sequelize);
+const User = require('../models/user')(sequelize);
 
 User.hasMany(Comment, {
   as: `comments`,
