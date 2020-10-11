@@ -1,7 +1,7 @@
 'use strict';
 
 const {ExitCode} = require(`../../constants`);
-const {logger} = require(`../../utils`);
+const {logger} = require(`src/utils/logger`);
 
 const packageJsonFile = require(`../../../package.json`);
 

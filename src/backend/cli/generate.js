@@ -19,7 +19,12 @@ const {
   TimeInMilliseconds,
   ExitCode
 } = require(`../../constants`);
-const {getRandomInt, getDate, shuffle, logger} = require(`../../utils`);
+const {getDate} = require(`../../utils/get-date`);
+const {shuffle} = require(`../../utils/shuffle`);
+const {getRandomInt} = require(`../../utils/get-random-int`);
+const {getLogger} = require(`../lib/logger`);
+
+const logger = getLogger();
 
 const getCategories = (data) => [...new Set(
     Array(getRandomInt(0, MAX_CATEGORIES)).fill({}).map(

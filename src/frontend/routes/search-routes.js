@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const SearchService = require(`../data-service/search-service`);
-const {getErrorTemplate} = require(`../../utils`);
+const {getErrorTemplate} = require(`src/utils/get-error-template`);
 const {getLogger} = require(`./src/backend`);
 
 const logger = getLogger();
