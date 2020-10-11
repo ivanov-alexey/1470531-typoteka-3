@@ -23,6 +23,8 @@ const MIN_USERS = 2;
 const MAX_USERS = 10;
 const MAX_COMMENTS = 5;
 
+const MAX_ARTICLES_PER_PAGE = 8;
+
 const postsAmount = {
   min: 1,
   max: 1000
@@ -119,6 +121,7 @@ module.exports = {
   TimeInMilliseconds,
   TimeConfig,
   HttpCode,
+  MAX_ARTICLES_PER_PAGE,
   MIN_CATEGORIES,
   MAX_CATEGORIES,
   MIN_USERS,

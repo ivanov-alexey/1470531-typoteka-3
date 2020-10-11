@@ -1,6 +1,7 @@
 "use strict";
 
-const {db: {Article}} = require('../configs/db-connect');
+const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
+const {db: {Article, Category, Comment}} = require('../configs/db-connect');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
@@ -22,26 +23,38 @@ class ArticleService {
     }
   }
 
-  async findAll() {
+  async findAll(offset = 0, limit = MAX_ARTICLES_PER_PAGE) {
     try {
-      const result = [];
-      const allArticles = await Article.findAll({
-        order: [[`created_at`, `DESC`]],
-        raw: true,
+      return await Article.findAll({
+        attributes: [
+          `id`,
+          `announce`,
+          [`full_text`, `fullText`],
+          `picture`,
+          `title`,
+          [`publication_date`, 'publicationDate'],
+        ],
+        include: [{
+          model: Category,
+          as: `categories`,
+          attributes: [
+            `id`,
+            `title`,
+          ],
+        },
+        {
+          model: Comment,
+          as: `comments`,
+          attributes: [
+            `id`,
+            `text`,
+            `createdAt`
+          ],
+        }],
+        order: [[`publication_date`, `DESC`]],
+        offset,
+        limit
       });
-
-      for (const article of allArticles) {
-        const {id} = article;
-        const currentArticle = await Article.findByPk(id);
-        const rawComments = await currentArticle.getComments();
-        const rawCategories = await currentArticle.getCategories();
-        const comments = rawComments.map(({dataValues}) => ({...dataValues}));
-        const category = rawCategories.map(({dataValues}) => ({...dataValues}));
-
-        result.push({...currentArticle.dataValues, comments, category});
-      }
-
-      return result;
     } catch (err) {
       logger.error(err);
       throw err;
@@ -51,9 +64,7 @@ class ArticleService {
   async findMostDiscussed() {
     try {
       const result = [];
-      const allArticles = await Article.findAll({
-        raw: true,
-      });
+      const allArticles = await Article.findAll();
 
       for (const article of allArticles) {
         const {id} = article;
@@ -77,7 +88,16 @@ class ArticleService {
 
   async findOne(id) {
     try {
-      return await Article.findByPk(id, {raw: true});
+      return await Article.findByPk(id, {
+        attributes: [
+          `id`,
+          `announce`,
+          [`full_text`, `fullText`],
+          `picture`,
+          `title`,
+          [`publication_date`, 'publicationDate'],
+        ],
+      });
     } catch (err) {
       logger.error(err);
       throw err;
@@ -107,7 +127,7 @@ class ArticleService {
 
   async drop(id) {
     try {
-      const article = await Article.findByPk(id, {raw: true});
+      const article = await Article.findByPk(id);
 
       if (!article) {
         return null;

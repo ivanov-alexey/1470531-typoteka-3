@@ -93,7 +93,7 @@ class CommentService {
 
   async drop(id) {
     try {
-      const comment = await Comment.findByPk(id, {raw: true});
+      const comment = await Comment.findByPk(id);
 
       if (!comment) {
         return null;
