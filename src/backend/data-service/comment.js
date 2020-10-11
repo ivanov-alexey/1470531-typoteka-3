@@ -1,7 +1,7 @@
 "use strict";
 
 const {
-  db: {Comment},
+  db: {Comment, User},
 } = require('../configs/db-connect');
 const {getLogger} = require('../../libs/logger');
 
@@ -23,20 +23,32 @@ class CommentService {
   async findByArticleId(articleId) {
     try {
       const comments = await Comment.findAll({
+        attributes: [
+          `id`,
+          `text`,
+          [`created_at`, 'createdAt']
+        ],
         where: {
           'article_id': articleId,
         },
-        include: `user`,
+        include: [{
+          model: User,
+          as: `user`,
+          attributes: [
+            `avatar`,
+            `firstname`,
+            `lastname`,
+          ],
+        }],
         order: [[`created_at`, `DESC`]],
-        raw: true,
       });
 
-      return comments.map((comment) => ({
-        id: comment.id,
-        author: `${comment[`user.firstname`]} ${comment[`user.lastname`]}`,
-        avatar: comment[`user.avatar`],
-        createdAt: comment.createdAt,
-        text: comment.text,
+      return comments.map(({id, text, createdAt, user}) => ({
+        id,
+        text,
+        createdAt,
+        avatar: user.avatar,
+        author: `${user.firstname} ${user.lastname}`,
       }));
     } catch (err) {
       logger.error(err);
@@ -44,33 +56,35 @@ class CommentService {
     }
   }
 
-  async findAll() {
+  async findAll(offset = 0, limit = 10) {
     try {
-      const result = [];
-      const allComments = await Comment.findAll({
+      const comments = await Comment.findAll({
+        attributes: [
+          `id`,
+          `text`,
+          [`created_at`, 'createdAt']
+        ],
+        include: [{
+          model: User,
+          as: `user`,
+          attributes: [
+            `avatar`,
+            `firstname`,
+            `lastname`,
+          ],
+        }],
         order: [[`created_at`, `DESC`]],
+        offset,
+        limit
       });
 
-      for (const comment of allComments) {
-        const {id} = comment;
-        const rawComment = await Comment.findByPk(id);
-        const rawUser = await rawComment.getUser();
-        const rawArticle = await rawComment.getArticle();
-        const currentComment = rawComment.dataValues;
-        const user = rawUser.dataValues;
-        const article = rawArticle.dataValues;
-
-        result.push({
-          id: currentComment.id,
-          articleId: article.id,
-          author: `${user.firstname} ${user.lastname}`,
-          avatar: user.avatar,
-          createdAt: currentComment.createdAt,
-          text: currentComment.text,
-        });
-      }
-
-      return result;
+      return comments.map(({id, text, createdAt, user}) => ({
+        id,
+        text,
+        createdAt,
+        avatar: user.avatar,
+        author: `${user.firstname} ${user.lastname}`,
+      }));
     } catch (err) {
       logger.error(err);
       throw err;
