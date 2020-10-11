@@ -2,7 +2,7 @@
 
 const fs = require(`fs`).promises;
 const {FILE_NAME} = require(`src/constants`);
-const {getLogger} = require(`src/lib/logger`);
+const {getLogger} = require(`src/libs`);
 
 const logger = getLogger();
 
