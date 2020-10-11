@@ -48,8 +48,6 @@ module.exports = (app, articleService, commentService) => {
       const article = await articleService.create(req.body);
 
       if (res.statusCode === HttpCode.BAD_REQUEST) {
-        res.end();
-
         return;
       }
 
@@ -73,8 +71,6 @@ module.exports = (app, articleService, commentService) => {
       }
 
       if (res.statusCode === HttpCode.BAD_REQUEST) {
-        res.end();
-
         return;
       }
 
@@ -113,8 +109,6 @@ module.exports = (app, articleService, commentService) => {
       const comments = await commentService.findByArticleId(id);
 
       if (res.statusCode === HttpCode.BAD_REQUEST) {
-        res.end();
-
         return;
       }
 
@@ -138,8 +132,6 @@ module.exports = (app, articleService, commentService) => {
       }
 
       if (res.statusCode === HttpCode.BAD_REQUEST) {
-        res.end();
-
         return;
       }
 
@@ -159,8 +151,6 @@ module.exports = (app, articleService, commentService) => {
       const comment = await commentService.create(id, req.body);
 
       if (res.statusCode === HttpCode.BAD_REQUEST) {
-        res.end();
-
         return;
       }
 

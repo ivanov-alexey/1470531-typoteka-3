@@ -4,7 +4,7 @@ const {Router} = require(`express`);
 const ArticleService = require(`../data-service/article-service`);
 const CommentService = require(`../data-service/comment-service`);
 const {getErrorTemplate} = require(`../../utils`);
-const {getLogger} = require(`../../service/lib/logger`);
+const {getLogger} = require(`./src/backend`);
 
 const logger = getLogger();
 

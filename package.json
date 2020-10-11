@@ -2,16 +2,16 @@
   "name": "typoteka",
   "version": "1.0.0",
   "description": "Типотека",
-  "main": "./src/service/service.js",
+  "main": "src/backend/service.js",
   "scripts": {
-    "start": "node ./src/service/service.js",
+    "start": "node src/backend/service.js",
     "test": "npm run eslint & npm run test::rest",
     "test::rest": "jest --config jest.config.js",
     "eslint": "eslint --ext .js src/",
-    "generate": "node ./src/service/service.js --generate 10",
-    "filldb": "node ./src/service/service.js --filldb 10",
-    "server": "LOG_LEVEL=error nodemon ./src/service/service.js --server 3000",
-    "server::debug": "LOG_LEVEL=debug nodemon ./src/service/service.js --server 3000",
+    "generate": "node src/backend/service.js --generate 10",
+    "filldb": "node src/backend/service.js --filldb 10",
+    "server": "LOG_LEVEL=error nodemon src/backend/service.js --server 3000",
+    "server::debug": "LOG_LEVEL=debug nodemon src/backend/service.js --server 3000",
     "start-front-server": "nodemon src/frontend/index.js"
   },
   "repository": {

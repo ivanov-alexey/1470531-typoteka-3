@@ -1,6 +1,8 @@
-'use strict';
+"use strict";
 
-const {db: {Comment}} = require(`../db/connect`);
+const {
+  db: {Comment},
+} = require(`../db/connect`);
 const {getLogger} = require(`../lib/logger`);
 
 const logger = getLogger();
@@ -10,7 +12,7 @@ class CommentService {
     try {
       return await Comment.create({
         text,
-        'user_id': userId
+        'user_id': userId,
       });
     } catch (err) {
       logger.error(err);
@@ -22,13 +24,11 @@ class CommentService {
     try {
       const comments = await Comment.findAll({
         where: {
-          "article_id": articleId
+          'article_id': articleId,
         },
         include: `user`,
-        order: [
-          [`created_at`, `DESC`]
-        ],
-        raw: true
+        order: [[`created_at`, `DESC`]],
+        raw: true,
       });
 
       return comments.map((comment) => ({
@@ -36,7 +36,7 @@ class CommentService {
         author: `${comment[`user.firstname`]} ${comment[`user.lastname`]}`,
         avatar: comment[`user.avatar`],
         createdAt: comment.createdAt,
-        text: comment.text
+        text: comment.text,
       }));
     } catch (err) {
       logger.error(err);
@@ -48,9 +48,7 @@ class CommentService {
     try {
       const result = [];
       const allComments = await Comment.findAll({
-        order: [
-          [`created_at`, `DESC`]
-        ]
+        order: [[`created_at`, `DESC`]],
       });
 
       for (const comment of allComments) {
@@ -68,9 +66,8 @@ class CommentService {
           author: `${user.firstname} ${user.lastname}`,
           avatar: user.avatar,
           createdAt: currentComment.createdAt,
-          text: currentComment.text
+          text: currentComment.text,
         });
-
       }
 
       return result;
@@ -90,8 +87,8 @@ class CommentService {
 
       await Comment.destroy({
         where: {
-          id
-        }
+          id,
+        },
       });
 
       return comment;

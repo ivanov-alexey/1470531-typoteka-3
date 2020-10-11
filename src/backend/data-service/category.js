@@ -1,6 +1,8 @@
 'use strict';
 
-const {db: {Category}} = require(`../db/connect`);
+const {
+  db: {Category},
+} = require(`../db/connect`);
 const {getLogger} = require(`../lib/logger`);
 
 const logger = getLogger();
@@ -49,11 +51,14 @@ class CategoryService {
 
   async update(id, {title}) {
     try {
-      await Category.update({
-        title,
-      }, {
-        where: {id}
-      });
+      await Category.update(
+        {
+          title,
+        },
+        {
+          where: {id},
+        }
+      );
 
       return await Category.findByPk(id);
     } catch (err) {
@@ -72,8 +77,8 @@ class CategoryService {
 
       await Category.destroy({
         where: {
-          id
-        }
+          id,
+        },
       });
 
       return category;

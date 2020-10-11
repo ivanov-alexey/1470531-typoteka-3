@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const {db: {Article}} = require(`../db/connect`);
 const {getLogger} = require(`../lib/logger`);
@@ -7,15 +7,14 @@ const logger = getLogger();
 
 class ArticleService {
   async create(article) {
-
     // TODO: добавить user_id
     try {
       return await Article.create({
-        "announce": article.announce,
-        "full_text": article.full_text,
-        "picture": article.picture,
-        "title": article.title,
-        "publication_date": article.publication_date || new Date(),
+        announce: article.announce,
+        'full_text': article.full_text,
+        picture: article.picture,
+        title: article.title,
+        'publication_date': article.publication_date || new Date(),
       });
     } catch (err) {
       logger.error(err);
@@ -27,10 +26,8 @@ class ArticleService {
     try {
       const result = [];
       const allArticles = await Article.findAll({
-        order: [
-          [`created_at`, `DESC`]
-        ],
-        raw: true
+        order: [[`created_at`, `DESC`]],
+        raw: true,
       });
 
       for (const article of allArticles) {
@@ -55,7 +52,7 @@ class ArticleService {
     try {
       const result = [];
       const allArticles = await Article.findAll({
-        raw: true
+        raw: true,
       });
 
       for (const article of allArticles) {
@@ -67,7 +64,7 @@ class ArticleService {
         result.push({
           id: dataValues.id,
           announce: dataValues.announce.slice(0, 100).concat(`...`),
-          count
+          count,
         });
       }
 
@@ -89,14 +86,17 @@ class ArticleService {
 
   async update(id, {announce, fullText, picture, title}) {
     try {
-      await Article.update({
-        announce,
-        fullText,
-        title,
-        picture
-      }, {
-        where: {id}
-      });
+      await Article.update(
+        {
+          announce,
+          fullText,
+          title,
+          picture,
+        },
+        {
+          where: {id},
+        }
+      );
 
       return await Article.findByPk(id);
     } catch (err) {
@@ -115,8 +115,8 @@ class ArticleService {
 
       await Article.destroy({
         where: {
-          id
-        }
+          id,
+        },
       });
 
       return article;
