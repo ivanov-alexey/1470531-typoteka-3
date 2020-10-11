@@ -1,8 +1,8 @@
 'use strict';
 
-const request = require(`supertest`);
-const {createApp} = require(`src/backend/cli/commands/server`);
-const artciclesStubs = require(`test-stuff/articles-stubs`);
+const request = require('supertest');
+const {createApp} = require('../../cli/commands/server');
+const artciclesStubs = require('../../../../test-stuff/articles-stubs');
 
 let server;
 const articleStub = {

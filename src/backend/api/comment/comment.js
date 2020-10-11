@@ -1,9 +1,9 @@
 'use strict';
 
-const {Router} = require(`express`);
-const {HttpCode} = require(`src/constants`);
-const commentValidator = require(`src/backend/middlewares/comment-validator`);
-const {getLogger} = require(`./src/lib`);
+const {Router} = require('express');
+const {HttpCode} = require('../../../constants');
+const commentValidator = require('../../middlewares/comment-validator');
+const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
 const route = new Router();

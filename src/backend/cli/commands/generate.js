@@ -1,7 +1,7 @@
 'use strict';
 
-const fs = require(`fs`).promises;
-const {nanoid} = require(`nanoid`);
+const fs = require('fs').promises;
+const {nanoid} = require('nanoid');
 const {
   avatarSettings,
   FILE_NAME,
@@ -18,11 +18,11 @@ const {
   Message,
   TimeInMilliseconds,
   ExitCode
-} = require(`src/constants`);
-const {getDate} = require(`src/utils/get-date`);
-const {shuffle} = require(`src/utils/shuffle`);
-const {getRandomInt} = require(`src/utils/get-random-int`);
-const {getLogger} = require(`./src/lib`);
+} = require('../../../constants');
+const {getDate} = require('../../../utils/get-date');
+const {shuffle} = require('../../../utils/shuffle');
+const {getRandomInt} = require('../../../utils/get-random-int');
+const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const {HttpCode, TextRestriction} = require(`../../constants`);
+const {HttpCode, TextRestriction} = require('../../constants');
 
 const categoryKeys = [`title`];
 

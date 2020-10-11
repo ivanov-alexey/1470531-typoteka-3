@@ -1,7 +1,7 @@
 'use strict';
 
-const {ExitCode} = require(`src/constants`);
-const {consoleLogger} = require(`src/utils/console-logger`);
+const {ExitCode} = require('../../../constants');
+const {consoleLogger} = require('../../../utils/console-logger');
 
 const message = `
 Программа запускает http-сервер и формирует файл с данными для API.

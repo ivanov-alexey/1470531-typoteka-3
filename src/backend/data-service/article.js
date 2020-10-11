@@ -1,7 +1,7 @@
 "use strict";
 
-const {db: {Article}} = require(`src/backend/configs/db-connect`);
-const {getLogger} = require(`./src/lib`);
+const {db: {Article}} = require('../configs/db-connect');
+const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
 

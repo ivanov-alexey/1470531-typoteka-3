@@ -1,15 +1,15 @@
 'use strict';
 
-const express = require(`express`);
-const path = require(`path`);
-const {DEFAULT_FRONT_PORT, PUBLIC_DIR, TEMPLATES_DIR} = require(`../constants`);
-const mainRoute = require(`./routes/main-route`);
-const registerRoutes = require(`./routes/register-routes`);
-const loginRoutes = require(`./routes/login-routes`);
-const searchRoutes = require(`./routes/search-routes`);
-const categoriesRoutes = require(`./routes/categories-routes`);
-const myRoutes = require(`./routes/my-routes`);
-const articlesRoutes = require(`./routes/articles-routes`);
+const express = require('express');
+const path = require('path');
+const {DEFAULT_FRONT_PORT, PUBLIC_DIR, TEMPLATES_DIR} = require('../constants');
+const mainRoute = require('./routes/main-route');
+const registerRoutes = require('./routes/register-routes');
+const loginRoutes = require('./routes/login-routes');
+const searchRoutes = require('./routes/search-routes');
+const categoriesRoutes = require('./routes/categories-routes');
+const myRoutes = require('./routes/my-routes');
+const articlesRoutes = require('./routes/articles-routes');
 
 const app = express();
 

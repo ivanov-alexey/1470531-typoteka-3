@@ -1,8 +1,8 @@
 'use strict';
 
-const fs = require(`fs`).promises;
-const {FILE_NAME} = require(`src/constants`);
-const {getLogger} = require(`src/libs`);
+const fs = require('fs').promises;
+const {FILE_NAME} = require('../constants');
+const {getLogger} = require('./logger');
 
 const logger = getLogger();
 

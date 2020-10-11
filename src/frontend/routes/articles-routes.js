@@ -1,15 +1,15 @@
 'use strict';
 
-const {Router} = require(`express`);
-const path = require(`path`);
-const multer = require(`multer`);
-const ArticleService = require(`../data-service/article-service`);
-const CategoryService = require(`../data-service/category-service`);
-const CommentService = require(`../data-service/comment-service`);
-const {getErrorTemplate} = require(`src/utils/get-error-template`);
-const {TextRestriction} = require(`../../constants`);
-const {generateErrors} = require(`src/utils/generate-errors`);
-const {getLogger} = require(`./src/backend`);
+const {Router} = require('express');
+const path = require('path');
+const multer = require('multer');
+const ArticleService = require('../data-service/article-service');
+const CategoryService = require('../data-service/category-service');
+const CommentService = require('../data-service/comment-service');
+const {generateErrors} = require('../../utils/generate-errors');
+const {getErrorTemplate} = require('../../utils/get-error-template');
+const {TextRestriction} = require('../../constants');
+const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
 

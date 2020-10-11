@@ -1,8 +1,8 @@
 'use strict';
 
-const DateTime = require(`luxon`).DateTime;
-const {getRandomInt} = require(`./get-random-int`);
-const {TimeConfig} = require(`src/constants`);
+const DateTime = require('luxon').DateTime;
+const {getRandomInt} = require('./get-random-int');
+const {TimeConfig} = require('../constants');
 
 module.exports.getDate = () => DateTime.fromObject({
   year: getRandomInt(TimeConfig.minYear, TimeConfig.maxYear),

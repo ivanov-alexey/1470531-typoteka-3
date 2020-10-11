@@ -1,10 +1,10 @@
 'use strict';
 
-const express = require(`express`);
-const {API_PREFIX, DEFAULT_API_PORT, HttpCode, Message} = require(`src/constants`);
-const createApi = require(`src/backend/api/index`);
-const {getLogger} = require(`./src/lib`);
-const {connectToDb} = require(`src/backend/configs/db-connect`);
+const express = require('express');
+const createApi = require('../../api/index');
+const {connectToDb} = require('../../configs/db-connect');
+const {API_PREFIX, HttpCode, DEFAULT_API_PORT, Message} = require('../../../constants');
+const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
 

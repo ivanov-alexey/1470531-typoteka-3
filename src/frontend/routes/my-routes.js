@@ -1,10 +1,10 @@
 'use strict';
 
-const {Router} = require(`express`);
-const ArticleService = require(`../data-service/article-service`);
-const CommentService = require(`../data-service/comment-service`);
-const {getErrorTemplate} = require(`src/utils/get-error-template`);
-const {getLogger} = require(`./src/backend`);
+const {Router} = require('express');
+const ArticleService = require('../data-service/article-service');
+const CommentService = require('../data-service/comment-service');
+const {getErrorTemplate} = require('../../utils/get-error-template');
+const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
 

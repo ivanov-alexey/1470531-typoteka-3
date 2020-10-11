@@ -1,9 +1,9 @@
 'use strict';
 
-const fs = require(`fs`);
-const path = require(`path`);
-const pinoms = require(`pino-multi-stream`);
-const {logLevel} = require(`src/backend/configs/env-config`);
+const fs = require('fs');
+const path = require('path');
+const pinoms = require('pino-multi-stream');
+const {logLevel} = require('../backend/configs/env-config');
 
 const prettyStream = pinoms.prettyStream({
   prettyPrint: {
@@ -11,11 +11,11 @@ const prettyStream = pinoms.prettyStream({
     translateTime: `SYS:standard`,
     ignore: `hostname,pid`
   },
-  prettifier: require(`pino-pretty`)
+  prettifier: require('pino-pretty')
 });
 const level = logLevel || `info`;
 const streams = [
-  {level, stream: fs.createWriteStream(path.join(path.dirname(process.mainModule.path), `service`, `logs`, `logs.txt`))},
+  {level, stream: fs.createWriteStream(path.join(path.dirname(process.mainModule.path), `backend`, `logs`, `logs.txt`))},
   {level, stream: prettyStream}
 ];
 

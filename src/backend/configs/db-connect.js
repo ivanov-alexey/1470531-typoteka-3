@@ -1,9 +1,9 @@
 'use strict';
 
-require(`dotenv`).config();
-const {Sequelize} = require(`sequelize`);
-const {host, user, database, password, port} = require(`src/backend/configs/env-config`);
-const {getLogger} = require(`./src/lib`);
+require('dotenv').config();
+const {Sequelize} = require('sequelize');
+const {host, user, database, password, port} = require('../configs/env-config');
+const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
 
@@ -12,10 +12,10 @@ const sequelize = new Sequelize(database, user, password, {
   dialect: `postgres`,
 });
 
-const Article = require(`src/backend/models`)(sequelize);
-const Category = require(`src/backend/models`)(sequelize);
-const Comment = require(`src/backend/models`)(sequelize);
-const User = require(`src/backend/models`)(sequelize);
+const Article = require('../models/article')(sequelize);
+const Category = require('../models/category')(sequelize);
+const Comment = require('../models/comment')(sequelize);
+const User = require('../models/comment')(sequelize);
 
 User.hasMany(Comment, {
   as: `comments`,

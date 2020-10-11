@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require(`fs`).promises;
+const fs = require('fs').promises;
 const {
   FILE_SENTENCES_PATH,
   FILE_TITLES_PATH,
@@ -15,16 +15,16 @@ const {
   MAX_USERS,
   Message,
   ExitCode
-} = require(`src/constants`);
-const {getDate} = require(`src/utils/get-date`);
-const {shuffle} = require(`src/utils/shuffle`);
-const {getRandomInt} = require(`src/utils/get-random-int`);
+} = require('../../../constants');
+const {getDate} = require('../../../utils/get-date');
+const {shuffle} = require('../../../utils/shuffle');
+const {getRandomInt} = require('../../../utils/get-random-int');
 const {
   initDb,
   sequelize,
   db: {Article, Category, Comment, User}
-} = require(`src/backend/configs/db-connect`);
-const {getLogger} = require(`./src/lib`);
+} = require('../../configs/db-connect');
+const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
 
