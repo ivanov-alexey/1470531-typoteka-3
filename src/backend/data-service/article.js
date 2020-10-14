@@ -1,6 +1,7 @@
 "use strict";
 
 const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
+const {sequelize} = require('../configs/db-connect');
 const {db: {Article, Category, Comment}} = require('../configs/db-connect');
 const {getLogger} = require('../../libs/logger');
 
@@ -63,23 +64,23 @@ class ArticleService {
 
   async findMostDiscussed() {
     try {
-      const result = [];
-      const allArticles = await Article.findAll();
+      const sql = `
+        SELECT a.id,
+               a.announce,
+               count(c.article_id) AS "commentsCount"
+        FROM articles AS a
+        INNER JOIN comments c on a.id = c.article_id
+        GROUP BY a.id
+        ORDER BY "commentsCount" DESC
+        LIMIT 4;
+      `;
+      const type = sequelize.QueryTypes.SELECT;
+      const articles = await sequelize.query(sql, {type});
 
-      for (const article of allArticles) {
-        const {id} = article;
-        const currentArticle = await Article.findByPk(id);
-        const count = await currentArticle.countComments();
-        const {dataValues} = currentArticle;
-
-        result.push({
-          id: dataValues.id,
-          announce: dataValues.announce.slice(0, 100).concat(`...`),
-          count,
-        });
-      }
-
-      return result.sort((prev, next) => next.count - prev.count).slice(0, 4);
+      return articles.map((article) => ({
+        ...article,
+        announce: article.announce.slice(0, 100).concat(`...`)
+      }));
     } catch (err) {
       logger.error(err);
       throw err;

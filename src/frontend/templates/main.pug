@@ -22,7 +22,7 @@ block content
             each popularArticle in popularArticles
               li.hot__list-item
                 a.hot__list-link(href='/articles/' + popularArticle.id)= popularArticle.announce
-                  sup.hot__link-sup= popularArticle.count
+                  sup.hot__link-sup= popularArticle.commentsCount
         else
           p.hot__empty Здесь пока ничего нет...
       section.main-page__last.last
