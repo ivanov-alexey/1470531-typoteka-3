@@ -1,7 +1,7 @@
 'use strict';
 
 const {
-  db: {Category},
+  sequelize, db: {Category},
 } = require('../configs/db-connect');
 const {getLogger} = require('../../libs/logger');
 
@@ -21,19 +21,17 @@ class CategoryService {
 
   async findAll() {
     try {
-      const result = [];
-      const allCategories = await Category.findAll();
+      const sql = `
+      SELECT c.id                  AS "id",
+             c.title               AS "title",
+             count(ca.category_id) AS "count"
+      FROM categories AS c
+      LEFT JOIN category_article AS ca ON ca.category_id = c.id
+      GROUP BY c.id;
+      `;
+      const type = sequelize.QueryTypes.SELECT;
 
-      for (const category of allCategories) {
-        const {id} = category;
-        const currentCategory = await Category.findByPk(id);
-        const count = await currentCategory.countArticles();
-        const {dataValues} = currentCategory;
-
-        result.push({...dataValues, count});
-      }
-
-      return result;
+      return  await sequelize.query(sql, {type});
     } catch (err) {
       logger.error(err);
       throw err;
