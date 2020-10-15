@@ -21,19 +21,19 @@ mainRoute.get(`/`, async (req, res) => {
     const {articles, count} = await ArticleService.getAll(offset, MAX_ARTICLES_PER_PAGE);
     const categories = await CategoryService.getAll();
     const popularArticles = await ArticleService.findMostDiscussed();
-    const allComments = await CommentService.getAll();
-    const lastComments = allComments.slice(0, 4);
+    const {comments} = await CommentService.getAll(0, 4);
     const pagesCount = Math.ceil(count / MAX_ARTICLES_PER_PAGE);
 
     res.render(`main`, {
       articles,
       categories,
       popularArticles,
-      lastComments,
+      lastComments: comments,
       pagesCount,
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
-      nextIsActive: pageNumber < pagesCount
+      nextIsActive: pageNumber < pagesCount,
+      mainPath: '/'
     });
   } catch (err) {
     logger.error(err);

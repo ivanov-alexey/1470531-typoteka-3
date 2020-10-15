@@ -1,5 +1,6 @@
 "use strict";
 
+const {MAX_COMMENTS_PER_PAGE} = require('../../constants');
 const {
   db: {Comment, User},
 } = require('../configs/db-connect');
@@ -56,9 +57,10 @@ class CommentService {
     }
   }
 
-  async findAll(offset = 0, limit = 10) {
+  async findAll(offset = 0, limit = MAX_COMMENTS_PER_PAGE) {
     try {
-      const comments = await Comment.findAll({
+      const count = await Comment.count();
+      const rawComments = await Comment.findAll({
         attributes: [
           `id`,
           `text`,
@@ -78,13 +80,18 @@ class CommentService {
         limit
       });
 
-      return comments.map(({id, text, createdAt, user}) => ({
+      const comments =  rawComments.map(({id, text, createdAt, user}) => ({
         id,
         text,
         createdAt,
         avatar: user.avatar,
         author: `${user.firstname} ${user.lastname}`,
       }));
+
+      return {
+        count,
+        comments
+      }
     } catch (err) {
       logger.error(err);
       throw err;

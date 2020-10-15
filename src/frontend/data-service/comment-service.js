@@ -19,9 +19,9 @@ class CommentService {
     }
   }
 
-  static async getAll() {
+  static async getAll(offset, limit) {
     try {
-      const response = await apiRequest.get(`/comments`);
+      const response = await apiRequest.get(`/comments?offset=${offset}&limit=${limit}`);
 
       return response.data;
     } catch (err) {
