@@ -59,3 +59,5 @@ block content
               | Комментарии
               span.preview__cloud
               b.preview__comment-count= article.comments.length
+    include ./mixins/pagination
+    +pagination(pagesCount, activePage)

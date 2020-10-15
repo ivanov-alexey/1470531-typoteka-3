@@ -15,8 +15,10 @@ module.exports = (app, articleService, commentService) => {
 
   route.get(`/`, async (req, res) => {
     try {
-      const {popular} = req.query;
-      const articles = popular ? await articleService.findMostDiscussed() : await articleService.findAll();
+      const {popular, offset, limit} = req.query;
+      const offsetNum = parseInt(offset, 10);
+      const limitNum = parseInt(limit, 10);
+      const articles = popular ? await articleService.findMostDiscussed() : await articleService.findAll(offsetNum, limitNum);
 
       res.status(HttpCode.OK).json(articles);
     } catch (err) {

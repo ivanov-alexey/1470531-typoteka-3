@@ -1,0 +1,23 @@
+mixin pagination(pagesCount, activePage)
+  .preview__toggle-wrapper
+    ul.preview__pagination.pagination
+      if prevIsActive
+        li
+          a.pagination__button.button.button--backwards(href='/?page=' + (activePage - 1) aria-label='Страница назад') Назад
+      else
+        li
+          a.pagination__button.button.button--backwards.button--disabled(href aria-label='Страница назад') Назад
+      - for (var i = 0; i < pagesCount; i++)
+        if activePage === i + 1
+          li.pagination__item.pagination__item--active
+            a(href='/?page=' + (i + 1))= i + 1
+        else
+          li.pagination__item
+            a(href='/?page=' + (i + 1))= i + 1
+      if nextIsActive
+        li
+          a.pagination__button.button.button--forward(href='/?page=' + (activePage + 1) aria-label='Страница вперед') Вперед
+      else
+        li
+          a.pagination__button.button.button--forward.button--disabled(href aria-label='Страница вперед') Вперед
+

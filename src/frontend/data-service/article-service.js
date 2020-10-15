@@ -11,9 +11,9 @@ class ArticleService {
     this.article = article;
   }
 
-  static async getAll() {
+  static async getAll(offset, limit) {
     try {
-      const response = await apiRequest.get(`/articles`);
+      const response = await apiRequest.get(`/articles?offset=${offset}&limit=${limit}`);
 
       return response.data;
     } catch (err) {

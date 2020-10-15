@@ -26,7 +26,8 @@ class ArticleService {
 
   async findAll(offset = 0, limit = MAX_ARTICLES_PER_PAGE) {
     try {
-      return await Article.findAll({
+      const count = await Article.count();
+      const articles =  await Article.findAll({
         attributes: [
           `id`,
           `announce`,
@@ -56,6 +57,12 @@ class ArticleService {
         offset,
         limit
       });
+
+      return {
+        count,
+        articles
+      }
+
     } catch (err) {
       logger.error(err);
       throw err;
