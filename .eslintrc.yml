@@ -6,4 +6,14 @@ env:
   node: true
   jest: true
 
-extends: 'htmlacademy/node'
+extends:
+  - 'htmlacademy/node'
+  - 'prettier'
+
+plugins:
+  - 'prettier'
+
+
+
+
+
