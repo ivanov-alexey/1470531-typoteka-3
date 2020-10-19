@@ -8,15 +8,16 @@ const {getLogger} = require('../../libs/logger');
 const logger = getLogger();
 
 class ArticleService {
-  async create(article) {
+  async create({ announce, fullText, picture, title, publicationDate}) {
     // TODO: добавить user_id
+    // TODO: добавить category_id
     try {
       return await Article.create({
-        announce: article.announce,
-        'full_text': article.full_text,
-        picture: article.picture,
-        title: article.title,
-        'publication_date': article.publication_date || new Date(),
+        announce,
+        picture,
+        title,
+        'full_text': fullText,
+        'publication_date': publicationDate,
       });
     } catch (err) {
       logger.error(err);

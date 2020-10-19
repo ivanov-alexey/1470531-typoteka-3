@@ -1,54 +1,24 @@
 'use strict';
 
-const {HttpCode, TextRestriction} = require('../../constants');
+const {HttpCode} = require('../../constants');
 
-const articleKeys = [
-  `category`,
-  `announce`,
-  `full_text`,
-  `title`,
-  `picture`,
-  `publication_date`,
-  `publication_date`,
-  `publication_date`,
-];
+const articleValidator = (schema) => async (req, res, next) => {
+  const {body} = req;
 
-module.exports = (req, res, next) => {
-  const article = req.body;
-  const keys = Object.keys(article);
-  const keysExists = articleKeys.every((key) => keys.includes(key));
+  try {
+    await schema.validateAsync(body, {abortEarly: false});
+  } catch (err) {
+    const {details} = err;
 
-  if (!keysExists) {
-    res.status(HttpCode.BAD_REQUEST).send(`Field not exist`);
-  }
+    res.status(HttpCode.BAD_REQUEST).json({
+      message: details.map((errorDescription) => errorDescription.message),
+      data: body
+    });
 
-  if (article.title && article.title.length < TextRestriction.shortMin) {
-    res.status(HttpCode.BAD_REQUEST).send(`Title too short`);
-  }
-
-  if (article.title && article.title.length > TextRestriction.shortMax) {
-    res.status(HttpCode.BAD_REQUEST).send(`Title too long`);
-  }
-
-  if (article.announce && article.announce.length < TextRestriction.shortMin) {
-    res.status(HttpCode.BAD_REQUEST).send(`Announce too short`);
-  }
-
-  if (article.announce && article.announce.length > TextRestriction.shortMax) {
-    res.status(HttpCode.BAD_REQUEST).send(`Announce too long`);
-  }
-
-  if (article.category && !article.category.length) {
-    res.status(HttpCode.BAD_REQUEST).send(`Category is empty`);
-  }
-
-  if (article.fullText && article.fullText.length > TextRestriction.longMax) {
-    res.status(HttpCode.BAD_REQUEST).send(`Publication is too long`);
-  }
-
-  if (!article.publication_date) {
-    res.status(HttpCode.BAD_REQUEST).send(`publication_date is required`);
+    return
   }
 
   next();
-};
+}
+
+module.exports = articleValidator

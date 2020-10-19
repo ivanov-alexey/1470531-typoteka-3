@@ -1,17 +1,15 @@
 'use strict';
 
+const {DateTime} = require('luxon');
 const {getErrorMessage} = require('../../utils/get-error-message');
 const apiRequest = require('./api-request');
+const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
 
 class ArticleService {
-  constructor(article) {
-    this.article = article;
-  }
-
-  static async getAll(offset, limit) {
+  static async getAll(offset = 0, limit = MAX_ARTICLES_PER_PAGE) {
     try {
       const response = await apiRequest.get(`/articles?offset=${offset}&limit=${limit}`);
 
@@ -47,20 +45,21 @@ class ArticleService {
     }
   }
 
-  async create() {
+  static async create(article) {
     try {
       return await apiRequest.post(`/articles/add`, {
-        title: this.article.title,
-        category: typeof this.article.category === `string` ? [this.article.category] : this.article.category || ``,
-        picture: this.article.picture,
-        announce: this.article.announce,
-        'full_text': this.article.full_text,
-        'publication_date': this.article.publication_date || new Date(),
+        title: article.title || '',
+        category: typeof article.category === `string` ? [article.category] : article.category || ``,
+        picture: article.picture || '',
+        announce: article.announce || '',
+        fullText: article.fullText || '',
+        publicationDate: article.publicationDate || DateTime.local().toString(),
       });
-    } catch (err) {
-      logger.error(`Request /articles/add error: `, err.message);
-
-      return getErrorMessage(err);
+    } catch (error) {
+      return {
+        article: error.response && error.response.data && error.response.data.data,
+        errors: error.response && error.response.data && error.response.data.message
+      };
     }
   }
 }

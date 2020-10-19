@@ -5,6 +5,7 @@ const {HttpCode} = require('../../../constants');
 const articleValidator = require('../../middlewares/article-validator');
 const articleExist = require('../../middlewares/article-exists');
 const commentValidator = require('../../middlewares/comment-validator');
+const articleSchema = require('../../schemas/article');
 const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
@@ -45,13 +46,9 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.post(`/add`, articleValidator, async (req, res) => {
+  route.post(`/add`, articleValidator(articleSchema), async (req, res) => {
     try {
       const article = await articleService.create(req.body);
-
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
-        return;
-      }
 
       res.status(HttpCode.CREATED).json(article);
     } catch (err) {
@@ -61,7 +58,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.put(`/:id`, articleValidator, async (req, res) => {
+  route.put(`/:id`, articleValidator(articleSchema), async (req, res) => {
     try {
       const {id} = req.params;
       const article = await articleService.findOne(id);
@@ -69,10 +66,6 @@ module.exports = (app, articleService, commentService) => {
       if (!article) {
         res.status(HttpCode.NOT_FOUND).send(`Not found with ${id}`);
 
-        return;
-      }
-
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
         return;
       }
 
@@ -110,10 +103,6 @@ module.exports = (app, articleService, commentService) => {
       const {id} = req.params;
       const comments = await commentService.findByArticleId(id);
 
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
-        return;
-      }
-
       res.status(HttpCode.OK).json(comments);
     } catch (err) {
       logger.error(err);
@@ -133,10 +122,6 @@ module.exports = (app, articleService, commentService) => {
         return;
       }
 
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
-        return;
-      }
-
       res.status(HttpCode.OK).json(deletedComment);
     } catch (err) {
       logger.error(err);
@@ -151,10 +136,6 @@ module.exports = (app, articleService, commentService) => {
         article: {id},
       } = res.locals;
       const comment = await commentService.create(id, req.body);
-
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
-        return;
-      }
 
       res.status(HttpCode.CREATED).json(comment);
     } catch (err) {
