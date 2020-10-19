@@ -3,6 +3,7 @@
 const {Router} = require('express');
 const ArticleService = require('../data-service/article-service');
 const CommentService = require('../data-service/comment-service');
+const {MAX_COMMENTS_PER_PAGE} = require('../../constants');
 const {getErrorTemplate} = require('../../utils/get-error-template');
 const {getLogger} = require('../../libs/logger');
 
@@ -24,11 +25,21 @@ myRoutes.get(`/`, async (req, res) => {
 });
 
 myRoutes.get(`/comments`, async (req, res) => {
+  const {page = 1} = req.query;
+  const pageNumber = parseInt(page, 10);
+  const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_COMMENTS_PER_PAGE;
+
   try {
-    const comments = await CommentService.getAll();
+    const {count, comments} = await CommentService.getAll(offset, MAX_COMMENTS_PER_PAGE);
+    const pagesCount = Math.ceil(count / MAX_COMMENTS_PER_PAGE);
 
     res.render(`my/comments`, {
       comments,
+      pagesCount,
+      activePage: pageNumber,
+      prevIsActive: pageNumber !== 1,
+      nextIsActive: pageNumber < pagesCount,
+      commentsPath: './comments'
     });
   } catch (err) {
     logger.error(err);

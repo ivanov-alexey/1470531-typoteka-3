@@ -13,7 +13,10 @@ module.exports = (app, service) => {
 
   route.get(`/`, async (req, res) => {
     try {
-      const comments = await service.findAll();
+      const {offset, limit} = req.query;
+      const offsetNum = parseInt(offset, 10);
+      const limitNum = parseInt(limit, 10);
+      const comments = await service.findAll(offsetNum, limitNum);
 
       res.status(HttpCode.OK).json(comments);
     } catch (err) {

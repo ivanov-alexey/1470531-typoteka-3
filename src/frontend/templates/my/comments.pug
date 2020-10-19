@@ -10,8 +10,10 @@ block content
             .publication__header
               img.publication__list-image(src='/img/' + comment.avatar, width='20', height='20', alt='Аватар пользователя')
               b.publication__list-name= comment.author
-              time.publication__item-time(datetime='2019-03-21T20:33') 21.03.2019, 20:33
+              time.publication__item-time(datetime= comment.createdAt)= comment.createdAt
             a.publication__item-text(href='#')= comment.text
             p.publication__text-strong= comment.articleTitle
             button.publication__button.button.button--close-item(type='button')
               span.visually-hidden Закрыть строку списка
+    include ../mixins/pagination
+    +pagination(pagesCount, activePage, commentsPath)

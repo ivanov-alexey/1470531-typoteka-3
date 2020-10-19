@@ -9,7 +9,7 @@
     "test::rest": "jest --config jest.config.js",
     "eslint": "eslint --ext .js src/",
     "generate": "node src/backend/service.js --generate 10",
-    "filldb": "node src/backend/service.js --filldb 10",
+    "filldb": "node src/backend/service.js --filldb 20",
     "server": "LOG_LEVEL=error nodemon src/backend/service.js --server 3000",
     "server::debug": "LOG_LEVEL=debug nodemon src/backend/service.js --server 3000",
     "start-front-server": "nodemon src/frontend/index.js"
