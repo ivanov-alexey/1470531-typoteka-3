@@ -62,6 +62,18 @@ class ArticleService {
       };
     }
   }
+
+  static async drop(id) {
+    try {
+      const response = await apiRequest.delete(`/articles/${id}`);
+
+      return response.data;
+    } catch (err) {
+      logger.error(`Request /comments/:id error: `, err.message);
+
+      return getErrorMessage(err);
+    }
+  }
 }
 
 module.exports = ArticleService;

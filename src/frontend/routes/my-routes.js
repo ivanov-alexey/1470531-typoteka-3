@@ -12,6 +12,7 @@ const logger = getLogger();
 
 const myRoutes = new Router();
 
+// TODO: пофиксить время во всех шаблонах
 myRoutes.get(`/`, async (req, res) => {
   const {page = 1} = req.query;
   const pageNumber = parseInt(page, 10);
@@ -34,6 +35,33 @@ myRoutes.get(`/`, async (req, res) => {
     res.render(getErrorTemplate(err));
   }
 });
+
+myRoutes.post(`/`, async (req, res) => {
+  const {page = 1} = req.query;
+  const pageNumber = parseInt(page, 10);
+  const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_ARTICLES_PER_PAGE;
+
+  try {
+    const {method, articleId} = req.body;
+
+    if (method === 'DELETE') {
+      await ArticleService.drop(parseInt(articleId, 10));
+      const {articles, count} = await ArticleService.getAll(offset, MAX_ARTICLES_PER_PAGE);
+      const pagesCount = Math.ceil(count / MAX_ARTICLES_PER_PAGE);
+
+      res.render(`my/my`, {
+        articles,
+        pagesCount,
+        activePage: pageNumber,
+        prevIsActive: pageNumber !== 1,
+        nextIsActive: pageNumber < pagesCount,
+        myPath: '/my'
+      })
+    }
+  } catch (err) {
+    console.error(err);
+  }
+})
 
 // TODO: создание комментариев
 // TODO: удаление комментариев
