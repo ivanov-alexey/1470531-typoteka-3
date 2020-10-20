@@ -11,3 +11,5 @@ block content
             a.notes__item-text(href='/articles/' + article.id)= article.title
             button.notes__button.button.button--close-item(type='button')
               span.visually-hidden Закрыть строку списка
+    include ../mixins/pagination
+    +pagination(pagesCount, activePage, myPath)
