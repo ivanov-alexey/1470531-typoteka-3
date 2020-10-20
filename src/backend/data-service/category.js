@@ -8,7 +8,7 @@ const {getLogger} = require('../../libs/logger');
 const logger = getLogger();
 
 class CategoryService {
-  async create({title}) {
+  async create(title) {
     try {
       return await Category.create({
         title,

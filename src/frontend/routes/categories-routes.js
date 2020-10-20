@@ -24,4 +24,42 @@ categoriesRoutes.get(`/`, async (req, res) => {
   }
 });
 
+categoriesRoutes.post(`/`, async (req, res) => {
+  try {
+    const {title = '', method = '', categoryId = ''} = req.body;
+
+    if (method === 'ADD') {
+      const {errors} = await CategoryService.create(title);
+      const categories = await CategoryService.getAll();
+
+      if (errors) {
+        res.render(`categories`, {
+          isError: true,
+          errors,
+          isEdit: true,
+          categories,
+        });
+
+        return;
+      }
+
+      res.render(`categories`, {
+        categories,
+      });
+
+      return;
+    }
+
+    if (method === 'DELETE') {
+
+      console.log('categoryId', categoryId);
+    }
+
+
+  } catch (err) {
+    logger.error(err);
+    res.render(getErrorTemplate(err));
+  }
+});
+
 module.exports = categoriesRoutes;

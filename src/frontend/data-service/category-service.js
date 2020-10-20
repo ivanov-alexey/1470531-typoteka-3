@@ -7,6 +7,19 @@ const {getLogger} = require('../../libs/logger');
 const logger = getLogger();
 
 class CategoryService {
+  static async create(title) {
+    try {
+      const response = await apiRequest.post(`/categories/add`, {title});
+
+      return response.data;
+    } catch (error) {
+      return {
+        categories: error.response && error.response.data && error.response.data.data,
+        errors: error.response && error.response.data && error.response.data.message
+      };
+    }
+  }
+
   static async getAll() {
     try {
       const response = await apiRequest.get(`/categories`);

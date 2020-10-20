@@ -2,7 +2,8 @@
 
 const {Router} = require('express');
 const {HttpCode} = require('../../../constants');
-const categoryValidator = require('../../middlewares/category-validator');
+const newEntityValidator = require('../../middlewares/new-entity-validator');
+const categorySchema = require('../../schemas/category');
 const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
@@ -23,9 +24,10 @@ module.exports = (app, service) => {
     }
   });
 
-  route.post(`/add`, categoryValidator, async (req, res) => {
+  route.post(`/add`, newEntityValidator(categorySchema), async (req, res) => {
     try {
-      const category = await service.create(req.body);
+      const {title} = req.body;
+      const category = await service.create(title);
 
       res.status(HttpCode.CREATED).json(category);
     } catch (err) {
@@ -52,7 +54,7 @@ module.exports = (app, service) => {
     }
   });
 
-  route.put(`/:id`, categoryValidator, async (req, res) => {
+  route.put(`/:id`, newEntityValidator(categorySchema), async (req, res) => {
     try {
       const {id} = req.params;
       const existCategory = await service.findOne(id);
