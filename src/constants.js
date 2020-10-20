@@ -93,11 +93,19 @@ const HttpCode = {
 
 const TextRestriction = {
   commentMin: 20,
+  commentMax: 500,
   categoryMin: 5,
   categoryMax: 30,
   shortMin: 30,
   shortMax: 250,
-  longMax: 1000
+  longMin: 30,
+  longMax: 1000,
+  nameMin: 2,
+  nameMax: 50,
+  passwordMin: 6,
+  passwordMax: 50,
+  linkMin: 4,
+  linkMax: 250
 };
 
 module.exports = {
