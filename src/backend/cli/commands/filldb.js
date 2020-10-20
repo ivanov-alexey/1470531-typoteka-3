@@ -101,6 +101,7 @@ const getArticles = (amount, sentences, titles, numberOfUsers) =>
     })
     );
 
+// TODO: проверить на бОльшем количестве (40)
 const run = async (count) => {
   try {
     const numberOfCategories = getRandomInt(MIN_CATEGORIES, MAX_CATEGORIES);

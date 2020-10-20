@@ -9,6 +9,8 @@ const logger = getLogger();
 
 const categoriesRoutes = new Router();
 
+// TODO: добавление/удаление категорий
+
 categoriesRoutes.get(`/`, async (req, res) => {
   try {
     const categories = await CategoryService.getAll();
