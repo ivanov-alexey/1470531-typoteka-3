@@ -2,10 +2,10 @@
 
 const {Router} = require('express');
 const {HttpCode} = require('../../../constants');
-const articleValidator = require('../../middlewares/article-validator');
+const newEntityValidator = require('../../middlewares/new-entity-validator');
 const articleExist = require('../../middlewares/article-exists');
-const commentValidator = require('../../middlewares/comment-validator');
 const articleSchema = require('../../schemas/article');
+const commentSchema = require('../../schemas/comment');
 const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
@@ -46,7 +46,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.post(`/add`, articleValidator(articleSchema), async (req, res) => {
+  route.post(`/add`, newEntityValidator(articleSchema), async (req, res) => {
     try {
       const article = await articleService.create(req.body);
 
@@ -58,7 +58,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.put(`/:id`, articleValidator(articleSchema), async (req, res) => {
+  route.put(`/:id`, newEntityValidator(articleSchema), async (req, res) => {
     try {
       const {id} = req.params;
       const article = await articleService.findOne(id);
@@ -130,7 +130,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.post(`/:id/comments/add`, [articleExist(articleService), commentValidator], async (req, res) => {
+  route.post(`/:id/comments/add`, [articleExist(articleService), newEntityValidator(commentSchema)], async (req, res) => {
     try {
       const {
         article: {id},

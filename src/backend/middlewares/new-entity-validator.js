@@ -2,7 +2,7 @@
 
 const {HttpCode} = require('../../constants');
 
-const articleValidator = (schema) => async (req, res, next) => {
+const newEntityValidator = (schema) => async (req, res, next) => {
   const {body} = req;
 
   try {
@@ -21,4 +21,4 @@ const articleValidator = (schema) => async (req, res, next) => {
   next();
 }
 
-module.exports = articleValidator
+module.exports = newEntityValidator
