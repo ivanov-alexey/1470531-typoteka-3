@@ -8,11 +8,10 @@ const commentSchema = Joi.object({
     .min(TextRestriction.commentMin)
     .max(TextRestriction.commentMax)
     .required(),
-  userId: Joi.number()
-    .required(),
-  publicationDate: Joi.string()
-    .isoDate()
+  articleId: Joi.number()
     .required()
+  ,userId: Joi.number()
+    .required(),
 });
 
 module.exports = commentSchema;
