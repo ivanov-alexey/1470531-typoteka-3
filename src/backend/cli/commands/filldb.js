@@ -82,7 +82,7 @@ const getComments = (amount, text, numberOfArticles, numberOfUsers) => (
       text: shuffle(text)
         .slice(0, getRandomInt(1, text.length))
         .join(` `),
-      'publication_date': getDate(),
+      'publication_date': getDate(), // TODO: удалить везде
       'article_id': getRandomInt(1, numberOfArticles),
       'user_id': getRandomInt(1, numberOfUsers)
     }))
