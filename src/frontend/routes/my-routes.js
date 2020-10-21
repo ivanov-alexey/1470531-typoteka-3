@@ -63,8 +63,6 @@ myRoutes.post(`/`, async (req, res) => {
   }
 })
 
-// TODO: создание комментариев
-// TODO: удаление комментариев
 myRoutes.get(`/comments`, async (req, res) => {
   const {page = 1} = req.query;
   const pageNumber = parseInt(page, 10);
@@ -87,5 +85,19 @@ myRoutes.get(`/comments`, async (req, res) => {
     res.render(getErrorTemplate(err));
   }
 });
+
+myRoutes.post(`/comments`, async (req, res) => {
+  const {id} = req.body;
+
+  try {
+    await CommentService.drop(id);
+
+    res.redirect('/my/comments');
+  } catch (err) {
+    logger.error(err);
+    res.render(getErrorTemplate(err));
+  }
+});
+
 
 module.exports = myRoutes;
