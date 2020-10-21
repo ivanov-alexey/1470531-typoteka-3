@@ -4,6 +4,7 @@ const {Router} = require('express');
 const {HttpCode} = require('../../../constants');
 const newEntityValidator = require('../../middlewares/new-entity-validator');
 const commentSchema = require('../../schemas/comment');
+const idValidator = require('../../middlewares/idValidator');
 const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
@@ -39,7 +40,7 @@ module.exports = (app, service) => {
     }
   });
 
-  route.delete(`/:id`, async (req, res) => {
+  route.delete(`/:id`, idValidator, async (req, res) => {
     try {
       const {id} = req.params;
       const comment = await service.drop(id);

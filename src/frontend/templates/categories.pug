@@ -21,10 +21,9 @@ block content
         each category, index in categories
           li.category__list-item
             form(action='/categories', method='POST')
-              input(type='text', name='category', value= category.title, id= `modify-form-category-${index}`)
+              input(type='text', name='title', value= category.title, id= `modify-form-category-${index}`)
               label(for=`modify-form-category-${index}`)
                 span.visually-hidden Редактировать категорию
-              input(type='hidden', name='articleId', value= category.id)
-              input(type='hidden', name='method', value='DELETE')
-              button.category__button.button.button--category(type='submit') Сохранить
-              button.category__button.button.button--category(type='delete') Удалить
+              input(type='hidden', name='categoryId', value= category.id)
+              button.category__button.button.button--category(type='submit' name='type' value='update') Сохранить
+              button.category__button.button.button--category(type='submit' name='type' value='delete') Удалить

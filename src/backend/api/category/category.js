@@ -4,6 +4,7 @@ const {Router} = require('express');
 const {HttpCode} = require('../../../constants');
 const newEntityValidator = require('../../middlewares/new-entity-validator');
 const categorySchema = require('../../schemas/category');
+const idValidator = require('../../middlewares/idValidator');
 const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
@@ -37,7 +38,7 @@ module.exports = (app, service) => {
     }
   });
 
-  route.delete(`/:id`, async (req, res) => {
+  route.delete(`/:id`, idValidator, async (req, res) => {
     try {
       const {id} = req.params;
       const category = await service.drop(id);
@@ -54,16 +55,17 @@ module.exports = (app, service) => {
     }
   });
 
-  route.put(`/:id`, newEntityValidator(categorySchema), async (req, res) => {
+  route.put(`/:id`, [idValidator, newEntityValidator(categorySchema)], async (req, res) => {
     try {
       const {id} = req.params;
+      const {title} = req.body;
       const existCategory = await service.findOne(id);
 
       if (!existCategory) {
         res.status(HttpCode.NOT_FOUND).send(`Not found with ${id}`);
       }
 
-      const updatedCategory = await service.update(id, req.body);
+      const updatedCategory = await service.update(id, title);
 
       res.status(HttpCode.OK).json(updatedCategory);
     } catch (err) {

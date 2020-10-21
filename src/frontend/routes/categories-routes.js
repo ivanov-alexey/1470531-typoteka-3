@@ -26,7 +26,7 @@ categoriesRoutes.get(`/`, async (req, res) => {
 
 categoriesRoutes.post(`/`, async (req, res) => {
   try {
-    const {title = '', method = '', categoryId = ''} = req.body;
+    const {title = '', type = '', method = '', categoryId = ''} = req.body;
 
     if (method === 'ADD') {
       const {errors} = await CategoryService.create(title);
@@ -50,9 +50,22 @@ categoriesRoutes.post(`/`, async (req, res) => {
       return;
     }
 
-    if (method === 'DELETE') {
+    if (type === 'update') {
+      await CategoryService.update(categoryId, title);
+      const categories = await CategoryService.getAll();
 
-      console.log('categoryId', categoryId);
+      res.render(`categories`, {
+        categories,
+      });
+    }
+
+    if (type === 'delete') {
+      await CategoryService.drop(categoryId);
+      const categories = await CategoryService.getAll();
+
+      res.render(`categories`, {
+        categories,
+      });
     }
 
 

@@ -6,6 +6,7 @@ const newEntityValidator = require('../../middlewares/new-entity-validator');
 const articleExist = require('../../middlewares/article-exists');
 const articleSchema = require('../../schemas/article');
 const commentSchema = require('../../schemas/comment');
+const idValidator = require('../../middlewares/idValidator');
 const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
@@ -29,7 +30,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.get(`/:id`, async (req, res) => {
+  route.get(`/:id`, idValidator, async (req, res) => {
     try {
       const {id} = req.params;
       const article = await articleService.findOne(id);
@@ -58,7 +59,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.put(`/:id`, newEntityValidator(articleSchema), async (req, res) => {
+  route.put(`/:id`, [idValidator, newEntityValidator(articleSchema)], async (req, res) => {
     try {
       const {id} = req.params;
       const article = await articleService.findOne(id);
@@ -79,7 +80,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.delete(`/:id`, async (req, res) => {
+  route.delete(`/:id`, idValidator, async (req, res) => {
     try {
       const {id} = req.params;
       const article = await articleService.drop(id);
@@ -97,8 +98,8 @@ module.exports = (app, articleService, commentService) => {
       res.status(HttpCode.BAD_REQUEST).send(`Bad request on DELETE /articles/:id`);
     }
   });
-
-  route.get(`/:id/comments`, articleExist(articleService), async (req, res) => {
+// TODO: проверить миддлварю
+  route.get(`/:id/comments`, [idValidator, articleExist(articleService)], async (req, res) => {
     try {
       const {id} = req.params;
       const comments = await commentService.findByArticleId(id);
@@ -110,8 +111,8 @@ module.exports = (app, articleService, commentService) => {
       res.status(HttpCode.BAD_REQUEST).send(`Bad request on GET /articles/:id/comments`);
     }
   });
-
-  route.delete(`/:id/comments/:commentId`, articleExist(articleService), async (req, res) => {
+// TODO: проверить миддлварю
+  route.delete(`/:id/comments/:commentId`, [idValidator, articleExist(articleService)], async (req, res) => {
     try {
       const {commentId} = req.params;
       const deletedComment = await commentService.drop(commentId);
@@ -130,18 +131,21 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.post(`/:id/comments/add`, [articleExist(articleService), newEntityValidator(commentSchema)], async (req, res) => {
-    try {
-      const {
-        article: {id},
-      } = res.locals;
-      const comment = await commentService.create(id, req.body);
+  route.post(
+    `/:id/comments/add`,
+    [idValidator,  articleExist(articleService), newEntityValidator(commentSchema)],
+      async (req, res) => {
+      try {
+        const {
+          article: {id},
+        } = res.locals;
+        const comment = await commentService.create(id, req.body);
 
-      res.status(HttpCode.CREATED).json(comment);
-    } catch (err) {
-      logger.error(err);
+        res.status(HttpCode.CREATED).json(comment);
+      } catch (err) {
+        logger.error(err);
 
-      res.status(HttpCode.BAD_REQUEST).send(`Bad request on POST /articles/:id/comments/:commentId`);
-    }
+        res.status(HttpCode.BAD_REQUEST).send(`Bad request on POST /articles/:id/comments/:commentId`);
+      }
   });
 };

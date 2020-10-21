@@ -47,7 +47,7 @@ class CategoryService {
     }
   }
 
-  async update(id, {title}) {
+  async update(id, title) {
     try {
       await Category.update(
         {
