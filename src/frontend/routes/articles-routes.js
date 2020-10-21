@@ -104,6 +104,7 @@ articlesRoutes.get(`/:id`, async (req, res) => {
       article,
       categories,
       comments,
+      currentComment: ''
     });
   } catch (err) {
     logger.error(err);
@@ -111,6 +112,36 @@ articlesRoutes.get(`/:id`, async (req, res) => {
   }
 });
 
-// TODO: удаление статей
+// TODO: еще нужен ID пользователя
+articlesRoutes.post(`/:id/comments`, async (req, res) => {
+  try {
+    const {id} = req.params;
+    const {text} = req.body;
+    const {errors, comment} = await CommentService.create(id, text);
+
+    if (errors) {
+      const article = await ArticleService.getOne(id);
+      const categories = await CategoryService.getAll();
+      const comments = await CommentService.getByArticleId(id);
+
+      res.render(`post`, {
+        article,
+        categories,
+        comments,
+        isError: true,
+        errors,
+        currentComment: comment.text
+      });
+
+      return;
+    }
+
+    res.redirect(`/articles/${id}`);
+
+  } catch (err) {
+    logger.error(err);
+    res.render(getErrorTemplate(err));
+  }
+});
 
 module.exports = articlesRoutes;

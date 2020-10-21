@@ -139,7 +139,8 @@ module.exports = (app, articleService, commentService) => {
         const {
           article: {id},
         } = res.locals;
-        const comment = await commentService.create(id, req.body);
+        const {text} = req.body
+        const comment = await commentService.create(id, text);
 
         res.status(HttpCode.CREATED).json(comment);
       } catch (err) {
