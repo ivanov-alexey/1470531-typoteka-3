@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-const helmet = require('helmet');
 const createApi = require('../../api/index');
 const {connectToDb} = require('../../configs/db-connect');
 const {API_PREFIX, HttpCode, DEFAULT_API_PORT, Message} = require('../../../constants');
@@ -24,7 +23,6 @@ const createApp = async () => {
     next();
   });
 
-  app.use(helmet());
   app.use(express.json());
   app.use(API_PREFIX, apiRoutes);
 
