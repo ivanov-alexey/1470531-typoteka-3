@@ -14,7 +14,6 @@ class SearchService {
             [Op.substring]: `%${searchText}%`,
           },
         },
-        raw: true,
       });
     } catch (err) {
       return console.error(err);
