@@ -2,7 +2,6 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const helmet = require('helmet');
 const path = require('path');
 const {DEFAULT_FRONT_PORT, PUBLIC_DIR, TEMPLATES_DIR} = require('../constants');
 const mainRoute = require('./routes/main-route');
@@ -18,7 +17,6 @@ const app = express();
 app.set(`views`, path.resolve(__dirname, TEMPLATES_DIR));
 app.set(`view engine`, `pug`);
 
-app.use(helmet());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
