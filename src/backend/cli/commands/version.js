@@ -11,5 +11,5 @@ module.exports = {
     consoleLogger.info(packageJsonFile.version);
 
     return ExitCode.success;
-  }
+  },
 };

@@ -1,7 +1,9 @@
 'use strict';
 
 const {Op} = require('sequelize');
-const {db: {Article}} = require('../configs/db-connect');
+const {
+  db: {Article},
+} = require('../configs/db-config');
 
 class SearchService {
   async findAll(searchText) {
@@ -9,10 +11,10 @@ class SearchService {
       return await Article.findAll({
         where: {
           title: {
-            [Op.substring]: `%${searchText}%`
-          }
+            [Op.substring]: `%${searchText}%`,
+          },
         },
-        raw: true
+        raw: true,
       });
     } catch (err) {
       return console.error(err);

@@ -8,14 +8,14 @@ const idValidator = (req, res, next) => {
 
   if (!id || !Number.isInteger(parsedId)) {
     res.status(HttpCode.BAD_REQUEST).json({
-        message: 'Id is incorrect',
-        data: req.body
-      });
+      message: 'Id is incorrect',
+      data: req.body,
+    });
 
     return;
   }
 
   next();
-}
+};
 
-module.exports = idValidator
+module.exports = idValidator;

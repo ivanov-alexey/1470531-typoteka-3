@@ -1,8 +1,9 @@
 'use strict';
 
 const {
-  sequelize, db: {Category},
-} = require('../configs/db-connect');
+  sequelize,
+  db: {Category},
+} = require('../configs/db-config');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
@@ -31,7 +32,7 @@ class CategoryService {
       `;
       const type = sequelize.QueryTypes.SELECT;
 
-      return  await sequelize.query(sql, {type});
+      return await sequelize.query(sql, {type});
     } catch (err) {
       logger.error(err);
       throw err;

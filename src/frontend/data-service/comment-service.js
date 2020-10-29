@@ -15,7 +15,7 @@ class CommentService {
     } catch (error) {
       return {
         comment: error.response && error.response.data && error.response.data.data,
-        errors: error.response && error.response.data && error.response.data.message
+        errors: error.response && error.response.data && error.response.data.message,
       };
     }
   }

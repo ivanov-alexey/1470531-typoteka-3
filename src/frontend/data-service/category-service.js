@@ -15,7 +15,7 @@ class CategoryService {
     } catch (error) {
       return {
         categories: error.response && error.response.data && error.response.data.data,
-        errors: error.response && error.response.data && error.response.data.message
+        errors: error.response && error.response.data && error.response.data.message,
       };
     }
   }

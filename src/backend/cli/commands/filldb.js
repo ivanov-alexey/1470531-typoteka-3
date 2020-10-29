@@ -14,7 +14,7 @@ const {
   MIN_USERS,
   MAX_USERS,
   Message,
-  ExitCode
+  ExitCode,
 } = require('../../../constants');
 const {getDate} = require('../../../utils/get-date');
 const {shuffle} = require('../../../utils/shuffle');
@@ -22,9 +22,11 @@ const {getRandomInt} = require('../../../utils/get-random-int');
 const {
   initDb,
   sequelize,
-  db: {Article, Category, Comment, User}
-} = require('../../configs/db-connect');
+  db: {Article, Category, Comment, User},
+} = require('../../configs/db-config');
 const {getLogger} = require('../../../libs/logger');
+
+const env = process.env.NODE_ENV || 'development';
 
 const logger = getLogger();
 
@@ -41,9 +43,7 @@ const readContent = async (path) => {
 };
 
 const normalizeCount = (count) => {
-  const amount = !count || Number.isNaN(+count)
-    ? postsAmount.min
-    : Number.parseInt(count, 10);
+  const amount = !count || Number.isNaN(+count) ? postsAmount.min : Number.parseInt(count, 10);
 
   if (amount > postsAmount.max) {
     throw new Error(Message.postsQuotaExceed);
@@ -52,13 +52,15 @@ const normalizeCount = (count) => {
   return amount;
 };
 
-const getCategories = (amount, data) => [...new Set(
+const getCategories = (amount, data) => [
+  ...new Set(
     Array(amount)
       .fill({})
       .map(() => ({
-        title: data[getRandomInt(0, data.length - 1)]
+        title: data[getRandomInt(0, data.length - 1)],
       }))
-)];
+  ),
+];
 
 const getUsers = (amount, firstNames, lastNames) =>
   Array(amount)
@@ -66,40 +68,37 @@ const getUsers = (amount, firstNames, lastNames) =>
     .map((item, index) => {
       const id = index + 1;
 
-      return ({
-        avatar: `avatar-${id}.png`,
-        email: `user${id}@mail.localhost`,
-        firstname: firstNames[getRandomInt(0, firstNames.length - 1)],
-        lastname: lastNames[getRandomInt(0, lastNames.length - 1)],
-        password: `123456`
-      });
+      return {
+        'avatar': `avatar-${id}.png`,
+        'email': `user${id}@mail.localhost`,
+        'firstname': firstNames[getRandomInt(0, firstNames.length - 1)],
+        'lastname': lastNames[getRandomInt(0, lastNames.length - 1)],
+        'password': `123456`,
+      };
     });
 
-const getComments = (amount, text, numberOfArticles, numberOfUsers) => (
+const getComments = (amount, text, numberOfArticles, numberOfUsers) =>
   Array(amount)
     .fill({})
     .map(() => ({
-      text: shuffle(text)
-        .slice(0, getRandomInt(1, text.length))
-        .join(` `),
-      'publication_date': getDate(), // TODO: удалить везде
+      'text': shuffle(text).slice(0, getRandomInt(1, text.length)).join(` `),
       'article_id': getRandomInt(1, numberOfArticles),
-      'user_id': getRandomInt(1, numberOfUsers)
-    }))
-);
+      'user_id': getRandomInt(1, numberOfUsers),
+    }));
 
 const getArticles = (amount, sentences, titles, numberOfUsers) =>
   Array(amount)
     .fill({})
     .map(() => ({
-      announce: shuffle(sentences).slice(0, 5).join(` `),
-      'full_text': shuffle(sentences).slice(0, getRandomInt(1, sentences.length - 1)).join(` `),
-      picture: null,
-      title: titles[getRandomInt(0, titles.length - 1)],
+      'announce': shuffle(sentences).slice(0, 5).join(` `),
+      'full_text': shuffle(sentences)
+        .slice(0, getRandomInt(1, sentences.length - 1))
+        .join(` `),
+      'picture': null,
+      'title': titles[getRandomInt(0, titles.length - 1)],
       'publication_date': getDate(),
-      'user_id': getRandomInt(1, numberOfUsers)
-    })
-    );
+      'user_id': getRandomInt(1, numberOfUsers),
+    }));
 
 // TODO: проверить на бОльшем количестве (40)
 const run = async (count) => {
@@ -137,7 +136,9 @@ const run = async (count) => {
       await article.addCategory(randomCategory);
     }
 
-    await sequelize.close();
+    if (env === 'development') {
+      await sequelize.close();
+    }
 
     logger.info(`Database filled successfully`);
 
@@ -149,8 +150,7 @@ const run = async (count) => {
   }
 };
 
-
 module.exports = {
   name: `--filldb`,
-  run
+  run,
 };

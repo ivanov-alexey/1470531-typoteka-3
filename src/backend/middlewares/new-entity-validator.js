@@ -12,13 +12,13 @@ const newEntityValidator = (schema) => async (req, res, next) => {
 
     res.status(HttpCode.BAD_REQUEST).json({
       message: details.map((errorDescription) => errorDescription.message),
-      data: body
+      data: body,
     });
 
-    return
+    return;
   }
 
   next();
-}
+};
 
-module.exports = newEntityValidator
+module.exports = newEntityValidator;

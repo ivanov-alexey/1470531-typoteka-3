@@ -9,24 +9,31 @@ const prettyStream = pinoms.prettyStream({
   prettyPrint: {
     colorize: true,
     translateTime: `SYS:standard`,
-    ignore: `hostname,pid`
+    ignore: `hostname,pid`,
   },
-  prettifier: require('pino-pretty')
+  prettifier: require('pino-pretty'),
 });
+
 const level = logLevel || `info`;
 const streams = [
-  {level, stream: fs.createWriteStream(path.join(path.dirname(process.mainModule.path), `backend`, `logs`, `logs.txt`))},
-  {level, stream: prettyStream}
+  {
+    level,
+    stream: fs.createWriteStream(path.join(process.cwd(), 'src', `backend`, `logs`, `logs.txt`)),
+  },
+  {level, stream: prettyStream},
 ];
 
-const logger = pinoms({
-  name: `pino-and-express`,
-  level,
-}, pinoms.multistream(streams));
+const logger = pinoms(
+  {
+    name: `pino-and-express`,
+    level,
+  },
+  pinoms.multistream(streams)
+);
 
 module.exports = {
   logger,
   getLogger(options = {}) {
     return logger.child(options);
-  }
+  },
 };

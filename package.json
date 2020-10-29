@@ -5,8 +5,8 @@
   "main": "src/backend/service.js",
   "scripts": {
     "start": "node src/backend/service.js",
-    "test": "npm run eslint & npm run test::rest",
-    "test::rest": "jest --config jest.config.js",
+    "test": "NODE_ENV=test npm run eslint & npm run test::rest",
+    "test::rest": "NODE_ENV=test jest --runInBand --config jest.config.js",
     "eslint": "eslint --ext .js src/",
     "generate": "node src/backend/service.js --generate 10",
     "filldb": "node src/backend/service.js --filldb 20",

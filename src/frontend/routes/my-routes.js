@@ -28,7 +28,7 @@ myRoutes.get(`/`, async (req, res) => {
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
       nextIsActive: pageNumber < pagesCount,
-      myPath: '/my'
+      myPath: '/my',
     });
   } catch (err) {
     logger.error(err);
@@ -55,13 +55,13 @@ myRoutes.post(`/`, async (req, res) => {
         activePage: pageNumber,
         prevIsActive: pageNumber !== 1,
         nextIsActive: pageNumber < pagesCount,
-        myPath: '/my'
-      })
+        myPath: '/my',
+      });
     }
   } catch (err) {
     console.error(err);
   }
-})
+});
 
 myRoutes.get(`/comments`, async (req, res) => {
   const {page = 1} = req.query;
@@ -78,7 +78,7 @@ myRoutes.get(`/comments`, async (req, res) => {
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
       nextIsActive: pageNumber < pagesCount,
-      commentsPath: './comments'
+      commentsPath: './comments',
     });
   } catch (err) {
     logger.error(err);
@@ -98,6 +98,5 @@ myRoutes.post(`/comments`, async (req, res) => {
     res.render(getErrorTemplate(err));
   }
 });
-
 
 module.exports = myRoutes;

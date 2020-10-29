@@ -33,7 +33,7 @@ mainRoute.get(`/`, async (req, res) => {
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
       nextIsActive: pageNumber < pagesCount,
-      mainPath: '/'
+      mainPath: '/',
     });
   } catch (err) {
     logger.error(err);

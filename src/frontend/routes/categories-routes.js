@@ -67,8 +67,6 @@ categoriesRoutes.post(`/`, async (req, res) => {
         categories,
       });
     }
-
-
   } catch (err) {
     logger.error(err);
     res.render(getErrorTemplate(err));

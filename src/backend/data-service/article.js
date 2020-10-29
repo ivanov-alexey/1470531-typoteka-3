@@ -1,14 +1,16 @@
-"use strict";
+'use strict';
 
 const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
-const {sequelize} = require('../configs/db-connect');
-const {db: {Article, Category, Comment}} = require('../configs/db-connect');
+const {sequelize} = require('../configs/db-config');
+const {
+  db: {Article, Category, Comment},
+} = require('../configs/db-config');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
 
 class ArticleService {
-  async create({ announce, fullText, picture, title, publicationDate}) {
+  async create({announce, fullText, picture, title, publicationDate}) {
     // TODO: добавить user_id
     // TODO: добавить category_id
     try {
@@ -28,7 +30,7 @@ class ArticleService {
   async findAll(offset = 0, limit = MAX_ARTICLES_PER_PAGE) {
     try {
       const count = await Article.count();
-      const articles =  await Article.findAll({
+      const articles = await Article.findAll({
         attributes: [
           `id`,
           `announce`,
@@ -37,33 +39,27 @@ class ArticleService {
           `title`,
           [`publication_date`, 'publicationDate'],
         ],
-        include: [{
-          model: Category,
-          as: `categories`,
-          attributes: [
-            `id`,
-            `title`,
-          ],
-        },
-        {
-          model: Comment,
-          as: `comments`,
-          attributes: [
-            `id`,
-            `text`,
-            `createdAt`
-          ],
-        }],
+        include: [
+          {
+            model: Category,
+            as: `categories`,
+            attributes: [`id`, `title`],
+          },
+          {
+            model: Comment,
+            as: `comments`,
+            attributes: [`id`, `text`, `createdAt`],
+          },
+        ],
         order: [[`publication_date`, `DESC`]],
         offset,
-        limit
+        limit,
       });
 
       return {
         count,
-        articles
-      }
-
+        articles,
+      };
     } catch (err) {
       logger.error(err);
       throw err;
@@ -87,7 +83,7 @@ class ArticleService {
 
       return articles.map((article) => ({
         ...article,
-        announce: article.announce.slice(0, 100).concat(`...`)
+        announce: article.announce.slice(0, 100).concat(`...`),
       }));
     } catch (err) {
       logger.error(err);

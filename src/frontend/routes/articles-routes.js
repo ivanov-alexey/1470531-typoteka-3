@@ -58,15 +58,15 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
     const {errors, article} = await ArticleService.create(newArticle);
 
     if (errors) {
-        res.render(`my/new-post`, {
-          article,
-          isError: true,
-          errors,
-          isEdit: true,
-          categories,
-        });
+      res.render(`my/new-post`, {
+        article,
+        isError: true,
+        errors,
+        isEdit: true,
+        categories,
+      });
 
-        return;
+      return;
     }
 
     res.redirect(`/my`);
@@ -104,7 +104,7 @@ articlesRoutes.get(`/:id`, async (req, res) => {
       article,
       categories,
       comments,
-      currentComment: ''
+      currentComment: '',
     });
   } catch (err) {
     logger.error(err);
@@ -130,14 +130,13 @@ articlesRoutes.post(`/:id/comments`, async (req, res) => {
         comments,
         isError: true,
         errors,
-        currentComment: comment.text
+        currentComment: comment.text,
       });
 
       return;
     }
 
     res.redirect(`/articles/${id}`);
-
   } catch (err) {
     logger.error(err);
     res.render(getErrorTemplate(err));

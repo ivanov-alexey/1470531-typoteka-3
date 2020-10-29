@@ -28,7 +28,7 @@ const MAX_COMMENTS_PER_PAGE = 10;
 
 const postsAmount = {
   min: 1,
-  max: 1000
+  max: 1000,
 };
 
 const TimeConfig = {
@@ -43,7 +43,7 @@ const TimeConfig = {
   minMinute: 0,
   maxMinute: 59,
   minSecond: 0,
-  maxSecond: 59
+  maxSecond: 59,
 };
 
 const USER_ARGV_INDEX = 2;
@@ -52,7 +52,7 @@ const DEFAULT_COMMAND = `--help`;
 
 const ExitCode = {
   success: 0,
-  error: 1
+  error: 1,
 };
 
 const Message = {
@@ -60,15 +60,16 @@ const Message = {
   notFound: `Sorry, page not found`,
   postsQuotaExceed: `Не больше 1000 публикаций`,
   listenOnPort: (port) => `Listening for connections on http://localhost:${port}`,
-  serverStartError: (port, error) => `Server can't start on http://localhost:${port} with error: ${error}`,
+  serverStartError: (port, error) =>
+    `Server can't start on http://localhost:${port} with error: ${error}`,
   serverError: `Server error`,
-  connectionError: `Connection error`
+  connectionError: `Connection error`,
 };
 
 const TimeInMilliseconds = {
   second: 1000,
   minute: 1000 * 60,
-  year: 31556952000
+  year: 31556952000,
 };
 
 const avatarSettings = {
@@ -105,7 +106,7 @@ const TextRestriction = {
   passwordMin: 6,
   passwordMax: 50,
   linkMin: 4,
-  linkMax: 250
+  linkMax: 250,
 };
 
 module.exports = {
@@ -140,6 +141,5 @@ module.exports = {
   MAX_ID_LENGTH,
   Message,
   postsAmount,
-  USER_ARGV_INDEX
+  USER_ARGV_INDEX,
 };
-

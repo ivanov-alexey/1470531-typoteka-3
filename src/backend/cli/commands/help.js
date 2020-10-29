@@ -22,5 +22,5 @@ module.exports = {
     consoleLogger.data(message);
 
     return ExitCode.success;
-  }
+  },
 };

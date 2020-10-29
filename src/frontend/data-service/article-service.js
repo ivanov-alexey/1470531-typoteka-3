@@ -49,7 +49,8 @@ class ArticleService {
     try {
       return await apiRequest.post(`/articles/add`, {
         title: article.title || '',
-        category: typeof article.category === `string` ? [article.category] : article.category || ``,
+        category:
+          typeof article.category === `string` ? [article.category] : article.category || ``,
         picture: article.picture || '',
         announce: article.announce || '',
         fullText: article.fullText || '',
@@ -58,7 +59,7 @@ class ArticleService {
     } catch (error) {
       return {
         article: error.response && error.response.data && error.response.data.data,
-        errors: error.response && error.response.data && error.response.data.message
+        errors: error.response && error.response.data && error.response.data.message,
       };
     }
   }
