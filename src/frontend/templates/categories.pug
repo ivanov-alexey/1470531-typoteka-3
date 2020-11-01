@@ -4,9 +4,16 @@ block content
   main.main-page.main-page--padding
     section.main-page__category.category
       h1.category__title Категории
+      if isError && errors.length
+        div.show-errors
+          p При создании категории возникли ошибки:
+          ul.show-errors-list
+            each error in errors
+              li= error
       .category__add-form
         form(action='/categories', method='POST')
-          input#add-form-add-category(type='text', name='category', placeholder='Новая категория')
+          input#add-form-add-category(type='text', name='title', placeholder='Новая категория')
+          input(type='hidden', name='method', value='ADD')
           label(for='add-form-add-category')
             span.visually-hidden Добавить категорию
           button.category__button.button.button--category(type='submit') Добавить
@@ -14,8 +21,9 @@ block content
         each category, index in categories
           li.category__list-item
             form(action='/categories', method='POST')
-              input(type='text', name='category', value= category.title, id= `modify-form-category-${index}`)
+              input(type='text', name='title', value= category.title, id= `modify-form-category-${index}`)
               label(for=`modify-form-category-${index}`)
                 span.visually-hidden Редактировать категорию
-              button.category__button.button.button--category(type='submit') Сохранить
-              button.category__button.button.button--category(type='delete') Удалить
+              input(type='hidden', name='categoryId', value= category.id)
+              button.category__button.button.button--category(type='submit' name='type' value='update') Сохранить
+              button.category__button.button.button--category(type='submit' name='type' value='delete') Удалить

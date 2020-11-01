@@ -5,11 +5,17 @@ const {TextRestriction} = require('../constants');
 module.exports.generateErrors = (article) => {
   const errors = [];
 
-  if (article.announce.length < TextRestriction.shortMin || article.announce.length > TextRestriction.shortMax) {
+  if (
+    article.announce.length < TextRestriction.shortMin ||
+    article.announce.length > TextRestriction.shortMax
+  ) {
     errors.push(`Введите корректный текст анонса`);
   }
 
-  if (article.title.length < TextRestriction.shortMin || article.title.length > TextRestriction.shortMax) {
+  if (
+    article.title.length < TextRestriction.shortMin ||
+    article.title.length > TextRestriction.shortMax
+  ) {
     errors.push(`Введите корректный текст заголовка`);
   }
 

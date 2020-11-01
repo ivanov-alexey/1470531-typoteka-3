@@ -1,10 +1,12 @@
 'use strict';
 
 const {Router} = require('express');
-const {HttpCode} = require('../../../constants');
-const articleValidator = require('../../middlewares/article-validator');
+const {HttpCode, MAX_ARTICLES_PER_PAGE} = require('../../../constants');
+const newEntityValidator = require('../../middlewares/new-entity-validator');
 const articleExist = require('../../middlewares/article-exists');
-const commentValidator = require('../../middlewares/comment-validator');
+const articleSchema = require('../../schemas/article');
+const commentSchema = require('../../schemas/comment');
+const idValidator = require('../../middlewares/idValidator');
 const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
@@ -15,10 +17,12 @@ module.exports = (app, articleService, commentService) => {
 
   route.get(`/`, async (req, res) => {
     try {
-      const {popular, offset, limit} = req.query;
+      const {popular = false, offset = 0, limit = MAX_ARTICLES_PER_PAGE} = req.query;
       const offsetNum = parseInt(offset, 10);
       const limitNum = parseInt(limit, 10);
-      const articles = popular ? await articleService.findMostDiscussed() : await articleService.findAll(offsetNum, limitNum);
+      const articles = popular
+        ? await articleService.findMostDiscussed()
+        : await articleService.findAll(offsetNum, limitNum);
 
       res.status(HttpCode.OK).json(articles);
     } catch (err) {
@@ -28,7 +32,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.get(`/:id`, async (req, res) => {
+  route.get(`/:id`, idValidator, async (req, res) => {
     try {
       const {id} = req.params;
       const article = await articleService.findOne(id);
@@ -45,13 +49,9 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.post(`/add`, articleValidator, async (req, res) => {
+  route.post(`/add`, newEntityValidator(articleSchema), async (req, res) => {
     try {
       const article = await articleService.create(req.body);
-
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
-        return;
-      }
 
       res.status(HttpCode.CREATED).json(article);
     } catch (err) {
@@ -61,7 +61,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.put(`/:id`, articleValidator, async (req, res) => {
+  route.put(`/:id`, [idValidator, newEntityValidator(articleSchema)], async (req, res) => {
     try {
       const {id} = req.params;
       const article = await articleService.findOne(id);
@@ -69,10 +69,6 @@ module.exports = (app, articleService, commentService) => {
       if (!article) {
         res.status(HttpCode.NOT_FOUND).send(`Not found with ${id}`);
 
-        return;
-      }
-
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
         return;
       }
 
@@ -86,7 +82,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.delete(`/:id`, async (req, res) => {
+  route.delete(`/:id`, idValidator, async (req, res) => {
     try {
       const {id} = req.params;
       const article = await articleService.drop(id);
@@ -104,15 +100,11 @@ module.exports = (app, articleService, commentService) => {
       res.status(HttpCode.BAD_REQUEST).send(`Bad request on DELETE /articles/:id`);
     }
   });
-
-  route.get(`/:id/comments`, articleExist(articleService), async (req, res) => {
+  // TODO: проверить миддлварю
+  route.get(`/:id/comments`, [idValidator, articleExist(articleService)], async (req, res) => {
     try {
       const {id} = req.params;
       const comments = await commentService.findByArticleId(id);
-
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
-        return;
-      }
 
       res.status(HttpCode.OK).json(comments);
     } catch (err) {
@@ -121,46 +113,51 @@ module.exports = (app, articleService, commentService) => {
       res.status(HttpCode.BAD_REQUEST).send(`Bad request on GET /articles/:id/comments`);
     }
   });
+  // TODO: проверить миддлварю
+  route.delete(
+    `/:id/comments/:commentId`,
+    [idValidator, articleExist(articleService)],
+    async (req, res) => {
+      try {
+        const {commentId} = req.params;
+        const deletedComment = await commentService.drop(commentId);
 
-  route.delete(`/:id/comments/:commentId`, articleExist(articleService), async (req, res) => {
-    try {
-      const {commentId} = req.params;
-      const deletedComment = await commentService.drop(commentId);
+        if (!deletedComment) {
+          res.status(HttpCode.NOT_FOUND).send(`Not found`);
 
-      if (!deletedComment) {
-        res.status(HttpCode.NOT_FOUND).send(`Not found`);
+          return;
+        }
 
-        return;
+        res.status(HttpCode.OK).json(deletedComment);
+      } catch (err) {
+        logger.error(err);
+
+        res
+          .status(HttpCode.BAD_REQUEST)
+          .send(`Bad request on GET /articles/:id/comments/:commentId`);
       }
-
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
-        return;
-      }
-
-      res.status(HttpCode.OK).json(deletedComment);
-    } catch (err) {
-      logger.error(err);
-
-      res.status(HttpCode.BAD_REQUEST).send(`Bad request on GET /articles/:id/comments/:commentId`);
     }
-  });
+  );
 
-  route.post(`/:id/comments/add`, [articleExist(articleService), commentValidator], async (req, res) => {
-    try {
-      const {
-        article: {id},
-      } = res.locals;
-      const comment = await commentService.create(id, req.body);
+  route.post(
+    `/:id/comments/add`,
+    [idValidator, articleExist(articleService), newEntityValidator(commentSchema)],
+    async (req, res) => {
+      try {
+        const {text} = req.body;
+        const {id} = req.params;
+        const userId = 1; // TODO: поправить когда сделаю авторизацию
 
-      if (res.statusCode === HttpCode.BAD_REQUEST) {
-        return;
+        const comment = await commentService.create(id, userId, text);
+
+        res.status(HttpCode.CREATED).json(comment);
+      } catch (err) {
+        logger.error(err);
+
+        res
+          .status(HttpCode.BAD_REQUEST)
+          .send(`Bad request on POST /articles/:id/comments/:commentId`);
       }
-
-      res.status(HttpCode.CREATED).json(comment);
-    } catch (err) {
-      logger.error(err);
-
-      res.status(HttpCode.BAD_REQUEST).send(`Bad request on POST /articles/:id/comments/:commentId`);
     }
-  });
+  );
 };

@@ -7,15 +7,16 @@ const {getLogger} = require('../../libs/logger');
 const logger = getLogger();
 
 class CommentService {
-  static async create() {
+  static async create(articleId, text) {
     try {
-      const response = await apiRequest.post(`/comments/add`);
+      const response = await apiRequest.post(`/articles/${articleId}/comments/add`, {text});
 
       return response.data;
-    } catch (err) {
-      logger.error(`Request /comments/add error: `, err.message);
-
-      return getErrorMessage(err);
+    } catch (error) {
+      return {
+        comment: error.response && error.response.data && error.response.data.data,
+        errors: error.response && error.response.data && error.response.data.message,
+      };
     }
   }
 

@@ -8,12 +8,12 @@ env:
 
 extends:
   - 'htmlacademy/node'
-  - 'prettier'
+  - 'plugin:prettier/recommended'
 
 plugins:
   - 'prettier'
-
-
+rules:
+  object-curly-spacing: ["error", "never"]
 
 
 

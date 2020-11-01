@@ -7,13 +7,15 @@ block content
       ul.publication__list
         each comment in comments
           li.publication__list-item
-            .publication__header
-              img.publication__list-image(src='/img/' + comment.avatar, width='20', height='20', alt='Аватар пользователя')
-              b.publication__list-name= comment.author
-              time.publication__item-time(datetime= comment.createdAt)= comment.createdAt
-            a.publication__item-text(href='#')= comment.text
-            p.publication__text-strong= comment.articleTitle
-            button.publication__button.button.button--close-item(type='button')
-              span.visually-hidden Закрыть строку списка
+            form(action='/my/comments' method='POST')
+              .publication__header
+                img.publication__list-image(src='/img/' + comment.avatar, width='20', height='20', alt='Аватар пользователя')
+                b.publication__list-name= comment.author
+                time.publication__item-time(datetime= comment.createdAt)= comment.createdAt
+              a.publication__item-text(href='#')= comment.text
+              p.publication__text-strong= comment.articleTitle
+              input(type='hidden' name='id' value= comment.id)
+              button.publication__button.button.button--close-item(type='submit')
+                span.visually-hidden Закрыть строку списка
     include ../mixins/pagination
     +pagination(pagesCount, activePage, commentsPath)

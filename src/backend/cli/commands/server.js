@@ -1,8 +1,9 @@
 'use strict';
 
 const express = require('express');
+const helmet = require('helmet');
 const createApi = require('../../api/index');
-const {connectToDb} = require('../../configs/db-connect');
+const {connectToDb} = require('../../configs/db-config');
 const {API_PREFIX, HttpCode, DEFAULT_API_PORT, Message} = require('../../../constants');
 const {getLogger} = require('../../../libs/logger');
 
@@ -13,6 +14,7 @@ const createApp = async () => {
   const apiRoutes = await createApi();
 
   app.set(`json spaces`, 2);
+  app.use(helmet());
   app.use((req, res, next) => {
     logger.debug(`Requested url: ${req.url}`);
 

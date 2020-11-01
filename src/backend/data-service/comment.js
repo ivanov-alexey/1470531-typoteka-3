@@ -1,19 +1,20 @@
-"use strict";
+'use strict';
 
 const {MAX_COMMENTS_PER_PAGE} = require('../../constants');
 const {
   db: {Comment, User},
-} = require('../configs/db-connect');
+} = require('../configs/db-config');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
 
 class CommentService {
-  async create(userId, text) {
+  async create(articleId, userId, text) {
     try {
       return await Comment.create({
         text,
         'user_id': userId,
+        'article_id': articleId,
       });
     } catch (err) {
       logger.error(err);
@@ -24,23 +25,17 @@ class CommentService {
   async findByArticleId(articleId) {
     try {
       const comments = await Comment.findAll({
-        attributes: [
-          `id`,
-          `text`,
-          [`created_at`, 'createdAt']
-        ],
+        attributes: [`id`, `text`, [`created_at`, 'createdAt']],
         where: {
           'article_id': articleId,
         },
-        include: [{
-          model: User,
-          as: `user`,
-          attributes: [
-            `avatar`,
-            `firstname`,
-            `lastname`,
-          ],
-        }],
+        include: [
+          {
+            model: User,
+            as: `user`,
+            attributes: [`avatar`, `firstname`, `lastname`],
+          },
+        ],
         order: [[`created_at`, `DESC`]],
       });
 
@@ -61,26 +56,20 @@ class CommentService {
     try {
       const count = await Comment.count();
       const rawComments = await Comment.findAll({
-        attributes: [
-          `id`,
-          `text`,
-          [`created_at`, 'createdAt']
+        attributes: [`id`, `text`, [`created_at`, 'createdAt']],
+        include: [
+          {
+            model: User,
+            as: `user`,
+            attributes: [`avatar`, `firstname`, `lastname`],
+          },
         ],
-        include: [{
-          model: User,
-          as: `user`,
-          attributes: [
-            `avatar`,
-            `firstname`,
-            `lastname`,
-          ],
-        }],
         order: [[`created_at`, `DESC`]],
         offset,
-        limit
+        limit,
       });
 
-      const comments =  rawComments.map(({id, text, createdAt, user}) => ({
+      const comments = rawComments.map(({id, text, createdAt, user}) => ({
         id,
         text,
         createdAt,
@@ -90,8 +79,8 @@ class CommentService {
 
       return {
         count,
-        comments
-      }
+        comments,
+      };
     } catch (err) {
       logger.error(err);
       throw err;

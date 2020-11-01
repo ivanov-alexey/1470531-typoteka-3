@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
-.article-errors {
+.show-errors {
   margin-top: 30px;
+  margin-left: 20px;
   color: tomato;
 }

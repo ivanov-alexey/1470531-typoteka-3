@@ -59,9 +59,9 @@ block content
                     else
                       textarea(rows='5', placeholder='Полный текст публикации' name='fullText', maxlength=1000)
             if isError && errors.length
-              div.article-errors
+              div.show-errors
                 p При отправке формы возникли ошибки:
-                ul.article-errors-list
+                ul.show-errors-list
                   each error in errors
                     li= error
       .modal__overlay

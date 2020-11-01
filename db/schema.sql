@@ -51,7 +51,6 @@ CREATE TABLE comments
 (
     id SERIAL PRIMARY KEY,
     text TEXT,
-    publication_date timestamptz,
     created_at timestamptz,
     user_id INTEGER,
     article_id INTEGER,

@@ -1,19 +1,27 @@
 'use strict';
 
 const request = require('supertest');
+const fillDb = require('../../cli/commands/filldb');
 const {createApp} = require('../../cli/commands/server');
-const artciclesStubs = require('../../../../test-stuff/articles-stubs');
+const {connectToDb, closeDbConnection} = require('../../configs/db-config');
 
 let server;
 
 beforeAll(async () => {
-  server = await createApp(artciclesStubs);
+  server = await createApp();
+
+  await fillDb.run(3);
+  await connectToDb();
 });
 
 afterEach(() => {
   jest.clearAllMocks();
   jest.resetAllMocks();
   jest.restoreAllMocks();
+});
+
+afterAll(async () => {
+  await closeDbConnection();
 });
 
 describe(`Categories API end-points`, () => {
