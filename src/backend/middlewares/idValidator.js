@@ -7,7 +7,7 @@ const idValidator = (req, res, next) => {
   const parsedId = parseInt(id, 10);
 
   if (!id || !Number.isInteger(parsedId)) {
-    res.status(HttpCode.BAD_REQUEST).json({
+    res.status(HttpCode.NOT_FOUND).json({
       message: 'Id is incorrect',
       data: req.body,
     });

@@ -67,10 +67,10 @@ describe(`Offers API end-points`, () => {
     expect(res.statusCode).toBe(200);
   });
 
-  test(`Should return status 400 for delete article request with wrong ID`, async () => {
+  test(`Should return status 404 for delete article request with wrong ID`, async () => {
     const res = await request(server).delete(`/api/articles/wrongId`);
 
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(404);
   });
 
   test(`Should return status 200 for put request`, async () => {
@@ -105,10 +105,10 @@ describe(`Offers comments API end-points`, () => {
     expect(res.body.length).toBeGreaterThan(0);
   });
 
-  test(`Should return status 400 for request of article comments with wrong article ID`, async () => {
+  test(`Should return status 404 for request of article comments with wrong article ID`, async () => {
     const res = await request(server).get(`/api/articles/wrongId/comments`);
 
-    expect(res.statusCode).toBe(400);
+    expect(res.statusCode).toBe(404);
     expect(res.body).toMatchObject({data: {}, message: 'Id is incorrect'});
   });
 
