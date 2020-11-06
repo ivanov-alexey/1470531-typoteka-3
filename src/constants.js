@@ -31,6 +31,8 @@ const postsAmount = {
   max: 1000,
 };
 
+const PASSWORD_SALT_ROUNDS = 10;
+
 const TimeConfig = {
   minYear: 2018,
   maxYear: 2020,
@@ -141,5 +143,6 @@ module.exports = {
   MAX_ID_LENGTH,
   Message,
   postsAmount,
+  PASSWORD_SALT_ROUNDS,
   USER_ARGV_INDEX,
 };

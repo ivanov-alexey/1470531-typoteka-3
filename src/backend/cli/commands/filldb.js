@@ -1,5 +1,8 @@
 'use strict';
 
+const bcrypt = require('bcrypt');
+const {userPassword} = require('../../../configs/env-config');
+const {PASSWORD_SALT_ROUNDS} = require('../../../constants');
 const fs = require('fs').promises;
 const {
   FILE_SENTENCES_PATH,
@@ -23,7 +26,7 @@ const {
   initDb,
   sequelize,
   db: {Article, Category, Comment, User},
-} = require('../../configs/db-config');
+} = require('../../../configs/db-config');
 const {getLogger} = require('../../../libs/logger');
 
 const env = process.env.NODE_ENV || 'development';
@@ -62,7 +65,7 @@ const getCategories = (amount, data) => [
   ),
 ];
 
-const getUsers = (amount, firstNames, lastNames) =>
+const getUsers = (amount, firstNames, lastNames, hash) =>
   Array(amount)
     .fill({})
     .map((item, index) => {
@@ -70,10 +73,11 @@ const getUsers = (amount, firstNames, lastNames) =>
 
       return {
         'avatar': `avatar-${id}.png`,
-        'email': `user${id}@mail.localhost`,
+        'email': `user${id}@mail.local`,
         'firstname': firstNames[getRandomInt(0, firstNames.length - 1)],
         'lastname': lastNames[getRandomInt(0, lastNames.length - 1)],
-        'password': `123456`,
+        'password': hash,
+        'role': id === 1 ? 'admin' : 'reader',
       };
     });
 
@@ -115,8 +119,10 @@ const run = async (count) => {
     const firstNamesData = await readContent(FILE_NAMES_PATH);
     const lastNamesData = await readContent(FILE_SURNAMES_PATH);
 
+    const hash = await bcrypt.hash(userPassword, PASSWORD_SALT_ROUNDS);
+
     const categories = getCategories(numberOfCategories, categoriesData);
-    const users = getUsers(numberOfUsers, firstNamesData, lastNamesData);
+    const users = getUsers(numberOfUsers, firstNamesData, lastNamesData, hash);
     const articles = getArticles(numberOfArticles, sentencesData, titlesData, numberOfUsers);
     const comments = getComments(numberOfComments, commentsData, numberOfArticles, numberOfUsers);
 

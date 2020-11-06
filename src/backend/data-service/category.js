@@ -3,7 +3,7 @@
 const {
   sequelize,
   db: {Category},
-} = require('../configs/db-config');
+} = require('../../configs/db-config');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
