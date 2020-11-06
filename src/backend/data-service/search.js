@@ -3,7 +3,7 @@
 const {Op} = require('sequelize');
 const {
   db: {Article},
-} = require('../configs/db-config');
+} = require('../../configs/db-config');
 
 class SearchService {
   async findAll(searchText) {

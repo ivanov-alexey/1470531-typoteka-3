@@ -4,7 +4,7 @@ const {DateTime} = require('luxon');
 const request = require('supertest');
 const fillDb = require('../../cli/commands/filldb');
 const {createApp} = require('../../cli/commands/server');
-const {connectToDb, closeDbConnection} = require('../../configs/db-config');
+const {connectToDb, closeDbConnection} = require('../../../configs/db-config');
 
 let server;
 const articleStub = {

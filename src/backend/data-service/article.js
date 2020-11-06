@@ -1,10 +1,10 @@
 'use strict';
 
 const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
-const {sequelize} = require('../configs/db-config');
+const {sequelize} = require('../../configs/db-config');
 const {
   db: {Article, Category, Comment},
-} = require('../configs/db-config');
+} = require('../../configs/db-config');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();

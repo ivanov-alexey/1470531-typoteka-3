@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const pinoms = require('pino-multi-stream');
-const {logLevel} = require('../backend/configs/env-config');
+const {logLevel} = require('../configs/env-config');
 
 const prettyStream = pinoms.prettyStream({
   prettyPrint: {

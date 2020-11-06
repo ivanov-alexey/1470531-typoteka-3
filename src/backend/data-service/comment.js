@@ -3,7 +3,7 @@
 const {MAX_COMMENTS_PER_PAGE} = require('../../constants');
 const {
   db: {Comment, User},
-} = require('../configs/db-config');
+} = require('../../configs/db-config');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
