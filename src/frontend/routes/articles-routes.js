@@ -1,25 +1,14 @@
 'use strict';
 
 const {Router} = require('express');
-const path = require('path');
-const multer = require('multer');
 const ArticleService = require('../data-service/article-service');
 const CategoryService = require('../data-service/category-service');
 const CommentService = require('../data-service/comment-service');
+const upload = require('../../configs/upload-folder');
 const {getErrorTemplate} = require('../../utils/get-error-template');
 const {getLogger} = require('../../libs/logger');
 
 const logger = getLogger();
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(process.cwd(), `src`, `express`, `public`, `img`));
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + `-` + Date.now() + path.extname(file.originalname));
-  },
-});
-const upload = multer({storage});
 
 const articlesRoutes = new Router();
 // TODO: добавить ссылки в шаблонах на создание статей
