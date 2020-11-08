@@ -4,9 +4,10 @@ const express = require('express');
 const helmet = require('helmet');
 const expressSession = require('express-session');
 const createApi = require('../../api/index');
-const {connectToDb} = require('../../../configs/db-config');
+const {connectToDb, sessionStore} = require('../../../configs/db-config');
 const {API_PREFIX, HttpCode, DEFAULT_API_PORT, Message} = require('../../../constants');
 const {getLogger} = require('../../../libs/logger');
+const {secret} = require('../../../configs/env-config');
 
 const logger = getLogger();
 
@@ -20,12 +21,15 @@ const createApp = async () => {
 
   app.use(
     expressSession({
-      secret: 'secret', // TODO: поменять
+      secret,
       resave: false,
+      store: sessionStore,
+      proxy: true,
       saveUninitialized: false,
-      name: `session_id`,
     })
   );
+
+  sessionStore.sync();
 
   app.use((req, res, next) => {
     logger.debug(`Requested url: ${req.url}`);
