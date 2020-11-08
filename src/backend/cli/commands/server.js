@@ -2,6 +2,7 @@
 
 const express = require('express');
 const helmet = require('helmet');
+const expressSession = require('express-session');
 const createApi = require('../../api/index');
 const {connectToDb} = require('../../../configs/db-config');
 const {API_PREFIX, HttpCode, DEFAULT_API_PORT, Message} = require('../../../constants');
@@ -14,7 +15,18 @@ const createApp = async () => {
   const apiRoutes = await createApi();
 
   app.set(`json spaces`, 2);
+
   app.use(helmet());
+
+  app.use(
+    expressSession({
+      secret: 'secret', // TODO: поменять
+      resave: false,
+      saveUninitialized: false,
+      name: `session_id`,
+    })
+  );
+
   app.use((req, res, next) => {
     logger.debug(`Requested url: ${req.url}`);
 
@@ -26,6 +38,7 @@ const createApp = async () => {
   });
 
   app.use(express.json());
+
   app.use(API_PREFIX, apiRoutes);
 
   app.use((req, res) => {
