@@ -38,10 +38,12 @@ block content
                 input.visually-hidden(type='file', name='avatar', value= user ? user.avatar : '', required='')
                 | Загрузить фото профиля
             button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') Зарегистрироваться
-          if errors
-            ul.show-errors-list
-              each error in errors
-                li= error
+          if errors.length
+            .form__validation-error
+              p.form__error-message При регистрации произошли ошибки:
+              ul.form__errors
+                each error in errors
+                  li.form__error= error
       .modal__overlay
 block scripts
   script(src='js/main.js')

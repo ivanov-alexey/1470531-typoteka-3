@@ -19,10 +19,18 @@ block content
           form(action='/login', method='post')
             .form__field
               label
-                input(type='email', placeholder='Электронная почта', name='email' required='')
+                input(type='email', placeholder='Электронная почта', name='email', value= user ? user.email : '' required='')
+                if (loginError)
+                  p(class="form__error-message") Пользователь с такими данными не найден
             .form__field
               label
                 input(type='password', placeholder='Пароль', name='password', required='')
+            if errors.length
+              .form__validation-error
+                p.form__error-message При авторизации произошли ошибки:
+                ul.form__errors
+                  each error in errors
+                    li.form__error= error
             button.form__submit-btn.form__submit-btn--log-in.button.button--colored(type='submit') Войти
       .modal__overlay
 
