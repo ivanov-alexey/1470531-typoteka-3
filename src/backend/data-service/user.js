@@ -41,6 +41,21 @@ class UserService {
       throw err;
     }
   }
+
+  async checkUserExists(user) {
+    try {
+      const userData = await User.findOne({
+        attributes: [`password`],
+        where: {
+          email: user.email,
+        },
+      });
+
+      return await bcrypt.compare(user.password, userData.dataValues.password);
+    } catch (err) {
+      return console.error(err);
+    }
+  }
 }
 
 module.exports = UserService;
