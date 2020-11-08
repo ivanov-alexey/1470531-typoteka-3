@@ -50,8 +50,12 @@ class UserService {
           email: user.email,
         },
       });
+      const hash =
+        userData && userData.dataValues && userData.dataValues.password
+          ? userData.dataValues.password
+          : '';
 
-      return await bcrypt.compare(user.password, userData.dataValues.password);
+      return await bcrypt.compare(user.password, hash);
     } catch (err) {
       return console.error(err);
     }
