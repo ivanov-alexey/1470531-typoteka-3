@@ -25,7 +25,7 @@ block content
             .form__field
               label
                 input(type='password', placeholder='Пароль', name='password', required='')
-            if errors.length
+            if errors
               .form__validation-error
                 p.form__error-message При авторизации произошли ошибки:
                 ul.form__errors
