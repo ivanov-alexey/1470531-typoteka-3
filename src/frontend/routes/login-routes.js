@@ -22,7 +22,7 @@ loginRoutes.post(`/`, async (req, res) => {
 
     if (errors.length || !isPasswordCorrect) {
       res.render(`authorization/login`, {
-        errors,
+        errors: errors.length ? errors : null,
         user,
         loginError: true,
       });
