@@ -6,6 +6,7 @@ const newEntityValidator = require('../../middlewares/new-entity-validator');
 const newUserSchema = require('../../schemas/new-user');
 const userExists = require('../../middlewares/user-exists');
 const userSchema = require('../../schemas/user');
+const authentificate = require('../../middlewares/authentificate');
 const {getLogger} = require('../../../libs/logger');
 
 const logger = getLogger();
@@ -14,11 +15,13 @@ const route = new Router();
 module.exports = (app, service) => {
   app.use(`/users`, route);
 
-  route.post(`/`, newEntityValidator(userSchema), async (req, res) => {
-    try {
-      const isUserExist = await service.checkUserExists(req.body);
+  route.post(`/`, [newEntityValidator(userSchema), authentificate(service)], async (req, res) => {
+    const {email} = req.body;
 
-      res.status(HttpCode.OK).json(isUserExist);
+    try {
+      const userData = await service.getUserData(email);
+
+      res.status(HttpCode.OK).json(userData);
     } catch (err) {
       logger.error(err);
 
