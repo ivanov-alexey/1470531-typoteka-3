@@ -60,6 +60,25 @@ class UserService {
       return console.error(err);
     }
   }
+
+  async getUserData(email) {
+    try {
+      const user = await User.findOne({
+        where: {
+          email,
+        },
+      });
+
+      return {
+        avatar: user.avatar,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+      };
+    } catch (err) {
+      return console.error(err);
+    }
+  }
 }
 
 module.exports = UserService;
