@@ -18,9 +18,9 @@ loginRoutes.post(`/`, async (req, res) => {
   };
 
   try {
-    const {errors = [], isPasswordCorrect = false} = await UserService.check(user);
+    const {errors = [], userData = {}} = await UserService.check(user);
 
-    if (errors.length || !isPasswordCorrect) {
+    if (errors.length) {
       res.render(`authorization/login`, {
         errors: errors.length ? errors : null,
         user,
@@ -29,6 +29,9 @@ loginRoutes.post(`/`, async (req, res) => {
 
       return;
     }
+
+    req.session.user = userData;
+    req.session.isLoggedIn = true;
 
     res.redirect(`/my`);
   } catch (err) {

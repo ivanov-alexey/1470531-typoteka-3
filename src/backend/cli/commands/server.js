@@ -1,13 +1,11 @@
 'use strict';
 
 const express = require('express');
-const helmet = require('helmet');
-const expressSession = require('express-session');
+
 const createApi = require('../../api/index');
-const {connectToDb, sessionStore} = require('../../../configs/db-config');
+const {connectToDb} = require('../../../configs/db-config');
 const {API_PREFIX, HttpCode, DEFAULT_API_PORT, Message} = require('../../../constants');
 const {getLogger} = require('../../../libs/logger');
-const {secret} = require('../../../configs/env-config');
 
 const logger = getLogger();
 
@@ -16,20 +14,6 @@ const createApp = async () => {
   const apiRoutes = await createApi();
 
   app.set(`json spaces`, 2);
-
-  app.use(helmet());
-
-  app.use(
-    expressSession({
-      secret,
-      resave: false,
-      store: sessionStore,
-      proxy: true,
-      saveUninitialized: false,
-    })
-  );
-
-  sessionStore.sync();
 
   app.use((req, res, next) => {
     logger.debug(`Requested url: ${req.url}`);

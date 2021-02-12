@@ -20,9 +20,7 @@ class UserService {
     try {
       const response = await apiRequest.post(`/users`, user);
 
-      console.log('response', response);
-
-      return {isPasswordCorrect: response.data};
+      return {userData: response.data};
     } catch (error) {
       return {
         users: error.response && error.response.data && error.response.data.data,

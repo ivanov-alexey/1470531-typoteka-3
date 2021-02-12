@@ -24,9 +24,6 @@ const authentificate = (store) => async (req, res, next) => {
     return;
   }
 
-  req.session.isLogged = true;
-  req.session.username = email;
-
   next();
 };
 
