@@ -61,8 +61,6 @@ describe(`Users API end-points`, () => {
   test(`Should return status 400 for create user bad request`, async () => {
     const res = await request(server).post(`/api/users/add`).send(incorrectUserAuthStub);
 
-    console.log('res.body.message', res.body.message);
-
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toHaveLength(1);
     expect(res.body.message[0]).toMatch('User with this email is already registered');
