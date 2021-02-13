@@ -18,7 +18,7 @@ const level = logLevel || `info`;
 const streams = [
   {
     level,
-    stream: fs.createWriteStream(path.join(process.cwd(), 'src', `backend`, `logs`, `logs.txt`)),
+    stream: fs.createWriteStream(path.join(process.cwd(), `logs`, `logs.txt`)),
   },
   {level, stream: prettyStream},
 ];
