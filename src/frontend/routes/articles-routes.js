@@ -85,11 +85,14 @@ articlesRoutes.get(`/edit/:id`, async (req, res) => {
 articlesRoutes.get(`/:id`, async (req, res) => {
   try {
     const {id} = req.params;
+    const {user, isLoggedIn} = req.session;
     const article = await ArticleService.getOne(id);
     const categories = await CategoryService.getAll();
     const comments = await CommentService.getByArticleId(id);
 
     res.render(`post`, {
+      isLoggedIn,
+      user,
       article,
       categories,
       comments,

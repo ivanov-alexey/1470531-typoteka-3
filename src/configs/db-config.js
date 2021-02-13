@@ -2,6 +2,8 @@
 
 require('dotenv').config();
 const {Sequelize} = require('sequelize');
+const expressSession = require('express-session');
+const SequelizeStore = require(`connect-session-sequelize`)(expressSession.Store);
 const {getLogger} = require('../libs/logger');
 
 const env = process.env.NODE_ENV || 'development';
@@ -65,6 +67,12 @@ Category.belongsToMany(Article, {
   foreignKey: `category_id`,
 });
 
+const sessionStore = new SequelizeStore({
+  db: sequelize,
+  expiration: 180000,
+  checkExpirationInterval: 60000,
+});
+
 const connectToDb = async () => {
   try {
     logger.info(`Connecting to database "${config.database}" on ${config.host}:${config.port}`);
@@ -108,6 +116,7 @@ module.exports = {
     User,
   },
   sequelize,
+  sessionStore,
   connectToDb,
   initDb,
   closeDbConnection,

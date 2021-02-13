@@ -4,6 +4,9 @@ const {Op} = require('sequelize');
 const {
   db: {Article},
 } = require('../../configs/db-config');
+const {getLogger} = require('../../libs/logger');
+
+const logger = getLogger();
 
 class SearchService {
   async findAll(searchText) {
@@ -16,7 +19,7 @@ class SearchService {
         },
       });
     } catch (err) {
-      return console.error(err);
+      return logger.error(err);
     }
   }
 }
