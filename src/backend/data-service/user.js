@@ -57,7 +57,8 @@ class UserService {
 
       return await bcrypt.compare(user.password, hash);
     } catch (err) {
-      return console.error(err);
+      logger.error(err);
+      throw err;
     }
   }
 
@@ -76,7 +77,8 @@ class UserService {
         lastname: user.lastname,
       };
     } catch (err) {
-      return console.error(err);
+      logger.error(err);
+      throw err;
     }
   }
 }
