@@ -11,11 +11,21 @@ const searchRoutes = new Router();
 
 searchRoutes.get(`/`, async (req, res) => {
   try {
-    const articles = await SearchService.getResults(req.originalUrl);
     const {query = ``} = req.query;
 
+    if (query) {
+      const articles = await SearchService.getResults(req.originalUrl);
+
+      res.render(`search`, {
+        articles,
+        query,
+      });
+
+      return;
+    }
+
     res.render(`search`, {
-      articles,
+      articles: [],
       query,
     });
   } catch (err) {
