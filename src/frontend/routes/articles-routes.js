@@ -5,6 +5,7 @@ const ArticleService = require(`../data-service/article-service`);
 const CategoryService = require(`../data-service/category-service`);
 const CommentService = require(`../data-service/comment-service`);
 const upload = require(`../../configs/upload-folder`);
+const {privateRoute} = require(`../../backend/middlewares/privateRoute`);
 const {getErrorTemplate} = require(`../../utils/get-error-template`);
 const {getLogger} = require(`../../libs/logger`);
 
@@ -16,7 +17,7 @@ const articlesRoutes = new Router();
 articlesRoutes.get(`/category/:id`, (req, res) => res.render(`articles-by-category`));
 
 // TODO: поправить выбор даты при создании статьи
-articlesRoutes.get(`/add`, async (req, res) => {
+articlesRoutes.get(`/add`, privateRoute, async (req, res) => {
   try {
     const categories = await CategoryService.getAll();
 
@@ -32,7 +33,7 @@ articlesRoutes.get(`/add`, async (req, res) => {
 });
 
 // TODO: починить загрузку файлов
-articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
+articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, res) => {
   const newArticle = {
     announce: req.body.announce,
     category: req.body.category,
@@ -65,7 +66,7 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
   }
 });
 
-articlesRoutes.get(`/edit/:id`, async (req, res) => {
+articlesRoutes.get(`/edit/:id`, privateRoute, async (req, res) => {
   try {
     const {id} = req.params;
     const article = await ArticleService.getOne(id);

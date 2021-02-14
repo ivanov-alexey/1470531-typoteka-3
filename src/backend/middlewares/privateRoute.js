@@ -1,9 +1,9 @@
 'use strict';
 
-module.exports = (req, res, next) => {
-  const {isLogged} = req.session;
+module.exports.privateRoute = (req, res, next) => {
+  const {isLoggedIn} = req.session;
 
-  if (!isLogged) {
+  if (!isLoggedIn) {
     return res.redirect(`/login`);
   }
 

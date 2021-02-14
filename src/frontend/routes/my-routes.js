@@ -3,6 +3,7 @@
 const {Router} = require(`express`);
 const ArticleService = require(`../data-service/article-service`);
 const CommentService = require(`../data-service/comment-service`);
+const {privateRoute} = require(`../../backend/middlewares/privateRoute`);
 const {MAX_ARTICLES_PER_PAGE} = require(`../../constants`);
 const {MAX_COMMENTS_PER_PAGE} = require(`../../constants`);
 const {getErrorTemplate} = require(`../../utils/get-error-template`);
@@ -13,7 +14,7 @@ const logger = getLogger();
 const myRoutes = new Router();
 
 // TODO: пофиксить время во всех шаблонах
-myRoutes.get(`/`, async (req, res) => {
+myRoutes.get(`/`, privateRoute, async (req, res) => {
   const {page = 1} = req.query;
   const pageNumber = parseInt(page, 10);
   const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_ARTICLES_PER_PAGE;
@@ -36,7 +37,7 @@ myRoutes.get(`/`, async (req, res) => {
   }
 });
 
-myRoutes.post(`/`, async (req, res) => {
+myRoutes.post(`/`, privateRoute, async (req, res) => {
   const {page = 1} = req.query;
   const pageNumber = parseInt(page, 10);
   const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_ARTICLES_PER_PAGE;
@@ -63,7 +64,7 @@ myRoutes.post(`/`, async (req, res) => {
   }
 });
 
-myRoutes.get(`/comments`, async (req, res) => {
+myRoutes.get(`/comments`, privateRoute, async (req, res) => {
   const {page = 1} = req.query;
   const pageNumber = parseInt(page, 10);
   const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_COMMENTS_PER_PAGE;
@@ -86,7 +87,7 @@ myRoutes.get(`/comments`, async (req, res) => {
   }
 });
 
-myRoutes.post(`/comments`, async (req, res) => {
+myRoutes.post(`/comments`, privateRoute, async (req, res) => {
   const {id} = req.body;
 
   try {

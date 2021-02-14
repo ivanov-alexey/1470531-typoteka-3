@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const CategoryService = require(`../data-service/category-service`);
+const {privateRoute} = require(`../../backend/middlewares/privateRoute`);
 const {getErrorTemplate} = require(`../../utils/get-error-template`);
 const {getLogger} = require(`../../libs/logger`);
 
@@ -11,7 +12,7 @@ const categoriesRoutes = new Router();
 
 // TODO: добавление/удаление категорий
 
-categoriesRoutes.get(`/`, async (req, res) => {
+categoriesRoutes.get(`/`, privateRoute, async (req, res) => {
   try {
     const categories = await CategoryService.getAll();
 
@@ -24,7 +25,7 @@ categoriesRoutes.get(`/`, async (req, res) => {
   }
 });
 
-categoriesRoutes.post(`/`, async (req, res) => {
+categoriesRoutes.post(`/`, privateRoute, async (req, res) => {
   try {
     const {title = ``, type = ``, method = ``, categoryId = ``} = req.body;
 
