@@ -4,7 +4,7 @@
   "description": "Типотека",
   "main": "src/backend/service.js",
   "scripts": {
-    "start": "node src/backend/service.js",
+    "start": "concurrently --kill-others-on-fail -n \"FRONTEND,BACKEND\" -c \"cyan,magenta\" \"npm:server\" \"npm:server-front\"",
     "test": "NODE_ENV=test npm run eslint & npm run test::rest",
     "test::rest": "NODE_ENV=test jest --runInBand --config jest.config.js",
     "eslint": "eslint --ext .js src/",
@@ -12,7 +12,7 @@
     "filldb": "node src/backend/service.js --filldb 20",
     "server": "LOG_LEVEL=error nodemon src/backend/service.js --server 3000",
     "server::debug": "LOG_LEVEL=debug nodemon src/backend/service.js --server 3000",
-    "start-front-server": "nodemon src/frontend/index.js"
+    "server-front": "nodemon src/frontend/index.js"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "axios": "0.20.0",
     "bcrypt": "5.0.0",
     "chalk": "4.0.0",
+    "concurrently": "5.3.0",
     "connect-session-sequelize": "7.0.4",
     "dotenv": "8.2.0",
     "express": "4.17.1",
