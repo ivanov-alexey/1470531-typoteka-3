@@ -1,12 +1,12 @@
 'use strict';
 
-const {Router} = require('express');
-const ArticleService = require('../data-service/article-service');
-const CategoryService = require('../data-service/category-service');
-const CommentService = require('../data-service/comment-service');
-const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
-const {getErrorTemplate} = require('../../utils/get-error-template');
-const {getLogger} = require('../../libs/logger');
+const {Router} = require(`express`);
+const ArticleService = require(`../data-service/article-service`);
+const CategoryService = require(`../data-service/category-service`);
+const CommentService = require(`../data-service/comment-service`);
+const {MAX_ARTICLES_PER_PAGE} = require(`../../constants`);
+const {getErrorTemplate} = require(`../../utils/get-error-template`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -33,7 +33,7 @@ mainRoute.get(`/`, async (req, res) => {
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
       nextIsActive: pageNumber < pagesCount,
-      mainPath: '/',
+      mainPath: `/`,
     });
   } catch (err) {
     logger.error(err);

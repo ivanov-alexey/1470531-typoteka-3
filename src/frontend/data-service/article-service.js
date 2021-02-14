@@ -1,10 +1,10 @@
 'use strict';
 
-const {DateTime} = require('luxon');
-const {getErrorMessage} = require('../../utils/get-error-message');
-const apiRequest = require('./api-request');
-const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
-const {getLogger} = require('../../libs/logger');
+const {DateTime} = require(`luxon`);
+const {getErrorMessage} = require(`../../utils/get-error-message`);
+const apiRequest = require(`./api-request`);
+const {MAX_ARTICLES_PER_PAGE} = require(`../../constants`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -48,12 +48,12 @@ class ArticleService {
   static async create(article) {
     try {
       return await apiRequest.post(`/articles/add`, {
-        title: article.title || '',
+        title: article.title || ``,
         category:
           typeof article.category === `string` ? [article.category] : article.category || ``,
-        picture: article.picture || '',
-        announce: article.announce || '',
-        fullText: article.fullText || '',
+        picture: article.picture || ``,
+        announce: article.announce || ``,
+        fullText: article.fullText || ``,
         publicationDate: article.publicationDate || DateTime.local().toString(),
       });
     } catch (error) {

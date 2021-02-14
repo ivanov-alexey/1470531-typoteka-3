@@ -1,7 +1,7 @@
 'use strict';
 
-const fs = require('fs').promises;
-const {nanoid} = require('nanoid');
+const fs = require(`fs`).promises;
+const {nanoid} = require(`nanoid`);
 const {
   avatarSettings,
   FILE_NAME,
@@ -18,17 +18,17 @@ const {
   Message,
   TimeInMilliseconds,
   ExitCode,
-} = require('../../../constants');
-const {getDate} = require('../../../utils/get-date');
-const {shuffle} = require('../../../utils/shuffle');
-const {getRandomInt} = require('../../../utils/get-random-int');
-const {getLogger} = require('../../../libs/logger');
+} = require(`../../../constants`);
+const {getDate} = require(`../../../utils/get-date`);
+const {shuffle} = require(`../../../utils/shuffle`);
+const {getRandomInt} = require(`../../../utils/get-random-int`);
+const {getLogger} = require(`../../../libs/logger`);
 
 const logger = getLogger();
 
 const getCategories = (data) => [
   ...new Set(
-    Array(getRandomInt(0, MAX_CATEGORIES))
+      Array(getRandomInt(0, MAX_CATEGORIES))
       .fill({})
       .map(() => data[getRandomInt(0, data.length - 1)])
   ),
@@ -67,7 +67,7 @@ const getArticles = (count, titles, sentences, categories, comments, names, surn
   }
 
   return JSON.stringify(
-    Array(amount)
+      Array(amount)
       .fill({})
       .map(() => ({
         id: nanoid(MAX_ID_LENGTH),

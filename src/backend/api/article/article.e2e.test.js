@@ -1,10 +1,10 @@
 'use strict';
-const {DateTime} = require('luxon');
+const {DateTime} = require(`luxon`);
 
-const request = require('supertest');
-const fillDb = require('../../cli/commands/filldb');
-const {createApp} = require('../../cli/commands/server');
-const {connectToDb, closeDbConnection} = require('../../../configs/db-config');
+const request = require(`supertest`);
+const fillDb = require(`../../cli/commands/filldb`);
+const {createApp} = require(`../../cli/commands/server`);
+const {connectToDb, closeDbConnection} = require(`../../../configs/db-config`);
 
 let server;
 const articleStub = {
@@ -13,7 +13,7 @@ const articleStub = {
   'announce': `Am finished rejoiced drawings so he elegance. Set lose dear upon had two its what seen.`,
   'fullText': `Another journey chamber way yet females man. Way extensive and dejection get delivered deficient sincerity gentleman age.`,
   'category': [`category`],
-  'picture': '',
+  'picture': ``,
 };
 
 beforeAll(async () => {
@@ -82,7 +82,7 @@ describe(`Offers API end-points`, () => {
         'announce': `Set lose dear upon had two its what seen. Am finished rejoiced drawings so he elegance. `,
         'fullText': `Way extensive and dejection get delivered deficient sincerity gentleman age. Another journey chamber way yet females man. `,
         'category': [`category`],
-        'picture': '',
+        'picture': ``,
       });
 
     expect(res.statusCode).toBe(200);
@@ -109,7 +109,7 @@ describe(`Offers comments API end-points`, () => {
     const res = await request(server).get(`/api/articles/wrongId/comments`);
 
     expect(res.statusCode).toBe(404);
-    expect(res.body).toMatchObject({data: {}, message: 'Id is incorrect'});
+    expect(res.body).toMatchObject({data: {}, message: `Id is incorrect`});
   });
 
   test(`Should return status 200 for delete comment request`, async () => {

@@ -1,9 +1,9 @@
 'use strict';
 
-const {Router} = require('express');
-const UserService = require('../data-service/user-service');
-const {getErrorTemplate} = require('../../utils/get-error-template');
-const {getLogger} = require('../../libs/logger');
+const {Router} = require(`express`);
+const UserService = require(`../data-service/user-service`);
+const {getErrorTemplate} = require(`../../utils/get-error-template`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -13,8 +13,8 @@ loginRoutes.get(`/`, (req, res) => res.render(`authorization/login`));
 
 loginRoutes.post(`/`, async (req, res) => {
   const user = {
-    email: req.body.email || '',
-    password: req.body.password || '',
+    email: req.body.email || ``,
+    password: req.body.password || ``,
   };
 
   try {

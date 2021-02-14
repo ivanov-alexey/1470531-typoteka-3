@@ -1,12 +1,12 @@
 'use strict';
 
-const {Router} = require('express');
-const ArticleService = require('../data-service/article-service');
-const CommentService = require('../data-service/comment-service');
-const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
-const {MAX_COMMENTS_PER_PAGE} = require('../../constants');
-const {getErrorTemplate} = require('../../utils/get-error-template');
-const {getLogger} = require('../../libs/logger');
+const {Router} = require(`express`);
+const ArticleService = require(`../data-service/article-service`);
+const CommentService = require(`../data-service/comment-service`);
+const {MAX_ARTICLES_PER_PAGE} = require(`../../constants`);
+const {MAX_COMMENTS_PER_PAGE} = require(`../../constants`);
+const {getErrorTemplate} = require(`../../utils/get-error-template`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -28,7 +28,7 @@ myRoutes.get(`/`, async (req, res) => {
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
       nextIsActive: pageNumber < pagesCount,
-      myPath: '/my',
+      myPath: `/my`,
     });
   } catch (err) {
     logger.error(err);
@@ -44,7 +44,7 @@ myRoutes.post(`/`, async (req, res) => {
   try {
     const {method, articleId} = req.body;
 
-    if (method === 'DELETE') {
+    if (method === `DELETE`) {
       await ArticleService.drop(parseInt(articleId, 10));
       const {articles, count} = await ArticleService.getAll(offset, MAX_ARTICLES_PER_PAGE);
       const pagesCount = Math.ceil(count / MAX_ARTICLES_PER_PAGE);
@@ -55,7 +55,7 @@ myRoutes.post(`/`, async (req, res) => {
         activePage: pageNumber,
         prevIsActive: pageNumber !== 1,
         nextIsActive: pageNumber < pagesCount,
-        myPath: '/my',
+        myPath: `/my`,
       });
     }
   } catch (err) {
@@ -78,7 +78,7 @@ myRoutes.get(`/comments`, async (req, res) => {
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
       nextIsActive: pageNumber < pagesCount,
-      commentsPath: './comments',
+      commentsPath: `./comments`,
     });
   } catch (err) {
     logger.error(err);
@@ -92,7 +92,7 @@ myRoutes.post(`/comments`, async (req, res) => {
   try {
     await CommentService.drop(id);
 
-    res.redirect('/my/comments');
+    res.redirect(`/my/comments`);
   } catch (err) {
     logger.error(err);
     res.render(getErrorTemplate(err));

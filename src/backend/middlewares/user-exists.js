@@ -1,7 +1,7 @@
 'use strict';
 
-const {getLogger} = require('../../libs/logger');
-const {HttpCode} = require('../../constants');
+const {getLogger} = require(`../../libs/logger`);
+const {HttpCode} = require(`../../constants`);
 
 const logger = getLogger();
 
@@ -13,7 +13,7 @@ const userExists = (service) => async (req, res, next) => {
 
     if (users) {
       res.status(HttpCode.BAD_REQUEST).json({
-        message: ['User with this email is already registered'],
+        message: [`User with this email is already registered`],
         data: req.body,
       });
 

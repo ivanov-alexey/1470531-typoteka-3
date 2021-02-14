@@ -1,6 +1,6 @@
 'use strict';
 
-const {HttpCode} = require('../../constants');
+const {HttpCode} = require(`../../constants`);
 
 const idValidator = (req, res, next) => {
   const {id} = req.params;
@@ -8,7 +8,7 @@ const idValidator = (req, res, next) => {
 
   if (!id || !Number.isInteger(parsedId)) {
     res.status(HttpCode.NOT_FOUND).json({
-      message: 'Id is incorrect',
+      message: `Id is incorrect`,
       data: req.body,
     });
 

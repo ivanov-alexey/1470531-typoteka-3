@@ -1,9 +1,9 @@
 'use strict';
 
-const request = require('supertest');
-const fillDb = require('../../cli/commands/filldb');
-const {createApp} = require('../../cli/commands/server');
-const {connectToDb, closeDbConnection, sequelize} = require('../../../configs/db-config');
+const request = require(`supertest`);
+const fillDb = require(`../../cli/commands/filldb`);
+const {createApp} = require(`../../cli/commands/server`);
+const {connectToDb, closeDbConnection, sequelize} = require(`../../../configs/db-config`);
 
 let server;
 

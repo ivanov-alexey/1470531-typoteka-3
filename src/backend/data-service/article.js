@@ -1,11 +1,11 @@
 'use strict';
 
-const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
-const {sequelize} = require('../../configs/db-config');
+const {MAX_ARTICLES_PER_PAGE} = require(`../../constants`);
+const {sequelize} = require(`../../configs/db-config`);
 const {
   db: {Article, Category, Comment},
-} = require('../../configs/db-config');
-const {getLogger} = require('../../libs/logger');
+} = require(`../../configs/db-config`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -37,7 +37,7 @@ class ArticleService {
           [`full_text`, `fullText`],
           `picture`,
           `title`,
-          [`publication_date`, 'publicationDate'],
+          [`publication_date`, `publicationDate`],
         ],
         include: [
           {
@@ -100,7 +100,7 @@ class ArticleService {
           [`full_text`, `fullText`],
           `picture`,
           `title`,
-          [`publication_date`, 'publicationDate'],
+          [`publication_date`, `publicationDate`],
         ],
       });
     } catch (err) {
@@ -112,15 +112,15 @@ class ArticleService {
   async update(id, {announce, fullText, picture, title}) {
     try {
       await Article.update(
-        {
-          announce,
-          fullText,
-          title,
-          picture,
-        },
-        {
-          where: {id},
-        }
+          {
+            announce,
+            fullText,
+            title,
+            picture,
+          },
+          {
+            where: {id},
+          }
       );
 
       return await Article.findByPk(id);

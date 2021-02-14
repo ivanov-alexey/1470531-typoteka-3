@@ -1,7 +1,7 @@
 'use strict';
 
-const Joi = require('joi');
-const {TextRestriction} = require('../../constants');
+const Joi = require(`joi`);
+const {TextRestriction} = require(`../../constants`);
 
 const newUserSchema = Joi.object({
   avatar: Joi.string().min(TextRestriction.linkMin).max(TextRestriction.linkMax).required(),

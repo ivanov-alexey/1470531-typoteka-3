@@ -1,6 +1,6 @@
 'use strict';
 
-const apiRequest = require('./api-request');
+const apiRequest = require(`./api-request`);
 
 class UserService {
   static async create(user) {

@@ -1,11 +1,11 @@
 'use strict';
 
-const {Router} = require('express');
-const {HttpCode} = require('../../../constants');
-const newEntityValidator = require('../../middlewares/new-entity-validator');
-const commentSchema = require('../../schemas/comment');
-const idValidator = require('../../middlewares/idValidator');
-const {getLogger} = require('../../../libs/logger');
+const {Router} = require(`express`);
+const {HttpCode} = require(`../../../constants`);
+const newEntityValidator = require(`../../middlewares/new-entity-validator`);
+const commentSchema = require(`../../schemas/comment`);
+const idValidator = require(`../../middlewares/idValidator`);
+const {getLogger} = require(`../../../libs/logger`);
 
 const logger = getLogger();
 const route = new Router();

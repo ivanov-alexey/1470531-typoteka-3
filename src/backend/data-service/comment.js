@@ -1,10 +1,10 @@
 'use strict';
 
-const {MAX_COMMENTS_PER_PAGE} = require('../../constants');
+const {MAX_COMMENTS_PER_PAGE} = require(`../../constants`);
 const {
   db: {Comment, User},
-} = require('../../configs/db-config');
-const {getLogger} = require('../../libs/logger');
+} = require(`../../configs/db-config`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -25,7 +25,7 @@ class CommentService {
   async findByArticleId(articleId) {
     try {
       const comments = await Comment.findAll({
-        attributes: [`id`, `text`, [`created_at`, 'createdAt']],
+        attributes: [`id`, `text`, [`created_at`, `createdAt`]],
         where: {
           'article_id': articleId,
         },
@@ -56,7 +56,7 @@ class CommentService {
     try {
       const count = await Comment.count();
       const rawComments = await Comment.findAll({
-        attributes: [`id`, `text`, [`created_at`, 'createdAt']],
+        attributes: [`id`, `text`, [`created_at`, `createdAt`]],
         include: [
           {
             model: User,

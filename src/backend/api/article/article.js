@@ -1,13 +1,13 @@
 'use strict';
 
-const {Router} = require('express');
-const {HttpCode, MAX_ARTICLES_PER_PAGE} = require('../../../constants');
-const newEntityValidator = require('../../middlewares/new-entity-validator');
-const articleExist = require('../../middlewares/article-exists');
-const articleSchema = require('../../schemas/article');
-const commentSchema = require('../../schemas/comment');
-const idValidator = require('../../middlewares/idValidator');
-const {getLogger} = require('../../../libs/logger');
+const {Router} = require(`express`);
+const {HttpCode, MAX_ARTICLES_PER_PAGE} = require(`../../../constants`);
+const newEntityValidator = require(`../../middlewares/new-entity-validator`);
+const articleExist = require(`../../middlewares/article-exists`);
+const articleSchema = require(`../../schemas/article`);
+const commentSchema = require(`../../schemas/comment`);
+const idValidator = require(`../../middlewares/idValidator`);
+const {getLogger} = require(`../../../libs/logger`);
 
 const logger = getLogger();
 const route = new Router();
@@ -115,49 +115,49 @@ module.exports = (app, articleService, commentService) => {
   });
   // TODO: проверить миддлварю
   route.delete(
-    `/:id/comments/:commentId`,
-    [idValidator, articleExist(articleService)],
-    async (req, res) => {
-      try {
-        const {commentId} = req.params;
-        const deletedComment = await commentService.drop(commentId);
+      `/:id/comments/:commentId`,
+      [idValidator, articleExist(articleService)],
+      async (req, res) => {
+        try {
+          const {commentId} = req.params;
+          const deletedComment = await commentService.drop(commentId);
 
-        if (!deletedComment) {
-          res.status(HttpCode.NOT_FOUND).send(`Not found`);
+          if (!deletedComment) {
+            res.status(HttpCode.NOT_FOUND).send(`Not found`);
 
-          return;
-        }
+            return;
+          }
 
-        res.status(HttpCode.OK).json(deletedComment);
-      } catch (err) {
-        logger.error(err);
+          res.status(HttpCode.OK).json(deletedComment);
+        } catch (err) {
+          logger.error(err);
 
-        res
+          res
           .status(HttpCode.BAD_REQUEST)
           .send(`Bad request on GET /articles/:id/comments/:commentId`);
+        }
       }
-    }
   );
 
   route.post(
-    `/:id/comments/add`,
-    [idValidator, articleExist(articleService), newEntityValidator(commentSchema)],
-    async (req, res) => {
-      try {
-        const {text} = req.body;
-        const {id} = req.params;
-        const userId = 1; // TODO: поправить когда сделаю авторизацию
+      `/:id/comments/add`,
+      [idValidator, articleExist(articleService), newEntityValidator(commentSchema)],
+      async (req, res) => {
+        try {
+          const {text} = req.body;
+          const {id} = req.params;
+          const userId = 1; // TODO: поправить когда сделаю авторизацию
 
-        const comment = await commentService.create(id, userId, text);
+          const comment = await commentService.create(id, userId, text);
 
-        res.status(HttpCode.CREATED).json(comment);
-      } catch (err) {
-        logger.error(err);
+          res.status(HttpCode.CREATED).json(comment);
+        } catch (err) {
+          logger.error(err);
 
-        res
+          res
           .status(HttpCode.BAD_REQUEST)
           .send(`Bad request on POST /articles/:id/comments/:commentId`);
+        }
       }
-    }
   );
 };

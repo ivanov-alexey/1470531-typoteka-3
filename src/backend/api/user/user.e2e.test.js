@@ -1,24 +1,24 @@
 'use strict';
 
-const request = require('supertest');
-const fillDb = require('../../cli/commands/filldb');
-const {createApp} = require('../../cli/commands/server');
-const {connectToDb, closeDbConnection} = require('../../../configs/db-config');
-const {userPassword} = require('../../../configs/env-config');
+const request = require(`supertest`);
+const fillDb = require(`../../cli/commands/filldb`);
+const {createApp} = require(`../../cli/commands/server`);
+const {connectToDb, closeDbConnection} = require(`../../../configs/db-config`);
+const {userPassword} = require(`../../../configs/env-config`);
 
 let server;
 const correctUserAuthStub = {
   'firstname': `John`,
-  'lastname': 'Smith',
+  'lastname': `Smith`,
   'email': `mail@mail.com`,
   'password': `123456`,
-  'avatar': 'some.img',
+  'avatar': `some.img`,
 };
 const incorrectUserAuthStub = {
   'firstname': `John`,
   'email': `mail@mail.com`,
   'password': `123456`,
-  'avatar': 'som',
+  'avatar': `som`,
 };
 const correctUserLoginStub = {
   'email': `user1@mail.io`,
@@ -63,7 +63,7 @@ describe(`Users API end-points`, () => {
 
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toHaveLength(1);
-    expect(res.body.message[0]).toMatch('User with this email is already registered');
+    expect(res.body.message[0]).toMatch(`User with this email is already registered`);
   });
 
   test(`Should return status 200 for login user request`, async () => {
@@ -79,7 +79,7 @@ describe(`Users API end-points`, () => {
 
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toHaveLength(1);
-    expect(res.body.message[0]).toMatch('"email" must be a valid email');
+    expect(res.body.message[0]).toMatch(`"email" must be a valid email`);
   });
 
   test(`Should return status 400 for login with empty password`, async () => {
@@ -87,6 +87,6 @@ describe(`Users API end-points`, () => {
 
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toHaveLength(1);
-    expect(res.body.message[0]).toMatch('"password" is not allowed to be empty');
+    expect(res.body.message[0]).toMatch(`"password" is not allowed to be empty`);
   });
 });

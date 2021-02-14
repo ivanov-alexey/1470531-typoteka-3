@@ -1,12 +1,12 @@
 'use strict';
 
-const {Router} = require('express');
-const ArticleService = require('../data-service/article-service');
-const CategoryService = require('../data-service/category-service');
-const CommentService = require('../data-service/comment-service');
-const upload = require('../../configs/upload-folder');
-const {getErrorTemplate} = require('../../utils/get-error-template');
-const {getLogger} = require('../../libs/logger');
+const {Router} = require(`express`);
+const ArticleService = require(`../data-service/article-service`);
+const CategoryService = require(`../data-service/category-service`);
+const CommentService = require(`../data-service/comment-service`);
+const upload = require(`../../configs/upload-folder`);
+const {getErrorTemplate} = require(`../../utils/get-error-template`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -96,7 +96,7 @@ articlesRoutes.get(`/:id`, async (req, res) => {
       article,
       categories,
       comments,
-      currentComment: '',
+      currentComment: ``,
     });
   } catch (err) {
     logger.error(err);

@@ -1,9 +1,9 @@
 'use strict';
 
-const {Router} = require('express');
-const CategoryService = require('../data-service/category-service');
-const {getErrorTemplate} = require('../../utils/get-error-template');
-const {getLogger} = require('../../libs/logger');
+const {Router} = require(`express`);
+const CategoryService = require(`../data-service/category-service`);
+const {getErrorTemplate} = require(`../../utils/get-error-template`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -26,9 +26,9 @@ categoriesRoutes.get(`/`, async (req, res) => {
 
 categoriesRoutes.post(`/`, async (req, res) => {
   try {
-    const {title = '', type = '', method = '', categoryId = ''} = req.body;
+    const {title = ``, type = ``, method = ``, categoryId = ``} = req.body;
 
-    if (method === 'ADD') {
+    if (method === `ADD`) {
       const {errors} = await CategoryService.create(title);
       const categories = await CategoryService.getAll();
 
@@ -50,7 +50,7 @@ categoriesRoutes.post(`/`, async (req, res) => {
       return;
     }
 
-    if (type === 'update') {
+    if (type === `update`) {
       await CategoryService.update(categoryId, title);
       const categories = await CategoryService.getAll();
 
@@ -59,7 +59,7 @@ categoriesRoutes.post(`/`, async (req, res) => {
       });
     }
 
-    if (type === 'delete') {
+    if (type === `delete`) {
       await CategoryService.drop(categoryId);
       const categories = await CategoryService.getAll();
 

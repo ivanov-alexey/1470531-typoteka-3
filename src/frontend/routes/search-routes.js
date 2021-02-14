@@ -1,9 +1,9 @@
 'use strict';
 
-const {Router} = require('express');
-const SearchService = require('../data-service/search-service');
-const {getErrorTemplate} = require('../../utils/get-error-template');
-const {getLogger} = require('../../libs/logger');
+const {Router} = require(`express`);
+const SearchService = require(`../data-service/search-service`);
+const {getErrorTemplate} = require(`../../utils/get-error-template`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 

@@ -1,9 +1,9 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const pinoms = require('pino-multi-stream');
-const {logLevel} = require('../configs/env-config');
+const fs = require(`fs`);
+const path = require(`path`);
+const pinoms = require(`pino-multi-stream`);
+const {logLevel} = require(`../configs/env-config`);
 
 const prettyStream = pinoms.prettyStream({
   prettyPrint: {
@@ -11,7 +11,7 @@ const prettyStream = pinoms.prettyStream({
     translateTime: `SYS:standard`,
     ignore: `hostname,pid`,
   },
-  prettifier: require('pino-pretty'),
+  prettifier: require(`pino-pretty`),
 });
 
 const level = logLevel || `info`;
@@ -24,11 +24,11 @@ const streams = [
 ];
 
 const logger = pinoms(
-  {
-    name: `pino-and-express`,
-    level,
-  },
-  pinoms.multistream(streams)
+    {
+      name: `pino-and-express`,
+      level,
+    },
+    pinoms.multistream(streams)
 );
 
 module.exports = {

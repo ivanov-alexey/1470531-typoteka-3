@@ -1,29 +1,29 @@
 'use strict';
 
-const {Model, DataTypes} = require('sequelize');
+const {Model, DataTypes} = require(`sequelize`);
 
 module.exports = (sequelize) => {
   class Comment extends Model {}
 
   Comment.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false,
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+          allowNull: false,
+        },
+        text: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+        },
       },
-      text: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-    },
-    {
-      sequelize,
-      timestamps: true,
-      underscored: true,
-      modelName: `comment`,
-    }
+      {
+        sequelize,
+        timestamps: true,
+        underscored: true,
+        modelName: `comment`,
+      }
   );
 
   return Comment;

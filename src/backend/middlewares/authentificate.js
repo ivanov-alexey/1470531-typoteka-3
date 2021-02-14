@@ -1,6 +1,6 @@
 'use strict';
 
-const {HttpCode} = require('../../constants');
+const {HttpCode} = require(`../../constants`);
 
 const authentificate = (store) => async (req, res, next) => {
   const {email} = req.body;
@@ -8,7 +8,7 @@ const authentificate = (store) => async (req, res, next) => {
 
   if (!existsUser) {
     res.status(HttpCode.BAD_REQUEST).json({
-      message: ['User not found'],
+      message: [`User not found`],
       data: req.body,
     });
 
@@ -17,7 +17,7 @@ const authentificate = (store) => async (req, res, next) => {
 
   if (!(await store.checkUserExists(req.body))) {
     res.status(HttpCode.BAD_REQUEST).json({
-      message: ['Wrong password'],
+      message: [`Wrong password`],
       data: req.body,
     });
 
