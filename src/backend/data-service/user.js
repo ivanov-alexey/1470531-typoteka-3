@@ -71,6 +71,7 @@ class UserService {
       });
 
       return {
+        id: user.id,
         avatar: user.avatar,
         email: user.email,
         firstname: user.firstname,

@@ -1,11 +1,21 @@
 'use strict';
 
+const {ADMIN_ID} = require(`../../constants`);
+
 module.exports.privateRoute = (req, res, next) => {
-  const {isLoggedIn} = req.session;
+  const {isLoggedIn, user = {}} = req.session;
 
   if (!isLoggedIn) {
-    return res.redirect(`/login`);
+    res.redirect(`/login`);
+
+    return;
   }
 
-  return next();
+  if (user && user.id !== ADMIN_ID) {
+    res.redirect(`/`);
+
+    return;
+  }
+
+  next();
 };

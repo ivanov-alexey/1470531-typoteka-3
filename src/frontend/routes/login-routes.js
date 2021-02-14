@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const UserService = require(`../data-service/user-service`);
+const {alreadyLoggedIn} = require(`../../backend/middlewares/already-logged-in`);
 const {getErrorTemplate} = require(`../../utils/get-error-template`);
 const {getLogger} = require(`../../libs/logger`);
 
@@ -9,9 +10,9 @@ const logger = getLogger();
 
 const loginRoutes = new Router();
 
-loginRoutes.get(`/`, (req, res) => res.render(`authorization/login`));
+loginRoutes.get(`/`, alreadyLoggedIn, (req, res) => res.render(`authorization/login`));
 
-loginRoutes.post(`/`, async (req, res) => {
+loginRoutes.post(`/`, alreadyLoggedIn, async (req, res) => {
   const user = {
     email: req.body.email || ``,
     password: req.body.password || ``,

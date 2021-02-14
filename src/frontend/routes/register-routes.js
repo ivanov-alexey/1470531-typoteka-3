@@ -3,6 +3,7 @@
 const {Router} = require(`express`);
 const UserService = require(`../data-service/user-service`);
 const upload = require(`../../configs/upload-folder`);
+const {alreadyLoggedIn} = require(`../../backend/middlewares/already-logged-in`);
 const {getErrorTemplate} = require(`../../utils/get-error-template`);
 const {getLogger} = require(`../../libs/logger`);
 
@@ -10,9 +11,9 @@ const logger = getLogger();
 
 const registerRoutes = new Router();
 
-registerRoutes.get(`/`, (req, res) => res.render(`authorization/sign-up`));
+registerRoutes.get(`/`, alreadyLoggedIn, (req, res) => res.render(`authorization/sign-up`));
 
-registerRoutes.post(`/`, upload.single(`avatar`), async (req, res) => {
+registerRoutes.post(`/`, alreadyLoggedIn, upload.single(`avatar`), async (req, res) => {
   const {email = ``, firstname = ``, lastname = ``, password = ``, repeatPassword = ``} = req.body;
 
   try {
