@@ -56,7 +56,7 @@ class CommentService {
     try {
       const count = await Comment.count();
       const rawComments = await Comment.findAll({
-        attributes: [`id`, `text`, [`created_at`, `createdAt`]],
+        attributes: [`id`, `article_id`, `text`, [`created_at`, `createdAt`]],
         include: [
           {
             model: User,
@@ -69,12 +69,13 @@ class CommentService {
         limit,
       });
 
-      const comments = rawComments.map(({id, text, createdAt, user}) => ({
-        id,
-        text,
-        createdAt,
-        avatar: user.avatar,
-        author: `${user.firstname} ${user.lastname}`,
+      const comments = rawComments.map((comment) => ({
+        id: comment.id,
+        text: comment.text,
+        articleId: comment.article_id,
+        createdAt: comment.createdAt,
+        avatar: comment.user.avatar,
+        author: `${comment.user.firstname} ${comment.user.lastname}`,
       }));
 
       return {
