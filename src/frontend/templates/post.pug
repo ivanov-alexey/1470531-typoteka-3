@@ -37,18 +37,19 @@ block content
                     time.comments__date(datetime= comment.createdAt)= comment.createdAt
                   p.comments__message= comment.text
           .comments__footer.comments__footer--user
-            form(action='/articles/' + article.id + '/comments', method='POST')
-              .comments__avatar.avatar
-                img(src='/img/avatar-2.png', alt='аватар пользователя')
-              label
-                textarea(rows='1', placeholder='Присоединиться к обсуждению' name='text' minlength='20')= currentComment
-              button.comments__button.button.button--colored(type='submit') Опубликовать
-              if isError && errors.length
-                div.show-errors
-                  p При создании комментария возникли ошибки:
-                  ul.show-errors-list
-                    each error in errors
-                      li= error
+            if isLoggedIn
+              form(action='/articles/' + article.id + '/comments', method='POST')
+                .comments__avatar.avatar
+                  img(src='/img/avatar-2.png', alt='аватар пользователя')
+                label
+                  textarea(rows='1', placeholder='Присоединиться к обсуждению' name='text' minlength='20')= currentComment
+                button.comments__button.button.button--colored(type='submit') Опубликовать
+                if isError && errors.length
+                  div.show-errors
+                    p При создании комментария возникли ошибки:
+                    ul.show-errors-list
+                      each error in errors
+                        li= error
 
 block scripts
   script(src='/js/main.js')
