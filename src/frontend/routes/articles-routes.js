@@ -5,6 +5,7 @@ const ArticleService = require(`../data-service/article-service`);
 const CategoryService = require(`../data-service/category-service`);
 const CommentService = require(`../data-service/comment-service`);
 const upload = require(`../../configs/upload-folder`);
+const {getFormattedTime} = require(`../../utils/get-formatted-time`);
 const {privateRoute} = require(`../../backend/middlewares/privateRoute`);
 const {getErrorTemplate} = require(`../../utils/get-error-template`);
 const {getLogger} = require(`../../libs/logger`);
@@ -109,7 +110,7 @@ articlesRoutes.get(`/:id`, async (req, res) => {
       user,
       article,
       categories,
-      comments,
+      comments: getFormattedTime(comments, `createdAt`),
       currentComment: ``,
     });
   } catch (err) {
@@ -136,7 +137,7 @@ articlesRoutes.post(`/:id/comments`, async (req, res) => {
         isLoggedIn,
         article,
         categories,
-        comments,
+        comments: getFormattedTime(comments, `createdAt`),
         isError: true,
         errors,
         currentComment: comment.text,

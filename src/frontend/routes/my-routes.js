@@ -3,6 +3,7 @@
 const {Router} = require(`express`);
 const ArticleService = require(`../data-service/article-service`);
 const CommentService = require(`../data-service/comment-service`);
+const {getFormattedTime} = require(`../../utils/get-formatted-time`);
 const {privateRoute} = require(`../../backend/middlewares/privateRoute`);
 const {MAX_ARTICLES_PER_PAGE} = require(`../../constants`);
 const {MAX_COMMENTS_PER_PAGE} = require(`../../constants`);
@@ -13,7 +14,6 @@ const logger = getLogger();
 
 const myRoutes = new Router();
 
-// TODO: пофиксить время во всех шаблонах
 myRoutes.get(`/`, privateRoute, async (req, res) => {
   const {page = 1} = req.query;
   const {user, isLoggedIn} = req.session;
@@ -24,10 +24,11 @@ myRoutes.get(`/`, privateRoute, async (req, res) => {
     const {articles, count} = await ArticleService.getAll(offset, MAX_ARTICLES_PER_PAGE);
     const pagesCount = Math.ceil(count / MAX_ARTICLES_PER_PAGE);
 
+
     res.render(`my/my`, {
       user,
       isLoggedIn,
-      articles,
+      articles: getFormattedTime(articles, `publicationDate`),
       pagesCount,
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
@@ -57,7 +58,7 @@ myRoutes.post(`/`, privateRoute, async (req, res) => {
       res.render(`my/my`, {
         user,
         isLoggedIn,
-        articles,
+        articles: getFormattedTime(articles, `publicationDate`),
         pagesCount,
         activePage: pageNumber,
         prevIsActive: pageNumber !== 1,
@@ -83,7 +84,7 @@ myRoutes.get(`/comments`, privateRoute, async (req, res) => {
     res.render(`my/comments`, {
       user,
       isLoggedIn,
-      comments,
+      comments: getFormattedTime(comments, `createdAt`),
       pagesCount,
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
