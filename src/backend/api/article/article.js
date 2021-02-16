@@ -144,9 +144,8 @@ module.exports = (app, articleService, commentService) => {
       [idValidator, articleExist(articleService), newEntityValidator(commentSchema)],
       async (req, res) => {
         try {
-          const {text} = req.body;
+          const {text, userId} = req.body;
           const {id} = req.params;
-          const userId = 1; // TODO: поправить когда сделаю авторизацию
 
           const comment = await commentService.create(id, userId, text);
 

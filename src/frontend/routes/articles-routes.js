@@ -118,7 +118,6 @@ articlesRoutes.get(`/:id`, async (req, res) => {
   }
 });
 
-// TODO: еще нужен ID пользователя
 articlesRoutes.post(`/:id/comments`, async (req, res) => {
   const {user, isLoggedIn} = req.session;
   const {id} = req.params;
