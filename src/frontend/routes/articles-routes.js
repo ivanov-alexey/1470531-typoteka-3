@@ -18,10 +18,14 @@ articlesRoutes.get(`/category/:id`, (req, res) => res.render(`articles-by-catego
 
 // TODO: поправить выбор даты при создании статьи
 articlesRoutes.get(`/add`, privateRoute, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
+
   try {
     const categories = await CategoryService.getAll();
 
     res.render(`my/new-post`, {
+      user,
+      isLoggedIn,
       isEdit: false,
       isError: false,
       categories,
@@ -34,6 +38,7 @@ articlesRoutes.get(`/add`, privateRoute, async (req, res) => {
 
 // TODO: починить загрузку файлов
 articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, res) => {
+  const {user, isLoggedIn} = req.session;
   const newArticle = {
     announce: req.body.announce,
     category: req.body.category,
@@ -49,6 +54,8 @@ articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, re
 
     if (errors) {
       res.render(`my/new-post`, {
+        user,
+        isLoggedIn,
         article,
         isError: true,
         errors,
@@ -67,12 +74,16 @@ articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, re
 });
 
 articlesRoutes.get(`/edit/:id`, privateRoute, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
+  const {id} = req.params;
+
   try {
-    const {id} = req.params;
     const article = await ArticleService.getOne(id);
     const categories = await CategoryService.getAll();
 
     res.render(`my/new-post`, {
+      user,
+      isLoggedIn,
       article,
       categories,
       isEdit: true,
@@ -83,10 +94,12 @@ articlesRoutes.get(`/edit/:id`, privateRoute, async (req, res) => {
   }
 });
 
+// TODO: клик на категории на странице поста
 articlesRoutes.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  const {user, isLoggedIn} = req.session;
+
   try {
-    const {id} = req.params;
-    const {user, isLoggedIn} = req.session;
     const article = await ArticleService.getOne(id);
     const categories = await CategoryService.getAll();
     const comments = await CommentService.getByArticleId(id);
@@ -107,10 +120,12 @@ articlesRoutes.get(`/:id`, async (req, res) => {
 
 // TODO: еще нужен ID пользователя
 articlesRoutes.post(`/:id/comments`, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
+  const {id} = req.params;
+  const {text} = req.body;
+
   try {
-    const {id} = req.params;
-    const {text} = req.body;
-    const {errors, comment} = await CommentService.create(id, text);
+    const {errors, comment} = await CommentService.create(id, user.id, text);
 
     if (errors) {
       const article = await ArticleService.getOne(id);
@@ -118,6 +133,8 @@ articlesRoutes.post(`/:id/comments`, async (req, res) => {
       const comments = await CommentService.getByArticleId(id);
 
       res.render(`post`, {
+        user,
+        isLoggedIn,
         article,
         categories,
         comments,

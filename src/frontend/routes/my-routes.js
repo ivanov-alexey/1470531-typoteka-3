@@ -16,6 +16,7 @@ const myRoutes = new Router();
 // TODO: пофиксить время во всех шаблонах
 myRoutes.get(`/`, privateRoute, async (req, res) => {
   const {page = 1} = req.query;
+  const {user, isLoggedIn} = req.session;
   const pageNumber = parseInt(page, 10);
   const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_ARTICLES_PER_PAGE;
 
@@ -24,6 +25,8 @@ myRoutes.get(`/`, privateRoute, async (req, res) => {
     const pagesCount = Math.ceil(count / MAX_ARTICLES_PER_PAGE);
 
     res.render(`my/my`, {
+      user,
+      isLoggedIn,
       articles,
       pagesCount,
       activePage: pageNumber,
@@ -38,6 +41,7 @@ myRoutes.get(`/`, privateRoute, async (req, res) => {
 });
 
 myRoutes.post(`/`, privateRoute, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
   const {page = 1} = req.query;
   const pageNumber = parseInt(page, 10);
   const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_ARTICLES_PER_PAGE;
@@ -51,6 +55,8 @@ myRoutes.post(`/`, privateRoute, async (req, res) => {
       const pagesCount = Math.ceil(count / MAX_ARTICLES_PER_PAGE);
 
       res.render(`my/my`, {
+        user,
+        isLoggedIn,
         articles,
         pagesCount,
         activePage: pageNumber,
@@ -65,6 +71,7 @@ myRoutes.post(`/`, privateRoute, async (req, res) => {
 });
 
 myRoutes.get(`/comments`, privateRoute, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
   const {page = 1} = req.query;
   const pageNumber = parseInt(page, 10);
   const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_COMMENTS_PER_PAGE;
@@ -74,6 +81,8 @@ myRoutes.get(`/comments`, privateRoute, async (req, res) => {
     const pagesCount = Math.ceil(count / MAX_COMMENTS_PER_PAGE);
 
     res.render(`my/comments`, {
+      user,
+      isLoggedIn,
       comments,
       pagesCount,
       activePage: pageNumber,

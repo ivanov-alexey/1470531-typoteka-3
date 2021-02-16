@@ -13,6 +13,7 @@ const logger = getLogger();
 const mainRoute = new Router();
 
 mainRoute.get(`/`, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
   const {page = 1} = req.query;
   const pageNumber = parseInt(page, 10);
   const offset = pageNumber === 1 ? 0 : (pageNumber - 1) * MAX_ARTICLES_PER_PAGE;
@@ -25,6 +26,8 @@ mainRoute.get(`/`, async (req, res) => {
     const pagesCount = Math.ceil(count / MAX_ARTICLES_PER_PAGE);
 
     res.render(`main`, {
+      user,
+      isLoggedIn,
       articles,
       categories,
       popularArticles,

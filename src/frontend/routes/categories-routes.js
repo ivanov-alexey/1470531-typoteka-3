@@ -13,10 +13,14 @@ const categoriesRoutes = new Router();
 // TODO: добавление/удаление категорий
 
 categoriesRoutes.get(`/`, privateRoute, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
+
   try {
     const categories = await CategoryService.getAll();
 
     res.render(`categories`, {
+      user,
+      isLoggedIn,
       categories,
     });
   } catch (err) {
@@ -26,15 +30,18 @@ categoriesRoutes.get(`/`, privateRoute, async (req, res) => {
 });
 
 categoriesRoutes.post(`/`, privateRoute, async (req, res) => {
-  try {
-    const {title = ``, type = ``, method = ``, categoryId = ``} = req.body;
+  const {user, isLoggedIn} = req.session;
+  const {title = ``, type = ``, method = ``, categoryId = ``} = req.body;
 
+  try {
     if (method === `ADD`) {
       const {errors} = await CategoryService.create(title);
       const categories = await CategoryService.getAll();
 
       if (errors) {
         res.render(`categories`, {
+          user,
+          isLoggedIn,
           isError: true,
           errors,
           isEdit: true,
@@ -45,6 +52,8 @@ categoriesRoutes.post(`/`, privateRoute, async (req, res) => {
       }
 
       res.render(`categories`, {
+        user,
+        isLoggedIn,
         categories,
       });
 
@@ -56,6 +65,8 @@ categoriesRoutes.post(`/`, privateRoute, async (req, res) => {
       const categories = await CategoryService.getAll();
 
       res.render(`categories`, {
+        user,
+        isLoggedIn,
         categories,
       });
     }
@@ -65,6 +76,8 @@ categoriesRoutes.post(`/`, privateRoute, async (req, res) => {
       const categories = await CategoryService.getAll();
 
       res.render(`categories`, {
+        user,
+        isLoggedIn,
         categories,
       });
     }
