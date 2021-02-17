@@ -55,11 +55,12 @@ articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, re
   const {user, isLoggedIn} = req.session;
   const newArticle = {
     announce: req.body.announce,
-    category: req.body.category,
+    categories: req.body.category,
     publicationDate: req.body.currentDate,
     fullText: req.body.fullText,
     title: req.body.title,
     picture: (req.file && req.file.filename) || ``,
+    userId: user.id
   };
 
   try {

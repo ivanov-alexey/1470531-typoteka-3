@@ -9,7 +9,8 @@ const articleSchema = Joi.object({
   picture: Joi.string().allow(null, ``).required(),
   title: Joi.string().min(TextRestriction.shortMin).max(TextRestriction.shortMax).required(),
   publicationDate: Joi.string().isoDate().required(),
-  category: Joi.array().min(1).items(Joi.string()).required(),
+  categories: Joi.array().min(1).items(Joi.string()).required(),
+  userId: Joi.number(),
 });
 
 module.exports = articleSchema;

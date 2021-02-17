@@ -10,17 +10,24 @@ const {getLogger} = require(`../../libs/logger`);
 const logger = getLogger();
 
 class ArticleService {
-  async create({announce, fullText, picture, title, publicationDate}) {
-    // TODO: добавить user_id
-    // TODO: добавить category_id
+  async create(data) {
+    const {announce, fullText, picture, title, publicationDate, categories, userId} = data;
+
     try {
-      return await Article.create({
+      const article = await Article.create({
         announce,
         picture,
         title,
         'full_text': fullText,
         'publication_date': publicationDate,
+        'user_id': userId
       });
+
+      if (categories.length) {
+        article.addCategories(categories, {through: `category_article`});
+      }
+
+      return article;
     } catch (err) {
       logger.error(err);
       throw err;
@@ -147,9 +154,9 @@ class ArticleService {
     }
   }
 
-  async update(id, {announce, fullText, picture, title}) {
+  async update(id, {announce, fullText, picture, title, categories}) {
     try {
-      await Article.update(
+      const article = await Article.update(
           {
             announce,
             fullText,
@@ -160,6 +167,10 @@ class ArticleService {
             where: {id},
           }
       );
+
+      if (categories.length) {
+        article.addCategories(categories);
+      }
 
       return await Article.findByPk(id);
     } catch (err) {

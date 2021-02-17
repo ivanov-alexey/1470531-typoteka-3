@@ -61,12 +61,13 @@ class ArticleService {
     try {
       return await apiRequest.post(`/articles/add`, {
         title: article.title || ``,
-        category:
-          typeof article.category === `string` ? [article.category] : article.category || ``,
+        categories:
+          typeof article.categories === `string` ? [article.categories] : article.categories || ``,
         picture: article.picture || ``,
         announce: article.announce || ``,
         fullText: article.fullText || ``,
         publicationDate: article.publicationDate || DateTime.local().toString(),
+        userId: article.userId || 1
       });
     } catch (error) {
       return {
