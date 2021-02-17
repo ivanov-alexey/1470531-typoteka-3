@@ -33,6 +33,18 @@ class ArticleService {
     }
   }
 
+  static async getByCategory(id) {
+    try {
+      const response = await apiRequest.get(`/articles/categories/${id}`);
+
+      return response.data;
+    } catch (err) {
+      logger.error(`Request /articles/categories/:id error: `, err.message);
+
+      return getErrorMessage(err);
+    }
+  }
+
   static async findMostDiscussed() {
     try {
       const response = await apiRequest.get(`/articles?popular=true`);

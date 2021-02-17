@@ -138,3 +138,20 @@ describe(`Offers comments API end-points`, () => {
     expect(res.statusCode).toBe(400);
   });
 });
+
+describe(`Articles categories API end-points`, () => {
+  test(`Should return status 200 and array of articles on GET request`, async () => {
+    const res = await request(server).get(`/api/articles/categories/1`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty(`length`);
+    expect(res.body.length).toBeGreaterThan(0);
+  });
+
+  test(`Should return status 404 for request of article comments with wrong article ID`, async () => {
+    const res = await request(server).get(`/api/articles/categories/wrongId`);
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toMatchObject({data: {}, message: `Id is incorrect`});
+  });
+});

@@ -100,7 +100,24 @@ module.exports = (app, articleService, commentService) => {
       res.status(HttpCode.BAD_REQUEST).send(`Bad request on DELETE /articles/:id`);
     }
   });
-  // TODO: проверить миддлварю
+
+  route.get(`/categories/:id`, idValidator, async (req, res) => {
+    try {
+      const {id} = req.params;
+      const articles = await articleService.findByCategory(id);
+
+      if (!articles) {
+        res.status(HttpCode.NOT_FOUND).send(`Not found with ${id}`);
+      }
+
+      res.status(HttpCode.OK).json(articles);
+    } catch (err) {
+      logger.error(err);
+
+      res.status(HttpCode.BAD_REQUEST).send(`Bad request on GET /categories/:id`);
+    }
+  });
+
   route.get(`/:id/comments`, [idValidator, articleExist(articleService)], async (req, res) => {
     try {
       const {id} = req.params;
@@ -113,7 +130,7 @@ module.exports = (app, articleService, commentService) => {
       res.status(HttpCode.BAD_REQUEST).send(`Bad request on GET /articles/:id/comments`);
     }
   });
-  // TODO: проверить миддлварю
+
   route.delete(
       `/:id/comments/:commentId`,
       [idValidator, articleExist(articleService)],

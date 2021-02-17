@@ -13,11 +13,25 @@ const {getLogger} = require(`../../libs/logger`);
 const logger = getLogger();
 
 const articlesRoutes = new Router();
-// TODO: добавить ссылки в шаблонах на создание статей
-// TODO: добавить шаблон
-articlesRoutes.get(`/category/:id`, (req, res) => res.render(`articles-by-category`));
 
-// TODO: поправить выбор даты при создании статьи
+articlesRoutes.get(`/category/:id`, async (req, res) => {
+  const {id} = req.params;
+
+  try {
+    const categories = await CategoryService.getAll();
+    const articles = await ArticleService.getByCategory(id);
+
+    res.render(`articles-by-category`, {
+      id: parseInt(id, 10),
+      categories: categories.filter((category) => category.count > 0),
+      articles: getFormattedTime(articles, `publicationDate`)
+    });
+  } catch (err) {
+    logger.error(err);
+    res.render(getErrorTemplate(err));
+  }
+});
+
 articlesRoutes.get(`/add`, privateRoute, async (req, res) => {
   const {user, isLoggedIn} = req.session;
 
@@ -37,7 +51,6 @@ articlesRoutes.get(`/add`, privateRoute, async (req, res) => {
   }
 });
 
-// TODO: починить загрузку файлов
 articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, res) => {
   const {user, isLoggedIn} = req.session;
   const newArticle = {
@@ -95,7 +108,6 @@ articlesRoutes.get(`/edit/:id`, privateRoute, async (req, res) => {
   }
 });
 
-// TODO: клик на категории на странице поста
 articlesRoutes.get(`/:id`, async (req, res) => {
   const {id} = req.params;
   const {user, isLoggedIn} = req.session;

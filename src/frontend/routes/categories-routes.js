@@ -10,8 +10,6 @@ const logger = getLogger();
 
 const categoriesRoutes = new Router();
 
-// TODO: добавление/удаление категорий
-
 categoriesRoutes.get(`/`, privateRoute, async (req, res) => {
   const {user, isLoggedIn} = req.session;
 
