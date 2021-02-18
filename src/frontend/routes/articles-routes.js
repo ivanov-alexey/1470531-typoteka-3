@@ -53,18 +53,19 @@ articlesRoutes.get(`/add`, privateRoute, async (req, res) => {
 
 articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, res) => {
   const {user, isLoggedIn} = req.session;
+  const {announce, categories, currentDate, fullText, title} = req.body;
   const newArticle = {
-    announce: req.body.announce,
-    categories: req.body.category,
-    publicationDate: req.body.currentDate,
-    fullText: req.body.fullText,
-    title: req.body.title,
+    announce,
+    categories,
+    publicationDate: currentDate || new Date(),
+    fullText,
+    title,
     picture: (req.file && req.file.filename) || ``,
     userId: user.id
   };
 
   try {
-    const categories = await CategoryService.getAll();
+    const allCategories = await CategoryService.getAll();
     const {errors, article} = await ArticleService.create(newArticle);
 
     if (errors) {
@@ -75,7 +76,7 @@ articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, re
         isError: true,
         errors,
         isEdit: true,
-        categories,
+        categories: allCategories,
       });
 
       return;

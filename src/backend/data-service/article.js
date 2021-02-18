@@ -24,7 +24,7 @@ class ArticleService {
       });
 
       if (categories.length) {
-        article.addCategories(categories, {through: `category_article`});
+        await article.addCategories(categories, {through: `category_article`});
       }
 
       return article;
@@ -169,7 +169,7 @@ class ArticleService {
       );
 
       if (categories.length) {
-        article.addCategories(categories);
+        await article.addCategories(categories);
       }
 
       return await Article.findByPk(id);
