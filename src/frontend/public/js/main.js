@@ -327,3 +327,11 @@ if (textarea) {
     autosize(element);
   });
 }
+
+const goBackButton = document.querySelector('#goBackButton');
+
+if (goBackButton) {
+  goBackButton.addEventListener('click', () => {
+    history.back();
+  })
+}
