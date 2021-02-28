@@ -71,7 +71,7 @@ describe(`Users API end-points`, () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBeUndefined();
-    expect(res.body).toBe(true);
+    expect(res.body).not.toBeNull();
   });
 
   test(`Should return status 400 for login with wrong email`, async () => {

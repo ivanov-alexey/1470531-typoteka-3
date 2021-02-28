@@ -49,10 +49,10 @@ describe(`Offers API end-points`, () => {
     expect(res.body).toEqual({});
   });
 
-  test(`Should return status 201 for create article request`, async () => {
+  test(`Should return status 400 for create article request for not logged in user`, async () => {
     const res = await request(server).post(`/api/articles/add`).send(articleStub);
 
-    expect(res.statusCode).toBe(201);
+    expect(res.statusCode).toBe(400);
   });
 
   test(`Should return status 400 for create article bad request`, async () => {
@@ -73,7 +73,7 @@ describe(`Offers API end-points`, () => {
     expect(res.statusCode).toBe(404);
   });
 
-  test(`Should return status 200 for put request`, async () => {
+  test(`Should return status 400 for put request for not logged in user`, async () => {
     const res = await request(server)
       .put(`/api/articles/2`)
       .send({
@@ -85,7 +85,7 @@ describe(`Offers API end-points`, () => {
         'picture': ``,
       });
 
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(400);
   });
 
   test(`Should return status 400 for put request with wrong data`, async () => {
@@ -145,7 +145,6 @@ describe(`Articles categories API end-points`, () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty(`length`);
-    expect(res.body.length).toBeGreaterThan(0);
   });
 
   test(`Should return status 404 for request of article comments with wrong article ID`, async () => {
