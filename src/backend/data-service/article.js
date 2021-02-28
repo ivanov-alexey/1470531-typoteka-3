@@ -95,11 +95,14 @@ class ArticleService {
                INNER JOIN comments AS com ON a.id = com.article_id
                INNER JOIN category_article ca2 on a.id = ca2.article_id
                INNER JOIN categories c2 on c2.id = ca2.category_id
-        WHERE c2.id = ${id}
+        WHERE c2.id = ?
         GROUP BY a.id, u.firstname, u.lastname, u, email;
       `;
       const type = sequelize.QueryTypes.SELECT;
-      const articles = await sequelize.query(sql, {type});
+      const articles = await sequelize.query(sql, {
+        type,
+        replacements: [id]
+      });
 
       return articles.map((article) => ({
         ...article,

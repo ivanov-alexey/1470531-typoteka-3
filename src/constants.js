@@ -113,6 +113,11 @@ const TextRestriction = {
   linkMax: 250,
 };
 
+const userRole = {
+  admin: `admin`,
+  reader: `reader`,
+};
+
 module.exports = {
   ADMIN_ID,
   API_PREFIX,
@@ -148,4 +153,5 @@ module.exports = {
   postsAmount,
   PASSWORD_SALT_ROUNDS,
   USER_ARGV_INDEX,
+  userRole
 };

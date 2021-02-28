@@ -1,6 +1,7 @@
 'use strict';
 
 const bcrypt = require(`bcrypt`);
+const {userRole} = require(`../../constants`);
 const {PASSWORD_SALT_ROUNDS} = require(`../../constants`);
 const {
   db: {User},
@@ -21,7 +22,7 @@ class UserService {
         firstname,
         lastname,
         password: hash,
-        role: usersCount ? `reader` : `admin`,
+        role: usersCount ? userRole.reader : userRole.admin,
       });
     } catch (err) {
       logger.error(err);

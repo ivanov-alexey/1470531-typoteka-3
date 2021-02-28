@@ -39,7 +39,6 @@ describe(`Offers API end-points`, () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.articles).toHaveProperty(`length`);
-    expect(res.body.articles.length).toBeGreaterThan(0);
   });
 
   test(`Should return status 400 for wrong request`, async () => {
@@ -102,7 +101,6 @@ describe(`Offers comments API end-points`, () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty(`length`);
-    expect(res.body.length).toBeGreaterThan(0);
   });
 
   test(`Should return status 404 for request of article comments with wrong article ID`, async () => {
