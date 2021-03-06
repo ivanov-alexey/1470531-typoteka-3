@@ -24,7 +24,8 @@ articlesRoutes.get(`/category/:id`, async (req, res) => {
     res.render(`articles-by-category`, {
       id: parseInt(id, 10),
       categories: categories.filter((category) => category.count > 0),
-      articles: getFormattedTime(articles, `publicationDate`)
+      articles: getFormattedTime(articles, `publicationDate`),
+      title: categories.find((category) => category.id === parseInt(id, 10)).title
     });
   } catch (err) {
     logger.error(err);
