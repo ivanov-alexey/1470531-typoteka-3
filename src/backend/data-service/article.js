@@ -18,9 +18,9 @@ class ArticleService {
         announce,
         picture,
         title,
-        'full_text': fullText,
-        'publication_date': publicationDate,
-        'user_id': userId
+        fullText,
+        publicationDate,
+        userId
       });
 
       if (categories.length) {
@@ -41,10 +41,10 @@ class ArticleService {
         attributes: [
           `id`,
           `announce`,
-          [`full_text`, `fullText`],
+          `fullText`,
           `picture`,
           `title`,
-          [`publication_date`, `publicationDate`],
+          `publicationDate`,
         ],
         include: [
           {
@@ -58,7 +58,7 @@ class ArticleService {
             attributes: [`id`, `text`, `createdAt`],
           },
         ],
-        order: [[`publication_date`, `DESC`]],
+        order: [[`publicationDate`, `DESC`]],
         offset,
         limit,
       });
@@ -145,10 +145,10 @@ class ArticleService {
         attributes: [
           `id`,
           `announce`,
-          [`full_text`, `fullText`],
+          `fullText`,
           `picture`,
           `title`,
-          [`publication_date`, `publicationDate`],
+          `publicationDate`,
         ],
       });
     } catch (err) {

@@ -98,7 +98,7 @@ module.exports = {
 
     try {
       await fs.writeFile(FILE_NAME, content);
-      logger.success(Message.fileCreationSuccess);
+      logger.info(Message.fileCreationSuccess);
 
       return ExitCode.success;
     } catch (err) {

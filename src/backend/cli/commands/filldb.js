@@ -95,12 +95,12 @@ const getArticles = (amount, sentences, titles, numberOfUsers) =>
     .fill({})
     .map(() => ({
       'announce': shuffle(sentences).slice(0, 5).join(` `),
-      'full_text': shuffle(sentences)
+      'fullText': shuffle(sentences)
         .slice(0, getRandomInt(1, sentences.length - 1))
         .join(` `),
       'picture': null,
       'title': titles[getRandomInt(0, titles.length - 1)],
-      'publication_date': getDate(),
+      'publicationDate': getDate(),
       'user_id': getRandomInt(1, numberOfUsers),
     }));
 
@@ -126,6 +126,9 @@ const run = async (count) => {
     const comments = getComments(numberOfComments, commentsData, numberOfArticles, numberOfUsers);
 
     await initDb();
+
+    console.log(`articles: `, articles);
+
 
     await User.bulkCreate(users);
     await Article.bulkCreate(articles);
