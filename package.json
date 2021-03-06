@@ -4,16 +4,16 @@
   "description": "Типотека",
   "main": "src/backend/service.js",
   "scripts": {
-    "start": "concurrently --kill-others-on-fail -n \"FRONTEND,BACKEND\" -c \"cyan,magenta\" \"npm:server\" \"npm:server-front\"",
-    "test": "NODE_ENV=test npm run eslint & npm run test::rest",
-    "test::rest": "NODE_ENV=test jest --runInBand --config jest.config.js",
+    "start": "concurrently --kill-others-on-fail -n \"BACKEND,FRONTEND\" -c \"cyan,magenta\" \"npm:server\" \"npm:server-front\"",
+    "test": "cross-env NODE_ENV=test npm run eslint & npm run test::rest",
+    "test::rest": "cross-env NODE_ENV=test jest --runInBand --config jest.config.js",
     "eslint": "eslint --ext .js src/",
     "eslint:fix": "eslint --fix src/",
-    "generate": "node src/backend/service.js --generate 10",
-    "filldb": "node src/backend/service.js --filldb 20",
-    "server": "LOG_LEVEL=error nodemon src/backend/service.js --server 3000",
-    "server::debug": "LOG_LEVEL=debug nodemon src/backend/service.js --server 3000",
-    "server-front": "nodemon src/frontend/index.js"
+    "generate": "cross-env node src/backend/service.js --generate 10",
+    "filldb": "cross-env node src/backend/service.js --filldb 20",
+    "server": "cross-env LOG_LEVEL=error nodemon src/backend/service.js --server 3000",
+    "server::debug": "cross-env LOG_LEVEL=debug nodemon src/backend/service.js --server 3000",
+    "server-front": "cross-env nodemon src/frontend/index.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/ivanov-alexey/1470531-typoteka-3#readme",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "6.8.0",
     "eslint-config-htmlacademy": "0.6.0",
     "jest": "26.1.0",
