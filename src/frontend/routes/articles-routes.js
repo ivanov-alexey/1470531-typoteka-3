@@ -16,12 +16,15 @@ const articlesRoutes = new Router();
 
 articlesRoutes.get(`/category/:id`, async (req, res) => {
   const {id} = req.params;
+  const {user, isLoggedIn} = req.session;
 
   try {
     const categories = await CategoryService.getAll();
     const articles = await ArticleService.getByCategory(id);
 
     res.render(`articles-by-category`, {
+      user,
+      isLoggedIn,
       id: parseInt(id, 10),
       categories: categories.filter((category) => category.count > 0),
       articles: getFormattedTime(articles, `publicationDate`),
