@@ -37,7 +37,7 @@ myRoutes.get(`/`, privateRoute, async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
@@ -93,7 +93,7 @@ myRoutes.get(`/comments`, privateRoute, async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
@@ -106,7 +106,7 @@ myRoutes.post(`/comments`, privateRoute, async (req, res) => {
     res.redirect(`/my/comments`);
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 

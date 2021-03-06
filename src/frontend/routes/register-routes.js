@@ -40,7 +40,7 @@ registerRoutes.post(`/`, alreadyLoggedIn, upload.single(`avatar`), async (req, r
     res.redirect(`/login`);
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 

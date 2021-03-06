@@ -23,7 +23,7 @@ categoriesRoutes.get(`/`, privateRoute, async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
@@ -81,7 +81,7 @@ categoriesRoutes.post(`/`, privateRoute, async (req, res) => {
     }
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 

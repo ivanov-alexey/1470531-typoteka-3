@@ -14,6 +14,7 @@ const categoriesRoutes = require(`./routes/categories-routes`);
 const myRoutes = require(`./routes/my-routes`);
 const articlesRoutes = require(`./routes/articles-routes`);
 const logoutRoutes = require(`./routes/logout-routes`);
+const errorsRoutes = require(`./routes/errors-routes`);
 const {getLogger} = require(`../libs/logger`);
 const {sessionStore} = require(`../configs/db-config`);
 const {secret} = require(`../configs/env-config`);
@@ -50,6 +51,7 @@ app.use(`/search`, searchRoutes);
 app.use(`/categories`, categoriesRoutes);
 app.use(`/my`, myRoutes);
 app.use(`/articles`, articlesRoutes);
+app.use(`/errors`, errorsRoutes);
 
 app.listen(DEFAULT_FRONT_PORT, (err) => {
   if (err) {

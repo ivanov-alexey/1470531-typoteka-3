@@ -35,7 +35,7 @@ searchRoutes.get(`/`, async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 

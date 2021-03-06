@@ -37,7 +37,7 @@ loginRoutes.post(`/`, alreadyLoggedIn, async (req, res) => {
     res.redirect(`/my`);
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 

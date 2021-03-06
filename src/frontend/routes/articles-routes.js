@@ -32,7 +32,7 @@ articlesRoutes.get(`/category/:id`, async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
@@ -51,7 +51,7 @@ articlesRoutes.get(`/add`, privateRoute, async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
@@ -89,7 +89,7 @@ articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, re
     res.redirect(`/my`);
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
@@ -110,7 +110,7 @@ articlesRoutes.get(`/edit/:id`, privateRoute, async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
@@ -133,7 +133,7 @@ articlesRoutes.get(`/:id`, async (req, res) => {
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
@@ -167,7 +167,7 @@ articlesRoutes.post(`/:id/comments`, async (req, res) => {
     res.redirect(`/articles/${id}`);
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
