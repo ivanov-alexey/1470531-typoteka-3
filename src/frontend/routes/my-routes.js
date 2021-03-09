@@ -67,7 +67,7 @@ myRoutes.post(`/`, privateRoute, async (req, res) => {
       });
     }
   } catch (err) {
-    console.error(err);
+    logger.error(err);
   }
 });
 

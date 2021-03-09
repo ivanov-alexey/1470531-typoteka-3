@@ -127,9 +127,6 @@ const run = async (count) => {
 
     await initDb();
 
-    console.log(`articles: `, articles);
-
-
     await User.bulkCreate(users);
     await Article.bulkCreate(articles);
     await Comment.bulkCreate(comments);
