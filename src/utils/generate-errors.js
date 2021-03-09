@@ -1,6 +1,6 @@
 'use strict';
 
-const {TextRestriction} = require('../constants');
+const {TextRestriction} = require(`../constants`);
 
 module.exports.generateErrors = (article) => {
   const errors = [];

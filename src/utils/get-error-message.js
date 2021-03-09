@@ -1,6 +1,6 @@
 'use strict';
 
-const {HttpCode, Message} = require('../constants');
+const {HttpCode, Message} = require(`../constants`);
 
 module.exports.getErrorMessage = (error) => {
   if (error.response && error.response.status !== HttpCode.NOT_FOUND) {

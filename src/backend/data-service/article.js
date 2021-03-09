@@ -1,26 +1,33 @@
 'use strict';
 
-const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
-const {sequelize} = require('../../configs/db-config');
+const {MAX_ARTICLES_PER_PAGE} = require(`../../constants`);
+const {sequelize} = require(`../../configs/db-config`);
 const {
   db: {Article, Category, Comment},
-} = require('../../configs/db-config');
-const {getLogger} = require('../../libs/logger');
+} = require(`../../configs/db-config`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
 class ArticleService {
-  async create({announce, fullText, picture, title, publicationDate}) {
-    // TODO: добавить user_id
-    // TODO: добавить category_id
+  async create(data) {
+    const {announce, fullText, picture, title, publicationDate, categories, userId} = data;
+
     try {
-      return await Article.create({
+      const article = await Article.create({
         announce,
         picture,
         title,
-        'full_text': fullText,
-        'publication_date': publicationDate,
+        fullText,
+        publicationDate,
+        userId
       });
+
+      if (categories.length) {
+        await article.addCategories(categories, {through: `category_article`});
+      }
+
+      return article;
     } catch (err) {
       logger.error(err);
       throw err;
@@ -34,10 +41,10 @@ class ArticleService {
         attributes: [
           `id`,
           `announce`,
-          [`full_text`, `fullText`],
+          `fullText`,
           `picture`,
           `title`,
-          [`publication_date`, 'publicationDate'],
+          `publicationDate`,
         ],
         include: [
           {
@@ -51,7 +58,7 @@ class ArticleService {
             attributes: [`id`, `text`, `createdAt`],
           },
         ],
-        order: [[`publication_date`, `DESC`]],
+        order: [[`publicationDate`, `DESC`]],
         offset,
         limit,
       });
@@ -60,6 +67,47 @@ class ArticleService {
         count,
         articles,
       };
+    } catch (err) {
+      logger.error(err);
+      throw err;
+    }
+  }
+
+  async findByCategory(id) {
+    try {
+      const sql = `
+        SELECT a.id,
+               a.title,
+               a.announce,
+               a.publication_date    AS "publicationDate",
+               a.picture,
+               count(com.article_id) AS "commentsCount",
+               (
+                 SELECT string_agg(c.title, ', ') AS "categories_title"
+                 FROM category_article AS ca
+                        LEFT JOIN categories AS c ON ca.category_id = c.id
+                   AND ca.article_id = a.id
+               )
+        FROM articles AS a
+               INNER JOIN users AS u
+
+                          ON a.user_id = u.id
+               INNER JOIN comments AS com ON a.id = com.article_id
+               INNER JOIN category_article ca2 on a.id = ca2.article_id
+               INNER JOIN categories c2 on c2.id = ca2.category_id
+        WHERE c2.id = ?
+        GROUP BY a.id, u.firstname, u.lastname, u, email;
+      `;
+      const type = sequelize.QueryTypes.SELECT;
+      const articles = await sequelize.query(sql, {
+        type,
+        replacements: [id]
+      });
+
+      return articles.map((article) => ({
+        ...article,
+        categories: article[`categories_title`].split(`, `)
+      }));
     } catch (err) {
       logger.error(err);
       throw err;
@@ -97,10 +145,10 @@ class ArticleService {
         attributes: [
           `id`,
           `announce`,
-          [`full_text`, `fullText`],
+          `fullText`,
           `picture`,
           `title`,
-          [`publication_date`, 'publicationDate'],
+          `publicationDate`,
         ],
       });
     } catch (err) {
@@ -109,19 +157,23 @@ class ArticleService {
     }
   }
 
-  async update(id, {announce, fullText, picture, title}) {
+  async update(id, {announce, fullText, picture, title, categories}) {
     try {
-      await Article.update(
-        {
-          announce,
-          fullText,
-          title,
-          picture,
-        },
-        {
-          where: {id},
-        }
+      const article = await Article.update(
+          {
+            announce,
+            fullText,
+            title,
+            picture,
+          },
+          {
+            where: {id},
+          }
       );
+
+      if (categories.length) {
+        await article.addCategories(categories);
+      }
 
       return await Article.findByPk(id);
     } catch (err) {

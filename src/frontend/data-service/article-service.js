@@ -1,10 +1,10 @@
 'use strict';
 
-const {DateTime} = require('luxon');
-const {getErrorMessage} = require('../../utils/get-error-message');
-const apiRequest = require('./api-request');
-const {MAX_ARTICLES_PER_PAGE} = require('../../constants');
-const {getLogger} = require('../../libs/logger');
+const {DateTime} = require(`luxon`);
+const {getErrorMessage} = require(`../../utils/get-error-message`);
+const apiRequest = require(`./api-request`);
+const {MAX_ARTICLES_PER_PAGE} = require(`../../constants`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -33,6 +33,18 @@ class ArticleService {
     }
   }
 
+  static async getByCategory(id) {
+    try {
+      const response = await apiRequest.get(`/articles/categories/${id}`);
+
+      return response.data;
+    } catch (err) {
+      logger.error(`Request /articles/categories/:id error: `, err.message);
+
+      return getErrorMessage(err);
+    }
+  }
+
   static async findMostDiscussed() {
     try {
       const response = await apiRequest.get(`/articles?popular=true`);
@@ -48,13 +60,14 @@ class ArticleService {
   static async create(article) {
     try {
       return await apiRequest.post(`/articles/add`, {
-        title: article.title || '',
-        category:
-          typeof article.category === `string` ? [article.category] : article.category || ``,
-        picture: article.picture || '',
-        announce: article.announce || '',
-        fullText: article.fullText || '',
+        title: article.title || ``,
+        categories:
+          typeof article.categories === `string` ? [article.categories] : article.categories || ``,
+        picture: article.picture || ``,
+        announce: article.announce || ``,
+        fullText: article.fullText || ``,
         publicationDate: article.publicationDate || DateTime.local().toString(),
+        userId: article.userId || 1
       });
     } catch (error) {
       return {

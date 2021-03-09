@@ -1,10 +1,10 @@
 'use strict';
 
-const {Op} = require('sequelize');
+const {Op} = require(`sequelize`);
 const {
   db: {Article},
-} = require('../../configs/db-config');
-const {getLogger} = require('../../libs/logger');
+} = require(`../../configs/db-config`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 

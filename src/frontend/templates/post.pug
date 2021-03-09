@@ -8,13 +8,13 @@ block content
         h2.visually-hidden Основное содержание
         .post__wrapper
           .post__head
-            a.post__backwards.button.button--backwards(href='#') Назад
+            a.post__backwards.button.button--backwards(href='#', id='goBackButton') Назад
             time.post__date(datetime= article.createdDateTime)= article.createdDate
             h2.post__title.title.title--main= article.title
             ul.post__themes.themes
               each category in categories
                 li.themes__item
-                  a.themes__item-link(href='#')= category.title
+                  a.themes__item-link(href='/articles/category/' + category.id)= category.title
                     sup= category.count
                   button.themes__remove-btn(type='button') Удалить категорию
           if article.picture
@@ -37,18 +37,29 @@ block content
                     time.comments__date(datetime= comment.createdAt)= comment.createdAt
                   p.comments__message= comment.text
           .comments__footer.comments__footer--user
-            form(action='/articles/' + article.id + '/comments', method='POST')
-              .comments__avatar.avatar
-                img(src='/img/avatar-2.png', alt='аватар пользователя')
-              label
-                textarea(rows='1', placeholder='Присоединиться к обсуждению' name='text' minlength='20')= currentComment
-              button.comments__button.button.button--colored(type='submit') Опубликовать
-              if isError && errors.length
-                div.show-errors
-                  p При создании комментария возникли ошибки:
-                  ul.show-errors-list
-                    each error in errors
-                      li= error
+            if isLoggedIn
+              form(action='/articles/' + article.id + '/comments', method='POST')
+                .comments__avatar.avatar
+                  img(src='/img/' + user.avatar, alt='аватар пользователя')
+                label
+                  textarea(rows='1', placeholder='Присоединиться к обсуждению' name='text' minlength='20')= currentComment
+                button.comments__button.button.button--colored(type='submit') Опубликовать
+                if isError && errors.length
+                  div.show-errors
+                    p При создании комментария возникли ошибки:
+                    ul.show-errors-list
+                      each error in errors
+                        li= error
+            else
+              .comments__footer.comments__footer--visitor
+                a.comments__button.button.button--colored(href="/login") Войти
+                .comments__registration
+                  p.text.text--signature
+                    b.title.title--small Регистрация
+                    | Чтобы присоединиться к
+                    |                   переписке
+                    |                   нужно зарегистрироваться
+
 
 block scripts
   script(src='/js/main.js')

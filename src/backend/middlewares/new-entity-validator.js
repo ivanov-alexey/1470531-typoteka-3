@@ -1,6 +1,6 @@
 'use strict';
 
-const {HttpCode} = require('../../constants');
+const {HttpCode} = require(`../../constants`);
 
 const newEntityValidator = (schema) => async (req, res, next) => {
   const {body} = req;

@@ -50,6 +50,8 @@ const TimeConfig = {
 
 const USER_ARGV_INDEX = 2;
 
+const ADMIN_ID = 1;
+
 const DEFAULT_COMMAND = `--help`;
 
 const ExitCode = {
@@ -111,7 +113,13 @@ const TextRestriction = {
   linkMax: 250,
 };
 
+const userRole = {
+  admin: `admin`,
+  reader: `reader`,
+};
+
 module.exports = {
+  ADMIN_ID,
   API_PREFIX,
   API_URL,
   avatarSettings,
@@ -145,4 +153,5 @@ module.exports = {
   postsAmount,
   PASSWORD_SALT_ROUNDS,
   USER_ARGV_INDEX,
+  userRole
 };

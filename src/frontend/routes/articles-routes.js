@@ -1,58 +1,86 @@
 'use strict';
 
-const {Router} = require('express');
-const ArticleService = require('../data-service/article-service');
-const CategoryService = require('../data-service/category-service');
-const CommentService = require('../data-service/comment-service');
-const upload = require('../../configs/upload-folder');
-const {getErrorTemplate} = require('../../utils/get-error-template');
-const {getLogger} = require('../../libs/logger');
+const {Router} = require(`express`);
+const ArticleService = require(`../data-service/article-service`);
+const CategoryService = require(`../data-service/category-service`);
+const CommentService = require(`../data-service/comment-service`);
+const upload = require(`../../configs/upload-folder`);
+const {getFormattedTime} = require(`../../utils/get-formatted-time`);
+const {privateRoute} = require(`../../backend/middlewares/privateRoute`);
+const {getErrorTemplate} = require(`../../utils/get-error-template`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
 const articlesRoutes = new Router();
-// TODO: добавить ссылки в шаблонах на создание статей
-// TODO: добавить шаблон
-articlesRoutes.get(`/category/:id`, (req, res) => res.render(`articles-by-category`));
 
-// TODO: поправить выбор даты при создании статьи
-articlesRoutes.get(`/add`, async (req, res) => {
+articlesRoutes.get(`/category/:id`, async (req, res) => {
+  const {id} = req.params;
+  const {user, isLoggedIn} = req.session;
+
+  try {
+    const categories = await CategoryService.getAll();
+    const articles = await ArticleService.getByCategory(id);
+
+    res.render(`articles-by-category`, {
+      user,
+      isLoggedIn,
+      id: parseInt(id, 10),
+      categories: categories.filter((category) => category.count > 0),
+      articles: getFormattedTime(articles, `publicationDate`),
+      title: categories.find((category) => category.id === parseInt(id, 10)).title
+    });
+  } catch (err) {
+    logger.error(err);
+    res.redirect(getErrorTemplate(err));
+  }
+});
+
+articlesRoutes.get(`/add`, privateRoute, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
+
   try {
     const categories = await CategoryService.getAll();
 
     res.render(`my/new-post`, {
+      user,
+      isLoggedIn,
       isEdit: false,
       isError: false,
       categories,
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
-// TODO: починить загрузку файлов
-articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
+articlesRoutes.post(`/add`, privateRoute, upload.single(`image`), async (req, res) => {
+  const {user, isLoggedIn} = req.session;
+  const {announce, categories, currentDate, fullText, title} = req.body;
   const newArticle = {
-    announce: req.body.announce,
-    category: req.body.category,
-    publicationDate: req.body.currentDate,
-    fullText: req.body.fullText,
-    title: req.body.title,
+    announce,
+    categories,
+    publicationDate: currentDate || new Date(),
+    fullText,
+    title,
     picture: (req.file && req.file.filename) || ``,
+    userId: user.id
   };
 
   try {
-    const categories = await CategoryService.getAll();
+    const allCategories = await CategoryService.getAll();
     const {errors, article} = await ArticleService.create(newArticle);
 
     if (errors) {
       res.render(`my/new-post`, {
+        user,
+        isLoggedIn,
         article,
         isError: true,
         errors,
         isEdit: true,
-        categories,
+        categories: allCategories,
       });
 
       return;
@@ -61,31 +89,36 @@ articlesRoutes.post(`/add`, upload.single(`image`), async (req, res) => {
     res.redirect(`/my`);
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
-articlesRoutes.get(`/edit/:id`, async (req, res) => {
+articlesRoutes.get(`/edit/:id`, privateRoute, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
+  const {id} = req.params;
+
   try {
-    const {id} = req.params;
     const article = await ArticleService.getOne(id);
     const categories = await CategoryService.getAll();
 
     res.render(`my/new-post`, {
+      user,
+      isLoggedIn,
       article,
       categories,
       isEdit: true,
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
 articlesRoutes.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  const {user, isLoggedIn} = req.session;
+
   try {
-    const {id} = req.params;
-    const {user, isLoggedIn} = req.session;
     const article = await ArticleService.getOne(id);
     const categories = await CategoryService.getAll();
     const comments = await CommentService.getByArticleId(id);
@@ -95,21 +128,22 @@ articlesRoutes.get(`/:id`, async (req, res) => {
       user,
       article,
       categories,
-      comments,
-      currentComment: '',
+      comments: getFormattedTime(comments, `createdAt`),
+      currentComment: ``,
     });
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 
-// TODO: еще нужен ID пользователя
 articlesRoutes.post(`/:id/comments`, async (req, res) => {
+  const {user, isLoggedIn} = req.session;
+  const {id} = req.params;
+  const {text} = req.body;
+
   try {
-    const {id} = req.params;
-    const {text} = req.body;
-    const {errors, comment} = await CommentService.create(id, text);
+    const {errors, comment} = await CommentService.create(id, user.id, text);
 
     if (errors) {
       const article = await ArticleService.getOne(id);
@@ -117,9 +151,11 @@ articlesRoutes.post(`/:id/comments`, async (req, res) => {
       const comments = await CommentService.getByArticleId(id);
 
       res.render(`post`, {
+        user,
+        isLoggedIn,
         article,
         categories,
-        comments,
+        comments: getFormattedTime(comments, `createdAt`),
         isError: true,
         errors,
         currentComment: comment.text,
@@ -131,7 +167,7 @@ articlesRoutes.post(`/:id/comments`, async (req, res) => {
     res.redirect(`/articles/${id}`);
   } catch (err) {
     logger.error(err);
-    res.render(getErrorTemplate(err));
+    res.redirect(getErrorTemplate(err));
   }
 });
 

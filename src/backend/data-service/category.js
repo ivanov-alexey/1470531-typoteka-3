@@ -3,8 +3,8 @@
 const {
   sequelize,
   db: {Category},
-} = require('../../configs/db-config');
-const {getLogger} = require('../../libs/logger');
+} = require(`../../configs/db-config`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
@@ -51,12 +51,12 @@ class CategoryService {
   async update(id, title) {
     try {
       await Category.update(
-        {
-          title,
-        },
-        {
-          where: {id},
-        }
+          {
+            title,
+          },
+          {
+            where: {id},
+          }
       );
 
       return await Category.findByPk(id);

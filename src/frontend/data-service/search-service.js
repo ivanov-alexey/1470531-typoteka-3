@@ -1,8 +1,8 @@
 'use strict';
 
-const {getErrorMessage} = require('../../utils/get-error-message');
-const apiRequest = require('./api-request');
-const {getLogger} = require('../../libs/logger');
+const {getErrorMessage} = require(`../../utils/get-error-message`);
+const apiRequest = require(`./api-request`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 

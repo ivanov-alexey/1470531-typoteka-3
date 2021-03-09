@@ -1,10 +1,10 @@
 'use strict';
-const {DateTime} = require('luxon');
+const {DateTime} = require(`luxon`);
 
-const request = require('supertest');
-const fillDb = require('../../cli/commands/filldb');
-const {createApp} = require('../../cli/commands/server');
-const {connectToDb, closeDbConnection} = require('../../../configs/db-config');
+const request = require(`supertest`);
+const fillDb = require(`../../cli/commands/filldb`);
+const {createApp} = require(`../../cli/commands/server`);
+const {connectToDb, closeDbConnection} = require(`../../../configs/db-config`);
 
 let server;
 const articleStub = {
@@ -13,7 +13,7 @@ const articleStub = {
   'announce': `Am finished rejoiced drawings so he elegance. Set lose dear upon had two its what seen.`,
   'fullText': `Another journey chamber way yet females man. Way extensive and dejection get delivered deficient sincerity gentleman age.`,
   'category': [`category`],
-  'picture': '',
+  'picture': ``,
 };
 
 beforeAll(async () => {
@@ -39,7 +39,6 @@ describe(`Offers API end-points`, () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.articles).toHaveProperty(`length`);
-    expect(res.body.articles.length).toBeGreaterThan(0);
   });
 
   test(`Should return status 400 for wrong request`, async () => {
@@ -49,10 +48,10 @@ describe(`Offers API end-points`, () => {
     expect(res.body).toEqual({});
   });
 
-  test(`Should return status 201 for create article request`, async () => {
+  test(`Should return status 400 for create article request for not logged in user`, async () => {
     const res = await request(server).post(`/api/articles/add`).send(articleStub);
 
-    expect(res.statusCode).toBe(201);
+    expect(res.statusCode).toBe(400);
   });
 
   test(`Should return status 400 for create article bad request`, async () => {
@@ -73,7 +72,7 @@ describe(`Offers API end-points`, () => {
     expect(res.statusCode).toBe(404);
   });
 
-  test(`Should return status 200 for put request`, async () => {
+  test(`Should return status 400 for put request for not logged in user`, async () => {
     const res = await request(server)
       .put(`/api/articles/2`)
       .send({
@@ -82,10 +81,10 @@ describe(`Offers API end-points`, () => {
         'announce': `Set lose dear upon had two its what seen. Am finished rejoiced drawings so he elegance. `,
         'fullText': `Way extensive and dejection get delivered deficient sincerity gentleman age. Another journey chamber way yet females man. `,
         'category': [`category`],
-        'picture': '',
+        'picture': ``,
       });
 
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(400);
   });
 
   test(`Should return status 400 for put request with wrong data`, async () => {
@@ -102,14 +101,13 @@ describe(`Offers comments API end-points`, () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty(`length`);
-    expect(res.body.length).toBeGreaterThan(0);
   });
 
   test(`Should return status 404 for request of article comments with wrong article ID`, async () => {
     const res = await request(server).get(`/api/articles/wrongId/comments`);
 
     expect(res.statusCode).toBe(404);
-    expect(res.body).toMatchObject({data: {}, message: 'Id is incorrect'});
+    expect(res.body).toMatchObject({data: {}, message: `Id is incorrect`});
   });
 
   test(`Should return status 200 for delete comment request`, async () => {
@@ -136,5 +134,21 @@ describe(`Offers comments API end-points`, () => {
     const res = await request(server).post(`/api/articles/2/comments/add`).send({});
 
     expect(res.statusCode).toBe(400);
+  });
+});
+
+describe(`Articles categories API end-points`, () => {
+  test(`Should return status 200 and array of articles on GET request`, async () => {
+    const res = await request(server).get(`/api/articles/categories/1`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty(`length`);
+  });
+
+  test(`Should return status 404 for request of article comments with wrong article ID`, async () => {
+    const res = await request(server).get(`/api/articles/categories/wrongId`);
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toMatchObject({data: {}, message: `Id is incorrect`});
   });
 });

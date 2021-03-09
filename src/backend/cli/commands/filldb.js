@@ -1,9 +1,9 @@
 'use strict';
 
-const bcrypt = require('bcrypt');
-const {userPassword} = require('../../../configs/env-config');
-const {PASSWORD_SALT_ROUNDS} = require('../../../constants');
-const fs = require('fs').promises;
+const bcrypt = require(`bcrypt`);
+const {userPassword} = require(`../../../configs/env-config`);
+const {PASSWORD_SALT_ROUNDS} = require(`../../../constants`);
+const fs = require(`fs`).promises;
 const {
   FILE_SENTENCES_PATH,
   FILE_TITLES_PATH,
@@ -18,18 +18,18 @@ const {
   MAX_USERS,
   Message,
   ExitCode,
-} = require('../../../constants');
-const {getDate} = require('../../../utils/get-date');
-const {shuffle} = require('../../../utils/shuffle');
-const {getRandomInt} = require('../../../utils/get-random-int');
+} = require(`../../../constants`);
+const {getDate} = require(`../../../utils/get-date`);
+const {shuffle} = require(`../../../utils/shuffle`);
+const {getRandomInt} = require(`../../../utils/get-random-int`);
 const {
   initDb,
   sequelize,
   db: {Article, Category, Comment, User},
-} = require('../../../configs/db-config');
-const {getLogger} = require('../../../libs/logger');
+} = require(`../../../configs/db-config`);
+const {getLogger} = require(`../../../libs/logger`);
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || `development`;
 
 const logger = getLogger();
 
@@ -57,7 +57,7 @@ const normalizeCount = (count) => {
 
 const getCategories = (amount, data) => [
   ...new Set(
-    Array(amount)
+      Array(amount)
       .fill({})
       .map(() => ({
         title: data[getRandomInt(0, data.length - 1)],
@@ -77,7 +77,7 @@ const getUsers = (amount, firstNames, lastNames, hash) =>
         'firstname': firstNames[getRandomInt(0, firstNames.length - 1)],
         'lastname': lastNames[getRandomInt(0, lastNames.length - 1)],
         'password': hash,
-        'role': id === 1 ? 'admin' : 'reader',
+        'role': id === 1 ? `admin` : `reader`,
       };
     });
 
@@ -95,16 +95,15 @@ const getArticles = (amount, sentences, titles, numberOfUsers) =>
     .fill({})
     .map(() => ({
       'announce': shuffle(sentences).slice(0, 5).join(` `),
-      'full_text': shuffle(sentences)
+      'fullText': shuffle(sentences)
         .slice(0, getRandomInt(1, sentences.length - 1))
         .join(` `),
       'picture': null,
       'title': titles[getRandomInt(0, titles.length - 1)],
-      'publication_date': getDate(),
+      'publicationDate': getDate(),
       'user_id': getRandomInt(1, numberOfUsers),
     }));
 
-// TODO: проверить на бОльшем количестве (40)
 const run = async (count) => {
   try {
     const numberOfCategories = getRandomInt(MIN_CATEGORIES, MAX_CATEGORIES);
@@ -142,7 +141,7 @@ const run = async (count) => {
       await article.addCategory(randomCategory);
     }
 
-    if (env === 'development') {
+    if (env === `development`) {
       await sequelize.close();
     }
 

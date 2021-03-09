@@ -1,15 +1,15 @@
 'use strict';
 
-const {getErrorMessage} = require('../../utils/get-error-message');
-const apiRequest = require('./api-request');
-const {getLogger} = require('../../libs/logger');
+const {getErrorMessage} = require(`../../utils/get-error-message`);
+const apiRequest = require(`./api-request`);
+const {getLogger} = require(`../../libs/logger`);
 
 const logger = getLogger();
 
 class CommentService {
-  static async create(articleId, text) {
+  static async create(articleId, userId, text) {
     try {
-      const response = await apiRequest.post(`/articles/${articleId}/comments/add`, {text});
+      const response = await apiRequest.post(`/articles/${articleId}/comments/add`, {userId, text});
 
       return response.data;
     } catch (error) {

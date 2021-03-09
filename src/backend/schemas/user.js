@@ -1,7 +1,7 @@
 'use strict';
 
-const Joi = require('joi');
-const {TextRestriction} = require('../../constants');
+const Joi = require(`joi`);
+const {TextRestriction} = require(`../../constants`);
 
 const userSchema = Joi.object({
   email: Joi.string().email().required(),

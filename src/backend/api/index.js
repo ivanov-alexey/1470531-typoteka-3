@@ -1,16 +1,16 @@
 'use strict';
 
-const {Router} = require('express');
-const category = require('./category/category');
-const article = require('./article/article');
-const search = require('./search/search');
-const comment = require('./comment/comment');
-const user = require('./user/user');
-const CategoryService = require('../data-service/category');
-const ArticleService = require('../data-service/article');
-const CommentService = require('../data-service/comment');
-const SearchService = require('../data-service/search');
-const UserService = require('../data-service/user');
+const {Router} = require(`express`);
+const category = require(`./category/category`);
+const article = require(`./article/article`);
+const search = require(`./search/search`);
+const comment = require(`./comment/comment`);
+const user = require(`./user/user`);
+const CategoryService = require(`../data-service/category`);
+const ArticleService = require(`../data-service/article`);
+const CommentService = require(`../data-service/comment`);
+const SearchService = require(`../data-service/search`);
+const UserService = require(`../data-service/user`);
 
 const createApi = async () => {
   const app = new Router();

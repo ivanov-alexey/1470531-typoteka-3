@@ -1,13 +1,13 @@
 'use strict';
 
-require('dotenv').config();
-const {Sequelize} = require('sequelize');
-const expressSession = require('express-session');
+require(`dotenv`).config();
+const {Sequelize} = require(`sequelize`);
+const expressSession = require(`express-session`);
 const SequelizeStore = require(`connect-session-sequelize`)(expressSession.Store);
-const {getLogger} = require('../libs/logger');
+const {getLogger} = require(`../libs/logger`);
 
-const env = process.env.NODE_ENV || 'development';
-const config = require('./db-connect')[env];
+const env = process.env.NODE_ENV || `development`;
+const config = require(`./db-connect`)[env];
 
 const logger = getLogger();
 let sequelize;
@@ -18,10 +18,10 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.user, config.password, config);
 }
 
-const Article = require('../backend/models/article')(sequelize);
-const Category = require('../backend/models/category')(sequelize);
-const Comment = require('../backend/models/comment')(sequelize);
-const User = require('../backend/models/user')(sequelize);
+const Article = require(`../backend/models/article`)(sequelize);
+const Category = require(`../backend/models/category`)(sequelize);
+const Comment = require(`../backend/models/comment`)(sequelize);
+const User = require(`../backend/models/user`)(sequelize);
 
 User.hasMany(Comment, {
   as: `comments`,
