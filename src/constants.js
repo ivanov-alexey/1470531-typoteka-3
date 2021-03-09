@@ -118,6 +118,11 @@ const userRole = {
   reader: `reader`,
 };
 
+const socketEvent = {
+  connection: `connection`,
+  newComments: `newComments`,
+};
+
 module.exports = {
   ADMIN_ID,
   API_PREFIX,
@@ -152,6 +157,7 @@ module.exports = {
   Message,
   postsAmount,
   PASSWORD_SALT_ROUNDS,
+  socketEvent,
   USER_ARGV_INDEX,
   userRole
 };

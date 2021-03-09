@@ -1,10 +1,10 @@
 'use strict';
 
-const express = require(`express`);
 const bodyParser = require(`body-parser`);
 const path = require(`path`);
 const helmet = require(`helmet`);
 const expressSession = require(`express-session`);
+const {express, app, server} = require(`./server`);
 const {DEFAULT_FRONT_PORT, PUBLIC_DIR, TEMPLATES_DIR, Message} = require(`../constants`);
 const mainRoute = require(`./routes/main-route`);
 const registerRoutes = require(`./routes/register-routes`);
@@ -20,7 +20,6 @@ const {sessionStore} = require(`../configs/db-config`);
 const {secret} = require(`../configs/env-config`);
 
 const logger = getLogger();
-const app = express();
 
 app.set(`views`, path.resolve(__dirname, TEMPLATES_DIR));
 app.set(`view engine`, `pug`);
@@ -53,7 +52,7 @@ app.use(`/my`, myRoutes);
 app.use(`/articles`, articlesRoutes);
 app.use(`/errors`, errorsRoutes);
 
-app.listen(DEFAULT_FRONT_PORT, (err) => {
+server.listen(DEFAULT_FRONT_PORT, (err) => {
   if (err) {
     logger.error(Message.serverStartError(DEFAULT_FRONT_PORT, err));
   }
