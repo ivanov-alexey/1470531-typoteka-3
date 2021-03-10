@@ -1,6 +1,8 @@
 'use strict';
 
 const {Router} = require(`express`);
+const {io} = require(`../server`);
+const {socketEvent} = require(`../../constants`);
 const ArticleService = require(`../data-service/article-service`);
 const CategoryService = require(`../data-service/category-service`);
 const CommentService = require(`../data-service/comment-service`);
@@ -144,6 +146,8 @@ articlesRoutes.post(`/:id/comments`, async (req, res) => {
 
   try {
     const {errors, comment} = await CommentService.create(id, user.id, text);
+    const popularArticles = await ArticleService.findMostDiscussed();
+    const allComments = await CommentService.getAll(0, 4);
 
     if (errors) {
       const article = await ArticleService.getOne(id);
@@ -164,6 +168,10 @@ articlesRoutes.post(`/:id/comments`, async (req, res) => {
       return;
     }
 
+    io.emit(socketEvent.newComments, {
+      articles: popularArticles,
+      comments: allComments.comments
+    });
     res.redirect(`/articles/${id}`);
   } catch (err) {
     logger.error(err);
