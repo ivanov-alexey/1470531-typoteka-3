@@ -5,6 +5,16 @@ const path = require(`path`);
 const pinoms = require(`pino-multi-stream`);
 const {logLevel} = require(`../configs/env-config`);
 
+const dirPath = path.join(process.cwd(), `logs`);
+const filePath = path.join(dirPath, `logs.txt`);
+
+fs.exists(dirPath, (exists) => {
+  if (!exists) {
+    fs.mkdirSync(dirPath);
+    fs.writeFileSync(filePath, ``);
+  }
+});
+
 const prettyStream = pinoms.prettyStream({
   prettyPrint: {
     colorize: true,
@@ -18,7 +28,7 @@ const level = logLevel || `info`;
 const streams = [
   {
     level,
-    stream: fs.createWriteStream(path.join(process.cwd(), `logs`, `logs.txt`)),
+    stream: fs.createWriteStream(filePath),
   },
   {level, stream: prettyStream},
 ];
