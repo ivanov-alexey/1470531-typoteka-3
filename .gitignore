@@ -17,5 +17,6 @@ build/
 /mocks.json
 /coverage/
 /logs/
+/logs/logs.txt
 .env
 /src/frontend/public/img
