@@ -8,13 +8,6 @@ const {logLevel} = require(`../configs/env-config`);
 const dirPath = path.join(process.cwd(), `logs`);
 const filePath = path.join(dirPath, `logs.txt`);
 
-fs.exists(dirPath, (exists) => {
-  if (!exists) {
-    fs.mkdirSync(dirPath);
-    fs.writeFileSync(filePath, ``);
-  }
-});
-
 const prettyStream = pinoms.prettyStream({
   prettyPrint: {
     colorize: true,
