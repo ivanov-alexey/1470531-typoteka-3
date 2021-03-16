@@ -26,13 +26,13 @@ mainRoute.get(`/`, async (req, res) => {
     const {comments} = await CommentService.getAll(0, 4);
     const pagesCount = Math.ceil(count / MAX_ARTICLES_PER_PAGE);
 
-    res.render(`main`, {
+    res.render(count ? `main` : `main-empty`, {
       user,
       isLoggedIn,
       articles: getFormattedTime(articles, `publicationDate`),
       categories,
       popularArticles,
-      lastComments: comments,
+      lastComments: comments.map((comment) => comment.slice(0, 100).concat(`...`)),
       pagesCount,
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,
