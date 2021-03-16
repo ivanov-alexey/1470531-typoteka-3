@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const CategoryService = require(`../data-service/category-service`);
-const {privateRoute} = require(`../../backend/middlewares/privateRoute`);
+const {privateRoute} = require(`src/backend/middlewares/private-route`);
 const {getErrorTemplate} = require(`../../utils/get-error-template`);
 const {getLogger} = require(`../../libs/logger`);
 
