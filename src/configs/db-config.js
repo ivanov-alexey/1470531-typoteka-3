@@ -10,13 +10,9 @@ const env = process.env.NODE_ENV || `development`;
 const config = require(`./db-connect`)[env];
 
 const logger = getLogger();
-let sequelize;
-
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.user, config.password, config);
-}
+const sequelize = config.use_env_variable
+  ? new Sequelize(process.env[config.use_env_variable], config)
+  : new Sequelize(config.database, config.user, config.password, config);
 
 const Article = require(`../backend/models/article`)(sequelize);
 const Category = require(`../backend/models/category`)(sequelize);
