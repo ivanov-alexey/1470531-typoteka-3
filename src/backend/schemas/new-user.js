@@ -4,7 +4,7 @@ const Joi = require(`joi`);
 const {TextRestriction} = require(`../../constants`);
 
 const newUserSchema = Joi.object({
-  avatar: Joi.string().min(TextRestriction.linkMin).max(TextRestriction.linkMax).required(),
+  avatar: Joi.string().min(TextRestriction.linkMin).max(TextRestriction.linkMax).allow(null, ``),
   email: Joi.string().email().required(),
   firstname: Joi.string().min(TextRestriction.nameMin).max(TextRestriction.nameMax).required(),
   lastname: Joi.string().min(TextRestriction.nameMin).max(TextRestriction.nameMax).required(),

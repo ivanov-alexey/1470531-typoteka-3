@@ -25,7 +25,7 @@ body
                 button.search__button.button.button--transparent(type='submit') Найти
               each article in articles
                 .search__result
-                  time.search__date(datetime= article.createdDateTime)= article.createdDate
+                  time.search__date(datetime= article.createdDate)= article.createdDate
                   a.search__link(href='/articles/'+ article.id)= article.title
 
     include elements/footer

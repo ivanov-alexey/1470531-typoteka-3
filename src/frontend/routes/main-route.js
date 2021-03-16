@@ -32,7 +32,10 @@ mainRoute.get(`/`, async (req, res) => {
       articles: getFormattedTime(articles, `publicationDate`),
       categories,
       popularArticles,
-      lastComments: comments.map((comment) => comment.slice(0, 100).concat(`...`)),
+      lastComments: comments.map((comment) => ({
+        ...comment,
+        text: comment.text.slice(0, 100).concat(`...`)
+      })),
       pagesCount,
       activePage: pageNumber,
       prevIsActive: pageNumber !== 1,

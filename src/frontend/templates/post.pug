@@ -9,7 +9,7 @@ block content
         .post__wrapper
           .post__head
             a.post__backwards.button.button--backwards(href='#', id='goBackButton') Назад
-            time.post__date(datetime= article.createdDateTime)= article.createdDate
+            time.post__date(datetime= article.createdDate)= article.createdDate
             h2.post__title.title.title--main= article.title
             ul.post__themes.themes
               each category in categories
