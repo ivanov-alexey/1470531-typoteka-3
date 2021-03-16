@@ -30,7 +30,7 @@ mainRoute.get(`/`, async (req, res) => {
       user,
       isLoggedIn,
       articles: getFormattedTime(articles, `publicationDate`),
-      categories,
+      categories: categories.filter((category) => category.count > 0),
       popularArticles,
       lastComments: comments.map((comment) => ({
         ...comment,

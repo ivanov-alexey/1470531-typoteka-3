@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const SearchService = require(`../data-service/search-service`);
+const {getFormattedTime} = require(`../../utils/get-formatted-time`);
 const {getErrorTemplate} = require(`../../utils/get-error-template`);
 const {getLogger} = require(`../../libs/logger`);
 
@@ -20,7 +21,7 @@ searchRoutes.get(`/`, async (req, res) => {
       res.render(`search`, {
         user,
         isLoggedIn,
-        articles,
+        articles: getFormattedTime(articles, `publicationDate`),
         query,
       });
 

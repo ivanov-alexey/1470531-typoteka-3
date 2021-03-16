@@ -46,7 +46,7 @@ block content
             ul.preview__breadcrumbs
               each category in article.categories
                 li.preview__breadcrumbs-item
-                  a.preview__breadcrumbs-link(href='#')= category.title
+                  a.preview__breadcrumbs-link(href='articles/category/' + category.id)= category.title
             if article.picture
               if article.picture2x
               .preview__background

@@ -7,5 +7,5 @@ module.exports.getFormattedTime = (array, field) => array.map((item) => ({
   [field]: DateTime
     .fromISO(item[field])
     .setLocale(`ru`)
-    .toFormat(`yyyy.LL.dd, hh:mm`)
+    .toFormat(`dd.LL.yyyy, hh:mm`)
 }));

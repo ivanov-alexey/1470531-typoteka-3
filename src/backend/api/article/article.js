@@ -7,6 +7,7 @@ const articleExist = require(`../../middlewares/article-exists`);
 const articleSchema = require(`../../schemas/article`);
 const commentSchema = require(`../../schemas/comment`);
 const idValidator = require(`../../middlewares/id-validator`);
+const emptyFile = require(`../../middlewares/empty-file`);
 const {getLogger} = require(`../../../libs/logger`);
 
 const logger = getLogger();
@@ -49,7 +50,7 @@ module.exports = (app, articleService, commentService) => {
     }
   });
 
-  route.post(`/add`, newEntityValidator(articleSchema), async (req, res) => {
+  route.post(`/add`, emptyFile, newEntityValidator(articleSchema), async (req, res) => {
     try {
       const article = await articleService.create(req.body);
 

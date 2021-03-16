@@ -128,8 +128,8 @@ articlesRoutes.get(`/:id`, async (req, res) => {
     res.render(`post`, {
       isLoggedIn,
       user,
-      article,
-      categories,
+      article: getFormattedTime([article], `publicationDate`)[0],
+      categories: categories.filter((category) => category.count > 0),
       comments: getFormattedTime(comments, `createdAt`),
       currentComment: ``,
     });
