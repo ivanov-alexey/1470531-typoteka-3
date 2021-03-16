@@ -61,7 +61,7 @@ block content
               b.preview__comment-count= article.comments.length
     include ./mixins/pagination
     +pagination(pagesCount, activePage, mainPath)
-    block scripts
-      script(src='/js/socket.io.js')
-      script(src='/js/sockets.js')
+block scripts
+  script(src='/js/socket.io.js')
+  script(src='/js/sockets.js')
 
