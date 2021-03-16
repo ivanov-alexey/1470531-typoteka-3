@@ -35,7 +35,7 @@ block content
               a.form__avatar.avatar
                 img(src='img/icons/smile.svg', alt='аватар пользователя')
               label
-                input.visually-hidden(type='file', name='avatar', value= user ? user.avatar : '', required='')
+                input.visually-hidden(type='file', name='avatar', value= user ? user.avatar : '')
                 | Загрузить фото профиля
             button.form__submit-btn.form__submit-btn--register.button.button--colored(type='submit') Зарегистрироваться
           if errors
