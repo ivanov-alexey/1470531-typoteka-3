@@ -6,7 +6,7 @@ const newEntityValidator = require(`../../middlewares/new-entity-validator`);
 const articleExist = require(`../../middlewares/article-exists`);
 const articleSchema = require(`../../schemas/article`);
 const commentSchema = require(`../../schemas/comment`);
-const idValidator = require(`src/backend/middlewares/id-validator`);
+const idValidator = require(`../../middlewares/id-validator`);
 const {getLogger} = require(`../../../libs/logger`);
 
 const logger = getLogger();

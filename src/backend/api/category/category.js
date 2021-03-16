@@ -4,7 +4,7 @@ const {Router} = require(`express`);
 const {HttpCode} = require(`../../../constants`);
 const newEntityValidator = require(`../../middlewares/new-entity-validator`);
 const categorySchema = require(`../../schemas/category`);
-const idValidator = require(`src/backend/middlewares/id-validator`);
+const idValidator = require(`../../middlewares/id-validator`);
 const {getLogger} = require(`../../../libs/logger`);
 
 const logger = getLogger();
