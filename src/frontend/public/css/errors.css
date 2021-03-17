@@ -5,3 +5,8 @@
   margin-left: 20px;
   color: tomato;
 }
+
+.preview__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -35,6 +35,11 @@ module.exports = (sequelize) => {
           allowNull: false,
           field: `publication_date`,
         },
+        userId: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          field: `user_id`,
+        },
       },
       {
         sequelize,

@@ -30,7 +30,10 @@ block content
             each comment in comments
               li.comments__comment
                 .comments__avatar.avatar
-                  img(src='/img/' + comment.avatar, alt='аватар пользователя')
+                  if comment.avatar
+                    img(src='/img/' + comment.avatar, alt='аватар пользователя')
+                  else
+                    img(src='/img/icons/smile.svg', alt='аватар пользователя')
                 .comments__text
                   .comments__head
                     p= comment.author + '•'
@@ -40,7 +43,10 @@ block content
             if isLoggedIn
               form(action='/articles/' + article.id + '/comments', method='POST')
                 .comments__avatar.avatar
-                  img(src='/img/' + user.avatar, alt='аватар пользователя')
+                  if user.avatar
+                    img(src='/img/' + user.avatar, alt='аватар пользователя')
+                  else
+                    img(src='/img/icons/smile.svg', alt='аватар пользователя')
                 label
                   textarea(rows='1', placeholder='Присоединиться к обсуждению' name='text' minlength='20')= currentComment
                 button.comments__button.button.button--colored(type='submit') Опубликовать

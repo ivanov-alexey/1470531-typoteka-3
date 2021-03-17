@@ -92,9 +92,9 @@ class ArticleService {
                INNER JOIN users AS u
 
                           ON a.user_id = u.id
-               INNER JOIN comments AS com ON a.id = com.article_id
+               LEFT JOIN comments AS com ON a.id = com.article_id
                INNER JOIN category_article ca2 on a.id = ca2.article_id
-               INNER JOIN categories c2 on c2.id = ca2.category_id
+               LEFT JOIN categories c2 on c2.id = ca2.category_id
         WHERE c2.id = ?
         GROUP BY a.id, u.firstname, u.lastname, u, email;
       `;
