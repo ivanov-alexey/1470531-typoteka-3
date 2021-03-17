@@ -11,6 +11,7 @@
     "eslint:fix": "eslint --fix src/",
     "generate": "cross-env node src/backend/service.js --generate 10",
     "filldb": "cross-env node src/backend/service.js --filldb 20",
+    "filldb-empty-base": "cross-env node src/backend/service.js --filldb 0",
     "server": "cross-env LOG_LEVEL=error nodemon src/backend/service.js --server 3000",
     "server::debug": "cross-env LOG_LEVEL=debug nodemon src/backend/service.js --server 3000",
     "server-front": "cross-env nodemon src/frontend/index.js"
