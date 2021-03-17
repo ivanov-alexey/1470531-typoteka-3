@@ -72,7 +72,7 @@ const getUsers = (amount, firstNames, lastNames, hash) =>
       const id = index + 1;
 
       return {
-        'avatar': `avatar-${getRandomInt(0, 5)}.png`,
+        'avatar': `avatar-${getRandomInt(1, 5)}.png`,
         'email': `user${id}@mail.io`,
         'firstname': firstNames[getRandomInt(0, firstNames.length - 1)],
         'lastname': lastNames[getRandomInt(0, lastNames.length - 1)],
