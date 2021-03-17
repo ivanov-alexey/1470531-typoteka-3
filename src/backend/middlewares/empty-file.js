@@ -7,7 +7,7 @@ const emptyFile = (req, res, next) => {
 
   if (!picture) {
     res.status(HttpCode.BAD_REQUEST).json({
-      message: [`Image must have jpg or png format`],
+      message: [`Image should be in jpg or png format`],
       data: req.body,
     });
 
